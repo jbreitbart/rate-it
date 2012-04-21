@@ -145,7 +145,7 @@ public class RateIt implements EntryPoint {
 		}
 
 		// Add a handler to send the name to the server
-		MyHandler handler = new MyHandler();
+		MyHandler handler = new MyHandler(); 
 		sendButton.addClickHandler(handler);
 		nameField.addKeyUpHandler(handler);
 	}
