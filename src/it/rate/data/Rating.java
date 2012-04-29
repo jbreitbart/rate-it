@@ -1,4 +1,4 @@
-package it.rate;
+package it.rate.data;
 
 import java.util.List;
 

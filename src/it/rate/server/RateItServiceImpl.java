@@ -2,8 +2,9 @@ package it.rate.server;
 
 import java.util.List;
 
-import it.rate.Rating;
 import it.rate.client.RateItService;
+import it.rate.data.Rating;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**

@@ -1,8 +1,8 @@
 package it.rate.view;
 
-import it.rate.Rating;
 import it.rate.client.RateItService;
 import it.rate.client.RateItServiceAsync;
+import it.rate.data.Rating;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
