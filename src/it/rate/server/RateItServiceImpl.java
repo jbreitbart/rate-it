@@ -14,7 +14,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		RateItService {
 
 	@Override
-	public void rateUrl(Rating rating) {
+	public void rateUrl(String user, String url, String comment, float rating) {
 		// TODO Auto-generated method stub
 		
 	}

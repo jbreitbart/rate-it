@@ -185,7 +185,7 @@ public class FrontPage{
 	    	  // (3) Make the call. Control flow will continue immediately and later
 	    	  // 'callback' will be invoked when the RPC completes.
 	    	  //
-	    	  rateService.rateUrl(new Rating(), callback);
+	    	  rateService.rateUrl("testUser", "test.com", "testCom", (float)5.0, callback);
 
 	      }
 	    });

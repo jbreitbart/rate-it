@@ -15,9 +15,9 @@ public interface RateItService extends RemoteService {
 	
 	/**
 	 * Adds a rating for a URL in the DB
-	 * @param rating A rating object which holds the URL, its rating and an optional comment
+	 * @param rating A rating object which holds user, the URL, its rating and an optional comment
 	 */
-	public void rateUrl(Rating rating);	// server has to check if user hasn't already rated that URL
+	public void rateUrl(String user, String url, String comment, float rating);	// server has to check if user hasn't already rated that URL
 										// and whether the URL has to be added to the DB
 										// if false is returned, ask for changing users rating and send again
 
