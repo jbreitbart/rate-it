@@ -23,6 +23,6 @@ public interface RateItServiceAsync {
 
 	void getAllUserRatedUrls(AsyncCallback<List<Rating>> callback);
 
-	void getUsersUrlRating(String url, AsyncCallback<Float> callback);
+	void getUsersUrlRating(String user, String url, AsyncCallback<Float> callback);
 
 }

@@ -3,13 +3,17 @@ package it.rate.util;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
-public final class PMF {
-    private static final PersistenceManagerFactory pmfInstance =
-        JDOHelper.getPersistenceManagerFactory("transactions-optional");
+public final class PMF
+{
+	private static final PersistenceManagerFactory pmfInstance = JDOHelper
+			.getPersistenceManagerFactory("transactions-optional");
 
-    private PMF() {}
+	private PMF()
+	{
+	}
 
-    public static PersistenceManagerFactory getInstance() {
-        return pmfInstance;
-    }
+	public static PersistenceManagerFactory getInstance()
+	{
+		return pmfInstance;
+	}
 }

@@ -53,6 +53,6 @@ public interface RateItService extends RemoteService {
 	 * @param url The URL
 	 * @return URL's rating
 	 */
-	public float getUsersUrlRating(String url);
+	public float getUsersUrlRating(String user, String url);
 	
 }
