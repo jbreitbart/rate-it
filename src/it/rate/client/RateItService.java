@@ -1,5 +1,7 @@
 package it.rate.client;
 
+import java.util.List;
+
 import it.rate.Rating;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -24,13 +26,13 @@ public interface RateItService extends RemoteService {
 	 * @param url
 	 * @return An array of sub domains
 	 */
-	public Rating[] getSubDomains(String url);
+	public List<Rating> getSubDomains(String url);
 	
 	/**
 	 * Gets the top URLs for a certain time period
 	 * @return An array with the top URLs
 	 */
-	public Rating[] getTopUrlsForPeriod(String startDate, String endDate);
+	public List<Rating> getTopUrlsForPeriod(String startDate, String endDate);
 	
 	/**
 	 * Fetches average URL rating for a certain time period
@@ -44,7 +46,7 @@ public interface RateItService extends RemoteService {
 	 * Gets all user rated URLs (comments should be null here)
 	 * @return An array of ratings
 	 */
-	public Rating[] getAllUserRatedUrls();
+	public List<Rating> getAllUserRatedUrls();
 	
 	/**
 	 * Gets the rating from a user for a certain URL

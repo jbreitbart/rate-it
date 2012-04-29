@@ -1,5 +1,7 @@
 package it.rate.server;
 
+import java.util.List;
+
 import it.rate.Rating;
 import it.rate.client.RateItService;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -18,13 +20,13 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Rating[] getSubDomains(String url) {
+	public List<Rating> getSubDomains(String url) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Rating[] getTopUrlsForPeriod(String startDate, String endDate) {
+	public List<Rating> getTopUrlsForPeriod(String startDate, String endDate) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -37,7 +39,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Rating[] getAllUserRatedUrls() {
+	public List<Rating> getAllUserRatedUrls() {
 		// TODO Auto-generated method stub
 		return null;
 	}
