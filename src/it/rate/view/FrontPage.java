@@ -1,8 +1,8 @@
 package it.rate.view;
 
-import it.rate.Rating;
 import it.rate.client.RateItService;
 import it.rate.client.RateItServiceAsync;
+import it.rate.data.Rating;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -185,7 +185,7 @@ public class FrontPage{
 	    	  // (3) Make the call. Control flow will continue immediately and later
 	    	  // 'callback' will be invoked when the RPC completes.
 	    	  //
-	    	  rateService.rateUrl(new Rating(), callback);
+	    	  rateService.rateUrl("testUser", "test.com", "testCom", (float)5.0, callback);
 
 	      }
 	    });
