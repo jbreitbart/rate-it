@@ -1,20 +1,25 @@
 package it.rate.data;
 
+import com.google.appengine.api.datastore.Key;
+
+import it.rate.client.Rating;
+
 import java.util.Date;
 import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.Key;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import javax.jdo.annotations.IdentityType;
 
 /**
- * Class which can be used for one certain URL rating from a user (comments can't have more than one object)
- * or as a URL summary (comments can have more than one object).
- * The same goes for rating. Can be used for an average rating (URL summary) or a certain rating (from one user)
- * @author Waldo
+ * This class represent Rating-objects in DB
+ * 
+ *  @author Vladimir
  */
-@PersistenceCapable
-public class Rating {
+
+@PersistenceCapable(table = "rating", identityType = IdentityType.APPLICATION)
+public class RatingDB extends Rating
+{
 	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -30,7 +35,8 @@ public class Rating {
 	@Persistent
 	private Date date; 
 	
-	public Rating(String user, String url, String comment, float rating)
+	
+	public RatingDB(String user, String url, String comment, float rating)
 	{
 		this.user = user;
 		this.url = url;

@@ -14,9 +14,10 @@
   <!-- Other module inherits                                      -->
 
   <!-- Specify the app entry point class.                         -->
+<entry-point class='it.rate.RateIt'/>
 
   <!-- Specify the paths for translatable code                    -->
-  <source path=''/>
+  <source path='client'/>
   <source path=''/>
 
 </module>

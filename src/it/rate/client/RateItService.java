@@ -1,8 +1,7 @@
 package it.rate.client;
 
+import java.util.Date;
 import java.util.List;
-
-import it.rate.data.Rating;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -32,7 +31,7 @@ public interface RateItService extends RemoteService {
 	 * Gets the top URLs for a certain time period
 	 * @return An array with the top URLs
 	 */
-	public List<Rating> getTopUrlsForPeriod(String startDate, String endDate);
+	public List<Rating> getTopUrlsForPeriod(Date startDate, Date endDate, int countOfUrls);
 	
 	/**
 	 * Fetches average URL rating for a certain time period
@@ -40,7 +39,7 @@ public interface RateItService extends RemoteService {
 	 * @param date The date for the average rating
 	 * @return Average rating
 	 */
-	public float getAverageRatingForPeriod(String url, String startDate, String endDate);
+	public float getAverageRatingForPeriod(String url, Date startDate, Date endDate);
 	
 	/**
 	 * Gets all user rated URLs (comments should be null here)
