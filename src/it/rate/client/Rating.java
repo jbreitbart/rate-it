@@ -2,11 +2,6 @@ package it.rate.client;
 
 
 import java.util.Date;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.Key;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
 
 /**
  * Class which can be used for one certain URL rating from a user (comments can't have more than one object)
