@@ -13,7 +13,7 @@
   
   <servlet-mapping>
     <servlet-name>rateItServlet</servlet-name>
-    <url-pattern>/rateit/rate/</url-pattern>
+    <url-pattern>/rateit/rate</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
