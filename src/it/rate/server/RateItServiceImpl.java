@@ -1,13 +1,16 @@
 package it.rate.server;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import it.rate.client.RateItService;
-import it.rate.data.Rating;
+import it.rate.client.Rating;
+import it.rate.data.RatingDB;
 import it.rate.util.PMF;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -24,31 +27,31 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	public void rateUrl(String user, String url, String comment, float rating)
 	{
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
-		Query query = pm.newQuery(Rating.class, "(user == " + user
-				+ " ) && ( url == " + url + " )");
+		Query query = pm.newQuery(RatingDB.class,
+				"(user == userParam ) && ( url == urlParam)");
 
+		RatingDB temp = new RatingDB(user, url, comment, rating);
 		try
 		{
-			List<Rating> result = (List<Rating>) query.execute();
+			List<RatingDB> result = (List<RatingDB>) query.execute(user, url);
 			// if DB doesn't contain a rating-object then
 			// add this Rating-object to DataStore
+
 			if (result.isEmpty())
 			{
 				try
 				{
-					pm.makePersistent(new Rating(user, url, comment, rating));
+					pm.makePersistent(temp);
 				} finally
 				{
 					pm.close();
 				}
-
 			}
 
 		} finally
 		{
 			query.closeAll();
 		}
-
 	}
 
 	@Override
@@ -59,10 +62,10 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		 * Testdata START
 		 */
 		List<Rating> subDomains = new ArrayList<Rating>();
-		subDomains.add(new Rating("test", "test.com", "test comment",
-				(float) 5.0));
-		subDomains.add(new Rating("test2", "test.com", "test2 comment",
-				(float) 5.0));
+		 subDomains.add(new RatingDB("test", "test.com", "test comment",
+		 (float) 5.0));
+		 subDomains.add(new RatingDB("test2", "test.com", "test2 comment",
+		 (float) 5.0));
 		/*
 		 * Testdata END
 		 */
@@ -70,27 +73,94 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public List<Rating> getTopUrlsForPeriod(String startDate, String endDate)
+	public List<Rating> getTopUrlsForPeriod(Date startDate, Date endDate,
+			int countOfUrls)
 	{
-		/*
-		 * Testdata START
-		 */
-		List<Rating> topUrls = new ArrayList<Rating>();
-		topUrls.add(new Rating("test", "test.com", "test comment", (float) 5.0));
-		topUrls.add(new Rating("test2", "test.com", "test2 comment",
-				(float) 5.0));
-		/*
-		 * Testdata END
-		 */
+
+		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
+		List<Rating> result = null;
+		List<Rating> topUrls = new ArrayList();
+		int i = 0;
+
+		Query query = pm.newQuery(RatingDB.class);
+		query.setOrdering("rating desc");
+
+		try
+		{
+			// get all ratings of url
+			result = (List<Rating>) query.execute();
+
+		} finally
+		{
+			query.closeAll();
+		}
+
+		for (Rating r : result)
+		{
+			// select entries from certain period (>= startDate && <= endDate)
+			if ((r.getDate().compareTo(startDate) == 0)
+					|| (r.getDate().compareTo(endDate) == 0)
+					|| ((r.getDate().compareTo(startDate) > 0) && (r.getDate()
+							.compareTo(endDate) < 0)))
+			{
+				if (i < countOfUrls)
+				{
+					topUrls.add(r);
+					i++;
+				} else
+				{
+					break;
+				}
+			}
+
+		}
+
+//		for (Rating re : topUrls)
+//		{
+//			System.out.println(re.getRating());
+//		}
 		return topUrls;
 	}
 
 	@Override
-	public float getAverageRatingForPeriod(String url, String startDate,
-			String endDate)
+	public float getAverageRatingForPeriod(String url, Date startDate,
+			Date endDate)
 	{
+		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
+		List<Rating> result = null;
 
-		return (float) 5.0;
+		float advRating = 0;
+
+		Query query = pm.newQuery(RatingDB.class, "url == urlParam");
+
+		try
+		{
+			// get all ratings of url
+			result = (List<Rating>) query.execute(url);
+
+		} finally
+		{
+			query.closeAll();
+		}
+
+		for (Rating r : result)
+		{
+			// select entries from certain period (>= startDate && <= endDate)
+			if ((r.getDate().compareTo(startDate) == 0)
+					|| (r.getDate().compareTo(endDate) == 0)
+					|| ((r.getDate().compareTo(startDate) > 0) && (r.getDate()
+							.compareTo(endDate) < 0)))
+			{
+				advRating = advRating + r.getRating();
+			}
+		}
+
+		if (result.size() != 0)
+		{
+			advRating = advRating / result.size();
+		}
+
+		return advRating;
 	}
 
 	@Override
@@ -99,7 +169,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
 		List<Rating> allUrls = null;
 
-		Query query = pm.newQuery(Rating.class);
+		Query query = pm.newQuery(RatingDB.class);
 
 		try
 		{
@@ -111,6 +181,12 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			query.closeAll();
 		}
 
+		// for (Rating r :allUrls)
+		// {
+		// System.out.println("user : " + r.getUser() + " url : " + r.getUrl() +
+		// " rating : " + r.getRating() );
+		// }
+
 		return allUrls;
 
 	}
@@ -119,16 +195,16 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	public float getUsersUrlRating(String user, String url)
 	{
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
-		List<Rating> userRatedUrl = null;
+		List<RatingDB> userRatedUrl = null;
 		float userRating = 0;
 
-		Query query = pm.newQuery(Rating.class, "(user == " + user
-				+ ") && (url == " + url + ")");
+		Query query = pm.newQuery(RatingDB.class, "(user == userParam"
+				+ ") && (url == urlParam)");
 
 		try
 		{
 			// get user rating of url
-			userRatedUrl = (List<Rating>) query.execute();
+			userRatedUrl = (List<RatingDB>) query.execute(user, url);
 
 			if ((!userRatedUrl.isEmpty()) && (userRatedUrl.size() == 1))
 			{
