@@ -1,8 +1,11 @@
 package it.rate.view;
 
+import java.util.Date;
+
 import it.rate.client.RateItService;
 import it.rate.client.RateItServiceAsync;
-import it.rate.data.Rating;
+import it.rate.client.Rating;
+import it.rate.data.RatingDB;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -86,7 +89,7 @@ public class FrontPage{
 		verticalPanel_1.setCellVerticalAlignment(simplePanel_1, HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel_1.setCellWidth(simplePanel_1, "400");
 		
-		TextBox txtbxHallo = new TextBox();
+		final TextBox txtbxHallo = new TextBox();
 		simplePanel_1.setWidget(txtbxHallo);
 		txtbxHallo.setSize("100%", "100%");
 		txtbxHallo.setText("Enter URL");
@@ -185,10 +188,9 @@ public class FrontPage{
 	    	  // (3) Make the call. Control flow will continue immediately and later
 	    	  // 'callback' will be invoked when the RPC completes.
 	    	  //
-	    	  rateService.rateUrl("testUser", "test.com", "testCom", (float)5.0, callback);
-
+	    	  rateService.rateUrl("testUser", "test.com", "testCom", Float.valueOf(txtbxHallo.getValue()), callback);
+	    	  rateService.getTopUrlsForPeriod(new Date(), new Date(), 4, callback);
 	      }
 	    });
 	}
-
 }
