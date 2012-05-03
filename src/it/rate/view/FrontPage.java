@@ -4,8 +4,6 @@ import java.util.Date;
 
 import it.rate.client.RateItService;
 import it.rate.client.RateItServiceAsync;
-import it.rate.client.Rating;
-import it.rate.data.RatingDB;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
