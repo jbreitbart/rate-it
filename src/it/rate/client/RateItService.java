@@ -1,7 +1,8 @@
 package it.rate.client;
 
-import java.util.Date;
 import java.util.List;
+
+import shared.Date;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

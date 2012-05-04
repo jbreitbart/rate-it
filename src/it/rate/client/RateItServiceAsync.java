@@ -1,7 +1,9 @@
 package it.rate.client;
 
-import java.util.Date;
 import java.util.List;
+
+import shared.Date;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -13,7 +15,7 @@ public interface RateItServiceAsync {
 
 	void getSubDomains(String url, AsyncCallback<List<Rating>> callback);
 
-	void getTopUrlsForPeriod(Date startDate, Date endDate, int countOfUrls,
+	void getTopUrlsForPeriod(Date date, shared.Date date2, int countOfUrls,
 			AsyncCallback<List<Rating>> callback);
 
 	void getAverageRatingForPeriod(String url, Date startDate,

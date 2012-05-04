@@ -1,11 +1,12 @@
 package it.rate.server;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+
+import shared.Date;
 
 import it.rate.client.RateItService;
 import it.rate.client.Rating;
