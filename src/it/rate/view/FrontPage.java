@@ -1,7 +1,7 @@
 package it.rate.view;
 
-import java.util.Date;
 
+import shared.Date;
 import it.rate.client.RateItService;
 import it.rate.client.RateItServiceAsync;
 

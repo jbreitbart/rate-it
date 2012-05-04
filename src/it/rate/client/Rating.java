@@ -1,7 +1,7 @@
 package it.rate.client;
 
+import shared.Date;
 
-import java.util.Date;
 
 /**
  * Class which can be used for one certain URL rating from a user (comments can't have more than one object)
