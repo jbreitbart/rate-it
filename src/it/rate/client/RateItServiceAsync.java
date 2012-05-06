@@ -2,6 +2,7 @@ package it.rate.client;
 
 import java.util.Date;
 import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -9,7 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface RateItServiceAsync {
 
-	void rateUrl(String user, String url, String comment, float rating, AsyncCallback<Void> callback);
+	void rateUrl(String userEmail, String url, String comment, float rating, AsyncCallback<Void> callback);
 
 	void getSubDomains(String url, AsyncCallback<List<Rating>> callback);
 
@@ -23,4 +24,12 @@ public interface RateItServiceAsync {
 
 	void getUsersUrlRating(String user, String url, AsyncCallback<Float> callback);
 
+	void getLoginURL (String destinationURL, AsyncCallback<String> callback);
+	
+	void getLogoutURL (String destinationURL, AsyncCallback<String> callback);
+	
+	void isUserLoggedIn(AsyncCallback<Boolean> callback);
+	
+	void getCurrentUserEmail( AsyncCallback<String> callback);
+	
 }
