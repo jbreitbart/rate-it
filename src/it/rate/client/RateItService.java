@@ -16,7 +16,7 @@ public interface RateItService extends RemoteService {
 	 * Adds a rating for a URL in the DB
 	 * @param rating A rating object which holds user, the URL, its rating and an optional comment
 	 */
-	public void rateUrl(String user, String url, String comment, float rating);	// server has to check if user hasn't already rated that URL
+	public void rateUrl(String userEmail, String url, String comment, float rating);	// server has to check if user hasn't already rated that URL
 										// and whether the URL has to be added to the DB
 										// if false is returned, ask for changing users rating and send again
 
@@ -53,5 +53,33 @@ public interface RateItService extends RemoteService {
 	 * @return URL's rating
 	 */
 	public float getUsersUrlRating(String user, String url);
+	
+	/**
+	 * 
+	 * @param destinationURL a URL user will be redirect after login
+	 * @return Returns a URL that can be used to display a login page to the user.
+	 */
+	public String getLoginURL (String destinationURL);
+	
+	/**
+	 * 
+	 * @param destinationURL a URL user will be redirect after logout
+	 * @return Returns a URL that can be used to display a logout page to the user.
+	 */
+	public String getLogoutURL (String destinationURL);
+	
+	/**
+	 * 
+	 * @return true if there is a user logged in, false otherwise.
+	 */
+	public boolean isUserLoggedIn();
+	
+	/**
+	 * 
+	 * @return E-mail of current logged user as String
+	 */
+	public String getCurrentUserEmail();
+	
+	
 	
 }
