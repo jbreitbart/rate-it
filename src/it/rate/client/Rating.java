@@ -3,6 +3,7 @@ package it.rate.client;
 
 import java.util.Date;
 
+
 /**
  * Class which can be used for one certain URL rating from a user (comments can't have more than one object)
  * or as a URL summary (comments can have more than one object).
@@ -11,7 +12,7 @@ import java.util.Date;
  */
 public class Rating {
 	
-	private String user;
+	private String userEmail;
 	private String url;
 	private String comment;
 	private float rating;
@@ -26,12 +27,12 @@ public class Rating {
 //		this.date = new Date();
 //	}
 	
-	public String getUser() {
-		return user;
+	public String getUserEmail() {
+		return userEmail;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 	public Date getDate() {

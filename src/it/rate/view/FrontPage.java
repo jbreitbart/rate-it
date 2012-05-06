@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.Hyperlink;
 
 public class FrontPage{
 
@@ -37,6 +38,7 @@ public class FrontPage{
 		
 		VerticalPanel verticalPanel_2 = new VerticalPanel();
 		rootPanel.add(verticalPanel_2);
+		
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		verticalPanel_2.add(horizontalPanel);
@@ -186,8 +188,9 @@ public class FrontPage{
 	    	  // (3) Make the call. Control flow will continue immediately and later
 	    	  // 'callback' will be invoked when the RPC completes.
 	    	  //
-	    	  rateService.rateUrl("testUser", "test.com", "testCom", Float.valueOf(txtbxHallo.getValue()), callback);
-	    	  rateService.getTopUrlsForPeriod(new Date(), new Date(), 4, callback);
+	    	  rateService.rateUrl("testuser", "test.com", "testCom", Float.valueOf(txtbxHallo.getValue()), callback);
+//	    	  rateService.getTopUrlsForPeriod(new Date(), new Date(), 4, callback);
+	    	  rateService.getLoginURL("google.de", callback);
 	      }
 	    });
 	}
