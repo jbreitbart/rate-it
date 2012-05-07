@@ -188,9 +188,8 @@ public class FrontPage{
 	    	  // (3) Make the call. Control flow will continue immediately and later
 	    	  // 'callback' will be invoked when the RPC completes.
 	    	  //
-	    	  rateService.rateUrl("testuser", "test.com", "testCom", Float.valueOf(txtbxHallo.getValue()), callback);
-//	    	  rateService.getTopUrlsForPeriod(new Date(), new Date(), 4, callback);
-	    	  rateService.getLoginURL("google.de", callback);
+	    	  rateService.rateUrl("test.com", "testCom", Float.valueOf(txtbxHallo.getValue()), callback);
+	    	  
 	      }
 	    });
 	}

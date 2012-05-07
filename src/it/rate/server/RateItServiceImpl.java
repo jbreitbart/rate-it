@@ -12,6 +12,7 @@ import it.rate.client.Rating;
 import it.rate.data.RatingDB;
 import it.rate.util.PMF;
 
+import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -23,29 +24,32 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		RateItService {
 
 	@Override
-	public void rateUrl(String userEmail, String url, String comment,
-			float rating) {
+	public void rateUrl(String url, String comment, float rating) {
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
-		Query query = pm.newQuery(RatingDB.class,
-				"(userEmail == userParam ) && ( url == urlParam)");
+		User user = UserServiceFactory.getUserService().getCurrentUser();
+		
+		if (user != null) {
+			Query query = pm.newQuery(RatingDB.class,
+					"(userEmail == userParam ) && ( url == urlParam)");
 
-		RatingDB temp = new RatingDB(userEmail, url, comment, rating);
-		try {
-			List<RatingDB> result = (List<RatingDB>) query.execute(userEmail,
-					url);
-			// if DB doesn't contain a rating-object then
-			// add this Rating-object to DataStore
+			RatingDB temp = new RatingDB(user.getEmail(), url, comment, rating);
+			try {
+				List<RatingDB> result = (List<RatingDB>) query.execute(
+						user.getEmail(), url);
+				// if DB doesn't contain a rating-object then
+				// add this Rating-object to DataStore
 
-			if (result.isEmpty()) {
-				try {
-					pm.makePersistent(temp);
-				} finally {
-					pm.close();
+				if (result.isEmpty()) {
+					try {
+						pm.makePersistent(temp);
+					} finally {
+						pm.close();
+					}
 				}
-			}
 
-		} finally {
-			query.closeAll();
+			} finally {
+				query.closeAll();
+			}
 		}
 	}
 
@@ -194,7 +198,8 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public String getLoginURL(String destinationURL) {
-		System.out.println(UserServiceFactory.getUserService().createLoginURL(destinationURL));
+		System.out.println(UserServiceFactory.getUserService().createLoginURL(
+				destinationURL));
 		return UserServiceFactory.getUserService().createLoginURL(
 				destinationURL);
 	}
@@ -214,7 +219,17 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public String getCurrentUserEmail() {
 
-		return UserServiceFactory.getUserService().getCurrentUser().getEmail();
+		if (UserServiceFactory.getUserService().getCurrentUser() != null) {
+			System.out.println(UserServiceFactory.getUserService()
+					.getCurrentUser().getEmail());
+			return UserServiceFactory.getUserService().getCurrentUser()
+					.getEmail();
+
+		} else {
+			System.out.println("null");
+			return null;
+		}
+
 	}
 
 }

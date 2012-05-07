@@ -10,7 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface RateItServiceAsync {
 
-	void rateUrl(String userEmail, String url, String comment, float rating, AsyncCallback<Void> callback);
+	void rateUrl(String url, String comment, float rating, AsyncCallback<Void> callback);
 
 	void getSubDomains(String url, AsyncCallback<List<Rating>> callback);
 
