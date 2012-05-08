@@ -1,12 +1,10 @@
 package it.rate.data;
 
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.users.User;
 
 import it.rate.client.Rating;
 
 import java.util.Date;
-import java.util.HashSet;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -15,18 +13,18 @@ import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.IdentityType;
 
 /**
- * This class represent Rating-objects in DB
+ * This class represent Rated-domains in DB
  * 
- *  @author Vladimir
+ * @author Vladimir 
  */
 
-@PersistenceCapable(table = "rating", identityType = IdentityType.APPLICATION)
+@PersistenceCapable(identityType = IdentityType.APPLICATION) 
 public class RatingDB extends Rating
 {
-	
+
 	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Key key;
 	@Persistent
 	private String userEmail;
 	@Persistent
@@ -36,56 +34,83 @@ public class RatingDB extends Rating
 	@Persistent
 	private float rating;
 	@Persistent
-	private Date date; 
+	private Date date;
 	@Persistent
-	private HashSet<RatingDB> subdomains = null;
-	
-	
-	public RatingDB(String userEmail, String url, String comment, float rating)
+	private String host; 	
+
+	public RatingDB(String userEmail, String url, String host, String comment,
+			float rating)
 	{
 		this.userEmail = userEmail;
 		this.url = url;
+		this.host = host;
 		this.comment = comment;
 		this.rating = rating;
 		this.date = new Date();
 	}
 	
-	public String getUserEmail() {
+	public String getHost()
+	{
+		return host;
+	}
+
+	public void setHost(String host)
+	{
+		this.host = host;
+	}
+	
+	public String getUserEmail()
+	{
 		return this.userEmail;
 	}
 
-	public void setUserEmail(String userEmail) {
+	public void setUserEmail(String userEmail)
+	{
 		this.userEmail = userEmail;
 	}
 
-	public Date getDate() {
+	public Date getDate()
+	{
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(Date date)
+	{
 		this.date = date;
 	}
-	
-	public Key getKey() {
+
+	public Key getKey()
+	{
 		return key;
 	}
-	
-	public String getUrl() {
+
+	public String getUrl()
+	{
 		return url;
 	}
-	public void setUrl(String url) {
+
+	public void setUrl(String url)
+	{
 		this.url = url;
 	}
-	public float getRating() {
+
+	public float getRating()
+	{
 		return rating;
 	}
-	public void setRating(int rating) {
+
+	public void setRating(int rating)
+	{
 		this.rating = rating;
 	}
-	public String getComment() {
+
+	public String getComment()
+	{
 		return comment;
 	}
-	public void setComments(String comment) {
+
+	public void setComments(String comment)
+	{
 		this.comment = comment;
 	}
 }
