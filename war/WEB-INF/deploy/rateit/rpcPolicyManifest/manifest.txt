@@ -1,3 +1,2 @@
 # Module rateit
 # RPC service class, partial path of RPC policy file
-it.rate.client.RateItService, A52A7B512C70A60F6FBD07B20B469296.gwt.rpc

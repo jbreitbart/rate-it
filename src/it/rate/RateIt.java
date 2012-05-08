@@ -10,7 +10,7 @@ import com.google.gwt.core.client.GWT;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class RateIt  implements EntryPoint {	
+public class RateIt implements EntryPoint {	
 
 	/**
 	 * The message displayed to the user when the server cannot be reached or
@@ -29,7 +29,9 @@ public class RateIt  implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		FrontPage page = new FrontPage();
-		page.show();		
+		page.show();
+		page.addHandlers();
+		page.userAuthentication();	
 	}
 
 }
