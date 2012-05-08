@@ -1,6 +1,7 @@
 package it.rate.client;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -17,16 +18,20 @@ public class Rating {
 	private String comment;
 	private float rating;
 	private Date date; 
+	private String host; 
 	
-//	public Rating(String user, String url, String comment, float rating)
-//	{
-//		this.user = user;
-//		this.url = url;
-//		this.comment = comment;
-//		this.rating = rating;
-//		this.date = new Date();
-//	}
+
 	
+	public String getHost()
+	{
+		return host;
+	}
+
+	public void setHost(String host)
+	{
+		this.host = host;
+	}
+
 	public String getUserEmail() {
 		return userEmail;
 	}
