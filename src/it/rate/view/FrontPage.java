@@ -14,8 +14,6 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
@@ -34,12 +32,8 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.HTML;
-
-import java.net.URL;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import com.google.gwt.i18n.client.HasDirection.Direction;
 
 public class FrontPage {
 
@@ -200,12 +194,14 @@ public class FrontPage {
 
 		lblNewLabel_1 = new Label("Sub Domains");
 		verticalPanel_4.add(lblNewLabel_1);
-		verticalPanel_4.setCellHorizontalAlignment(lblNewLabel_1, HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_4.setCellHorizontalAlignment(lblNewLabel_1,
+				HasHorizontalAlignment.ALIGN_CENTER);
 		lblNewLabel_1.setWordWrap(false);
 
 		listBox_1 = new ListBox();
 		verticalPanel_4.add(listBox_1);
-		verticalPanel_4.setCellHorizontalAlignment(listBox_1, HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_4.setCellHorizontalAlignment(listBox_1,
+				HasHorizontalAlignment.ALIGN_CENTER);
 		listBox_1.setVisibleItemCount(5);
 
 		txtbxHallo = new TextBox();
@@ -226,7 +222,7 @@ public class FrontPage {
 		txtrOptionalEnterYour.setWidth("100%");
 
 		rootPanel.add(verticalPanel_2);
-		
+
 		htmlNewHtml = new HTML("", true);
 		rootPanel.add(htmlNewHtml, 0, 0);
 	}
@@ -243,9 +239,12 @@ public class FrontPage {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				txtbxHallo.setText(null);
-				txtrOptionalEnterYour.setText(null);
-				txtbxHallo.setStylePrimaryName("gwt-ListBox");
+				String url = txtbxHallo.getText();
+				if (url.contains(" ") || !url.contains(".")) {
+					txtbxHallo.setText(null);
+					txtrOptionalEnterYour.setText(null);
+					txtbxHallo.setStylePrimaryName("gwt-ListBox");
+				}
 			}
 
 		});
@@ -253,13 +252,20 @@ public class FrontPage {
 		/*
 		 * Comment textbox click handler
 		 */
-		txtbxHallo.addClickHandler(new ClickHandler() {
+		txtrOptionalEnterYour.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				txtbxHallo.setText(null);
-				txtrOptionalEnterYour.setText(null);
-				txtbxHallo.setStylePrimaryName("gwt-ListBox");
+				String url = txtbxHallo.getText();
+				if (url.contains(" ") || !url.contains(".")) {
+					txtbxHallo.setText(null);
+					txtbxHallo.setStylePrimaryName("gwt-ListBox");
+				}
+				String comment = txtrOptionalEnterYour.getText();
+				if (comment
+						.equals("Optional: Enter your experience with that site!")) {
+					txtrOptionalEnterYour.setText(null);
+				}
 			}
 
 		});
@@ -268,7 +274,7 @@ public class FrontPage {
 		 * Top domains click handler
 		 */
 		listBox.addDoubleClickHandler(new DoubleClickHandler() {
-			
+
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				// Show sub domain panel
@@ -276,9 +282,9 @@ public class FrontPage {
 				receiveSubDomains(listBox.getItemText(listBox.getItemCount()));
 			}
 		});
-		
+
 		listBox_2.addDoubleClickHandler(new DoubleClickHandler() {
-			
+
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				// Show sub domain panel
@@ -286,9 +292,9 @@ public class FrontPage {
 				receiveSubDomains(listBox.getItemText(listBox.getItemCount()));
 			}
 		});
-		
+
 		listBox_3.addDoubleClickHandler(new DoubleClickHandler() {
-			
+
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				// Show sub domain panel
@@ -302,23 +308,29 @@ public class FrontPage {
 		 */
 		tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-				Date startDate = new GregorianCalendar().getTime();
-				Date endDate;
+				Date startDate = new Date();
+				startDate.setTime(new Date().getTime());
+				Date endDate = new Date();
+				startDate.setYear(startDate.getYear() + 1900);
+				endDate.setYear(startDate.getYear());
+				endDate.setMonth(startDate.getMonth());
+				endDate.setDate(startDate.getDay());
 				// Years top
 				if (event.getSelectedItem() == 0) {
-					endDate = new GregorianCalendar(startDate.getYear()-1, startDate.getMonth(), startDate.getDay()).getTime();
+					endDate.setYear(startDate.getYear() - 1);
 					getTopUrls(TOP_COUNT, startDate, endDate);
 				}
 				// Months top
 				if (event.getSelectedItem() == 1) {
-					endDate = new GregorianCalendar(startDate.getYear(), startDate.getMonth()-1, startDate.getDay()).getTime();
+					endDate.setMonth(startDate.getMonth() - 1);
 					getTopUrls(TOP_COUNT, startDate, endDate);
 				}
 				// Todays top
 				if (event.getSelectedItem() == 2) {
-					endDate = new GregorianCalendar(startDate.getYear(), startDate.getMonth(), startDate.getDay()-1).getTime();
+					endDate.setDate(startDate.getDate() - 1);
 					getTopUrls(TOP_COUNT, startDate, endDate);
 				}
 			}
@@ -332,19 +344,14 @@ public class FrontPage {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				URL url = null;
 				// Get text from user input boxes
-				try{
-					// Throws exception if URL is invalid
-					url = new URL(txtbxHallo.getText());
-				} catch (Exception e){
+				String url = txtbxHallo.getText();
+				if (url.contains(" ") || !url.contains(".")) {
 					txtbxHallo.setText(null);
 					txtbxHallo.setStylePrimaryName("serverResponseLabelError");
 					txtbxHallo.setText("Please enter a URL");
 					return;
 				}
-				// Get host
-				String host = url.getHost();
 				String comment = txtrOptionalEnterYour.getText();
 				// Get rating
 				int rating = 0;
@@ -359,7 +366,7 @@ public class FrontPage {
 				if (rdbtnStars_3.getValue())
 					rating = 5;
 				// Calls method for sending the rating to server
-				rateUrl(host, comment, rating);
+				rateUrl(url, comment, rating);
 			}
 		});
 
@@ -434,12 +441,16 @@ public class FrontPage {
 	 *            List of all sub domains
 	 */
 	protected void updateSubDomainList(List<Rating> subDomains) {
-		for (Rating r : subDomains) {
-			listBox.addItem(r.getUrl());
-		}
-		listBox.setVisibleItemCount(subDomains.size());
-		if (!listBox.isEnabled()) {
-			listBox.setEnabled(true);
+		try {
+			for (Rating r : subDomains) {
+				listBox.addItem(r.getUrl());
+			}
+			listBox.setVisibleItemCount(subDomains.size());
+			if (!listBox.isEnabled()) {
+				listBox.setEnabled(true);
+			}
+		} catch (Exception e) {
+			e.getMessage();
 		}
 	}
 
@@ -464,11 +475,9 @@ public class FrontPage {
 				Window.alert("An error occured while retrieving the url list.");
 			}
 
-
 			@Override
 			public void onSuccess(List<TopUrl> topUrls) {
 				updateTopUrlsList((List<TopUrl>) topUrls);
-				
 			}
 		};
 
@@ -482,11 +491,15 @@ public class FrontPage {
 	 *            List of all top URLs
 	 */
 	protected void updateTopUrlsList(List<TopUrl> topUrls) {
-		for (TopUrl r : topUrls) {
-			listBox.addItem(r.getUrl());
+		try {
+			for (TopUrl r : topUrls) {
+				listBox.addItem(r.getUrl());
+			}
+			listBox.setVisibleItemCount(topUrls.size());
+			// TODO show url rating
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		listBox.setVisibleItemCount(topUrls.size());
-		// TODO show url rating
 	}
 
 	/**
@@ -505,18 +518,19 @@ public class FrontPage {
 
 			@Override
 			public void onSuccess(Boolean result) {
-				Window.alert("Thank your for your rating!");				
+				txtbxHallo.setText(null);
+				txtrOptionalEnterYour.setText(null);
+				Window.alert("Thank your for your rating!");
 			}
 		};
 
 		rateService.rateUrl(url, comment, (float) rating, callback);
 	}
-	
-	
+
 	/*
 	 * 
 	 */
-	public void userAuthentication(){
+	public void userAuthentication() {
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
 
@@ -528,7 +542,7 @@ public class FrontPage {
 
 			@Override
 			public void onSuccess(Boolean result) {
-				if (result){
+				if (result) {
 					RateItServiceAsync rateService = (RateItServiceAsync) GWT
 							.create(RateItService.class);
 
@@ -540,13 +554,12 @@ public class FrontPage {
 
 						@Override
 						public void onSuccess(String email) {
-							htmlNewHtml.setHTML("logged in as " + email);
+							htmlNewHtml.setHTML("Logged in as " + email);
 						}
 					};
 
 					rateService.getCurrentUserEmail(callback);
-				}
-				else{
+				} else {
 					RateItServiceAsync rateService = (RateItServiceAsync) GWT
 							.create(RateItService.class);
 
@@ -558,11 +571,12 @@ public class FrontPage {
 
 						@Override
 						public void onSuccess(String url) {
-							htmlNewHtml.setHTML("please log in " + "<a href=\"" + url + ">here</a>");
+							htmlNewHtml.setHTML("Please log in " + "<a href=\""
+									+ url + "\">here</a>");
 						}
 					};
-
-					rateService.getLoginURL("", callback);
+					// TODO change url
+					rateService.getLoginURL("www.rate-it.de", callback);
 				}
 			}
 		};
