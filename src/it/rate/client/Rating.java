@@ -11,7 +11,9 @@ import java.util.Date;
  * The same goes for rating. Can be used for an average rating (URL summary) or a certain rating (from one user)
  * @author Waldo
  */
-public class Rating {
+@SuppressWarnings("serial")
+public class Rating implements Serializable
+{
 	
 	private String userEmail;
 	private String url;
@@ -19,6 +21,22 @@ public class Rating {
 	private float rating;
 	private Date date; 
 	private String host; 
+	
+	public Rating()
+	{
+		
+	}
+	
+	public Rating(String userEmail, String url, String host, String comment,
+			float rating)
+	{
+		this.userEmail = userEmail;
+		this.url = url;
+		this.host = host;
+		this.comment = comment;
+		this.rating = rating;
+		this.date = new Date();
+	}
 	
 
 	
