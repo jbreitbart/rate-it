@@ -2,6 +2,7 @@ package it.rate.server;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -89,9 +90,20 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public List<Rating> getSubDomains(String host)
 	{
-
+//System.out.println("subdomains start");
+//System.out.println("Eingegebener host "+ host);
+		if(host.startsWith("http://"))
+		{
+			host = host.substring(7);
+			if (host.indexOf("/") != -1)
+			{
+				host = host.substring(0, host.indexOf("/"));
+			}
+		}
+//System.out.println("angepasste host " + host);
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
 		List<Rating> result = null;
+		List<Rating> returnResult = new LinkedList<Rating>();
 		Query query = pm.newQuery(RatingDB.class, ("this.host == url"));
 		query.declareParameters("String url");
 
@@ -103,13 +115,15 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			query.closeAll();
 		}
 
-		// for (Rating r: result)
-		// {
-		// System.out.println("host: " + r.getHost() + " subdomain: " +
-		// r.getUrl());
-		// }
+		 for (Rating r: result)
+		 {
+			 System.out.println("host: " + r.getHost() + " subdomain: " +
+			 r.getUrl());
+			 returnResult.add(new Rating(r.getUserEmail(), r.getUrl(), r.getHost(), r.getComment(), r.getRating()));
+		 }
 
-		return result;
+		 System.out.println("getsubdomain END");
+		return returnResult;
 
 	}
 
@@ -118,6 +132,8 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			int countOfUrls)
 	{
 
+		System.out.println("top urls start");
+		System.out.println("start : " + startDate.toString() + "  - end : " + endDate.toString());
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
 		List<Rating> result = null;
 		HashSet<String> selectedUrls = new HashSet<String>();
@@ -130,6 +146,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		{
 			// get all ratings of url
 			result = (List<Rating>) query.execute();
+			System.out.println("DB abfrage ok");
 
 		} finally
 		{
@@ -151,6 +168,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			}
 		}
 
+		System.out.println("count of selected urls" + selectedUrls.size());
 		// calculate the average values for each entry
 		for (String tempRatedUrl : selectedUrls)
 		{
@@ -188,10 +206,10 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			}
 		}
 
-//		for (TopUrl n : topNUrls)
-//		{
-//			System.out.println(n.getUrl() + " : " + n.getAveradgeRating());
-//		}
+		for (TopUrl n : topNUrls)
+		{
+			System.out.println(n.getUrl() + " : " + n.getAveradgeRating());
+		}
 		return topNUrls;
 	}
 

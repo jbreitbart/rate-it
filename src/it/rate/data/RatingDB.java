@@ -18,8 +18,9 @@ import javax.jdo.annotations.IdentityType;
  * @author Vladimir 
  */
 
+@SuppressWarnings("serial")
 @PersistenceCapable(identityType = IdentityType.APPLICATION) 
-public class RatingDB extends Rating
+public class RatingDB extends Rating 
 {
 
 	@PrimaryKey
@@ -37,6 +38,7 @@ public class RatingDB extends Rating
 	private Date date;
 	@Persistent
 	private String host; 	
+	
 
 	public RatingDB(String userEmail, String url, String host, String comment,
 			float rating)

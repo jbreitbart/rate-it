@@ -2,10 +2,16 @@ package it.rate.client;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class TopUrl implements Comparable<TopUrl>, Serializable
 {
 	private String url;
 	private float averadgeRating;
+	
+	public TopUrl()
+	{
+		
+	}
 	
 	public TopUrl(String url, float rating)
 	{
