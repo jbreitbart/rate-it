@@ -16,7 +16,7 @@ public interface RateItService extends RemoteService {
 	 * Adds a rating for a URL in the DB
 	 * @param rating A rating object which holds user, the URL, its rating and an optional comment
 	 */
-	public boolean rateUrl(String url, String comment, float rating);	// server has to check if user hasn't already rated that URL
+	public boolean rateUrl(String url, String comment, float rating, boolean canReplace);	// server has to check if user hasn't already rated that URL
 										// and whether the URL has to be added to the DB
 										// if false is returned, ask for changing users rating and send again
 
@@ -32,6 +32,12 @@ public interface RateItService extends RemoteService {
 	 * @return An array with the top URLs
 	 */
 	public List<TopUrl> getTopUrlsForPeriod(Date startDate, Date endDate, int countOfUrls);
+	
+	/**
+	 * Gets the top Hosts for a certain time period
+	 * @return An array with the top Hosts
+	 */
+	public List<TopUrl> getTopHostsForPeriod(Date startDate, Date endDate, int countOfUrls);
 	
 	/**
 	 * Fetches average URL rating for a certain time period

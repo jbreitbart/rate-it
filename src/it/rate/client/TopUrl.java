@@ -3,20 +3,30 @@ package it.rate.client;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class TopUrl implements Comparable<TopUrl>, Serializable
+public class TopUrl implements Serializable, Comparable<TopUrl>
 {
 	private String url;
 	private float averadgeRating;
+	private int countOfRatings;
 	
 	public TopUrl()
 	{
 		
 	}
 	
-	public TopUrl(String url, float rating)
+	public TopUrl(String url, float rating, int countOfRatings)
 	{
 		this.url = url;
 		this.averadgeRating = rating;
+		this.countOfRatings = countOfRatings;
+	}
+	
+	public int getCountOfRatings() {
+		return countOfRatings;
+	}
+
+	public void setCountOfRatings(int countOfRatings) {
+		this.countOfRatings = countOfRatings;
 	}
 	
 	public String getUrl()
