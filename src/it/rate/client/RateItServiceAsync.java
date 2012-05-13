@@ -10,11 +10,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface RateItServiceAsync {
 
-	void rateUrl(String url, String comment, float rating, AsyncCallback<Boolean> callback);
+	void rateUrl(String url, String comment, float rating, boolean canReplace, AsyncCallback<Boolean> callback);
 
 	void getSubDomains(String url, AsyncCallback<List<Rating>> callback);
 
 	void getTopUrlsForPeriod(Date startDate, Date endDate, int countOfUrls,
+			AsyncCallback<List<TopUrl>> callback);
+	
+	void getTopHostsForPeriod(Date startDate, Date endDate, int countOfUrls,
 			AsyncCallback<List<TopUrl>> callback);
 
 	void getAverageRatingForPeriod(String url, Date startDate,
