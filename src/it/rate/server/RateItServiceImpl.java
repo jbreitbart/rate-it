@@ -2,6 +2,7 @@ package it.rate.server;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -183,28 +184,35 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 				+ endDate.toString());
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
 		List<TopUrlDB> result = null;
-		List<TopUrl> topUrls = new LinkedList<TopUrl>();
+		List<TopUrl> topUrls = new ArrayList<TopUrl>();
 
 		Query query = pm.newQuery(TopUrlDB.class, "this.date >= startDateParam && this.date <= endDateParam" );
-		query.setOrdering("averageRating desc");
 		query.declareParameters("java.util.Date startDateParam, java.util.Date endDateParam");
 		
 		try
 		{
 			// get all ratings of url
 			result = (List<TopUrlDB>) query.execute(startDate, endDate);
-			System.out.println("DB abfrage ok " + result.size());
-
 		} finally
 		{
+			
 			query.closeAll();
 		}
-		
+		Collections.sort(result);
+		int i = 0;
 		for(TopUrlDB topUrl : result)
 		{
-			topUrls.add(new TopUrl(topUrl.getUrl(), topUrl.getAverageRating(), topUrl.getCountOfRatings()));
-			System.out.println(topUrl.getUrl() + " : " + topUrl.getAverageRating() + " : " +  topUrl.getCountOfRatings());
+			if (i < countOfUrls)
+			{
+				topUrls.add(new TopUrl(topUrl.getUrl(), topUrl.getAverageRating(), topUrl.getCountOfRatings()));
+				i++;
+			}
+			else
+			{
+				break;
+			}
 		}
+		
 		return topUrls;
 	}
 

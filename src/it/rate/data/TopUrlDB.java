@@ -10,7 +10,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 @SuppressWarnings("serial")
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class TopUrlDB
+public class TopUrlDB implements Comparable<TopUrlDB>
 {
 	
 
@@ -76,6 +76,25 @@ public class TopUrlDB
 	public void setCountOfRatings(int countOfRatings)
 	{
 		this.countOfRatings = countOfRatings;
+	}
+
+	@Override
+	public int compareTo(TopUrlDB o) {
+
+		int result = 0;
+		if (this.getAverageRating() < o.getAverageRating())
+		{
+			result = 1;
+		}
+		else if (this.getAverageRating() > o.getAverageRating())
+		{
+			result = -1;
+		}
+		else
+		{
+			result = 0;
+		}
+		return result;
 	}
 
 

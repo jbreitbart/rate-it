@@ -279,7 +279,7 @@ public class FrontPage {
 			public void onDoubleClick(DoubleClickEvent event) {
 				// Show sub domain panel
 				verticalPanel_4.setVisible(true);
-				receiveSubDomains(listBox.getItemText(listBox.getItemCount()));
+				receiveSubDomains(listBox.getItemText(listBox.getSelectedIndex()));
 			}
 		});
 
@@ -312,25 +312,21 @@ public class FrontPage {
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
 				Date startDate = new Date();
-				startDate.setTime(new Date().getTime());
 				Date endDate = new Date();
-				startDate.setYear(startDate.getYear() + 1900);
-				endDate.setYear(startDate.getYear());
-				endDate.setMonth(startDate.getMonth());
-				endDate.setDate(startDate.getDay());
+				
 				// Years top
 				if (event.getSelectedItem() == 0) {
-					endDate.setYear(startDate.getYear() - 1);
+					startDate.setYear(endDate.getYear() - 1);
 					getTopUrls(TOP_COUNT, startDate, endDate);
 				}
 				// Months top
 				if (event.getSelectedItem() == 1) {
-					endDate.setMonth(startDate.getMonth() - 1);
+					startDate.setMonth(endDate.getMonth() - 1);
 					getTopUrls(TOP_COUNT, startDate, endDate);
 				}
 				// Todays top
 				if (event.getSelectedItem() == 2) {
-					endDate.setDate(startDate.getDate() - 1);
+					startDate.setDate(endDate.getDate() - 1);
 					getTopUrls(TOP_COUNT, startDate, endDate);
 				}
 			}
@@ -443,11 +439,11 @@ public class FrontPage {
 	protected void updateSubDomainList(List<Rating> subDomains) {
 		try {
 			for (Rating r : subDomains) {
-				listBox.addItem(r.getUrl());
+				listBox_1.addItem(r.getUrl());
 			}
-			listBox.setVisibleItemCount(subDomains.size());
-			if (!listBox.isEnabled()) {
-				listBox.setEnabled(true);
+			listBox_1.setVisibleItemCount(subDomains.size());
+			if (!listBox_1.isEnabled()) {
+				listBox_1.setEnabled(true);
 			}
 		} catch (Exception e) {
 			e.getMessage();
@@ -524,7 +520,7 @@ public class FrontPage {
 			}
 		};
 
-		rateService.rateUrl(url, comment, (float) rating, callback);
+		rateService.rateUrl(url, comment, (float) rating, false, callback);
 	}
 
 	/*
