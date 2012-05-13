@@ -477,7 +477,7 @@ public class FrontPage {
 			}
 		};
 
-		rateService.getTopUrlsForPeriod(startDate, endDate, urlCount, callback);
+		rateService.getTopHostsForPeriod(startDate, endDate, urlCount, callback);
 	}
 
 	/**

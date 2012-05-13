@@ -12,7 +12,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 @SuppressWarnings("serial")
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class TopHostDB implements Serializable
+public class TopHostDB implements Serializable, Comparable<TopHostDB>
 {
 
 	@PrimaryKey
@@ -76,6 +76,24 @@ public class TopHostDB implements Serializable
 	public void setCountOfRatings(int countOfRatings)
 	{
 		this.countOfRatings = countOfRatings;
+	}
+
+	@Override
+	public int compareTo(TopHostDB o) {
+		int result = 0;
+		if (this.getAverageRating() < o.getAverageRating())
+		{
+			result = 1;
+		}
+		else if (this.getAverageRating() > o.getAverageRating())
+		{
+			result = -1;
+		}
+		else
+		{
+			result = 0;
+		}
+		return result;
 	}
 
 }

@@ -34,6 +34,12 @@ public interface RateItService extends RemoteService {
 	public List<TopUrl> getTopUrlsForPeriod(Date startDate, Date endDate, int countOfUrls);
 	
 	/**
+	 * Gets the top Hosts for a certain time period
+	 * @return An array with the top Hosts
+	 */
+	public List<TopUrl> getTopHostsForPeriod(Date startDate, Date endDate, int countOfUrls);
+	
+	/**
 	 * Fetches average URL rating for a certain time period
 	 * @param url The URL as string object
 	 * @param date The date for the average rating

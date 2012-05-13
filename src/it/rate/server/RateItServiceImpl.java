@@ -136,8 +136,6 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public List<Rating> getSubDomains(String host)
 	{
-		// System.out.println("subdomains start");
-		// System.out.println("Eingegebener host "+ host);
 		if (host.startsWith("http://"))
 		{
 			host = host.substring(7);
@@ -146,7 +144,6 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 				host = host.substring(0, host.indexOf("/"));
 			}
 		}
-		// System.out.println("angepasste host " + host);
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
 		List<Rating> result = null;
 		List<Rating> returnResult = new LinkedList<Rating>();
@@ -163,13 +160,10 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 
 		for (Rating r : result)
 		{
-			System.out.println("host: " + r.getHost() + " subdomain: "
-					+ r.getUrl());
 			returnResult.add(new Rating(r.getUserEmail(), r.getUrl(), r
 					.getHost(), r.getComment(), r.getRating()));
 		}
 
-		System.out.println("getsubdomain END");
 		return returnResult;
 
 	}
@@ -179,9 +173,6 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			int countOfUrls)
 	{
 
-		System.out.println("top urls start");
-		System.out.println("start : " + startDate.toString() + "  - end : "
-				+ endDate.toString());
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
 		List<TopUrlDB> result = null;
 		List<TopUrl> topUrls = new ArrayList<TopUrl>();
@@ -214,6 +205,43 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		}
 		
 		return topUrls;
+	}
+	
+	@Override
+	public List<TopUrl> getTopHostsForPeriod(Date startDate, Date endDate,
+			int countOfUrls) {
+		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
+		List<TopHostDB> result = null;
+		List<TopUrl> topHosts = new ArrayList<TopUrl>();
+
+		Query query = pm.newQuery(TopHostDB.class, "this.date >= startDateParam && this.date <= endDateParam" );
+		query.declareParameters("java.util.Date startDateParam, java.util.Date endDateParam");
+		
+		try
+		{
+			// get all ratings of url
+			result = (List<TopHostDB>) query.execute(startDate, endDate);
+		} finally
+		{
+			
+			query.closeAll();
+		}
+		Collections.sort(result);
+		int i = 0;
+		for(TopHostDB topHost : result)
+		{
+			if (i < countOfUrls)
+			{
+				topHosts.add(new TopUrl(topHost.getURL(), topHost.getAverageRating(), topHost.getCountOfRatings()));
+				i++;
+			}
+			else
+			{
+				break;
+			}
+		}
+		
+		return topHosts;
 	}
 
 	@Override
