@@ -12,7 +12,7 @@ public class TimePeriod {
 	@SuppressWarnings("deprecation")
 	public TimePeriod(){
 		today.setTime(new Date().getTime());
-		today.setYear(today.getYear() + 1900);
+		today.setYear(today.getYear());
 		oneYearBack.setTime(today.getTime());
 		oneMonthBack.setTime(today.getTime());
 		oneDayBack.setTime(today.getTime());
