@@ -193,7 +193,7 @@ public class HandlerInit {
 				}
 				// Months top
 				if (event.getSelectedItem() == 1) {
-					if (receivedYearsTopUrls == null) {
+					if (receivedMonthsTopUrls == null) {
 						rpc.receiveTopUrls(TOP_COUNT, calendar.oneMonthBack,
 								calendar.today);
 						receivedMonthsTopUrls = rpc.receivedTopUrls;
@@ -202,7 +202,7 @@ public class HandlerInit {
 				}
 				// Todays top
 				if (event.getSelectedItem() == 2) {
-					if (receivedYearsTopUrls == null) {
+					if (receivedTodaysTopUrls == null) {
 						rpc.receiveTopUrls(TOP_COUNT, calendar.oneDayBack,
 								calendar.today);
 						receivedTodaysTopUrls = rpc.receivedTopUrls;
