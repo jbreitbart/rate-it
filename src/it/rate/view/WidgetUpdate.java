@@ -59,6 +59,7 @@ public class WidgetUpdate {
 	 *            List of all sub domains
 	 */
 	public void updateSubDomainList(List<Rating> subDomains) {
+		fP.listBox_1.clear();
 		try {
 			for (Rating r : subDomains) {
 				fP.listBox_1.addItem(r.getUrl());
@@ -80,6 +81,7 @@ public class WidgetUpdate {
 	 *            List of all top URLs
 	 */
 	public void updateTopUrlsList(List<TopUrl> topUrls, ListBox box) {
+		box.clear();
 		try {
 			for (TopUrl r : topUrls) {
 				box.addItem(r.getUrl());
@@ -91,6 +93,7 @@ public class WidgetUpdate {
 	}
 
 	public void updateUserRatedUrls(List<Rating> userRatings) {
+		fP.listBox_7.clear();
 		fP.listBox_7.setVisible(true);
 		try {
 			for (Rating r : userRatings) {
@@ -116,6 +119,7 @@ public class WidgetUpdate {
 
 	public void updateDomainList(List<TopUrl> topDomains,
 			ListBox box) {
+		box.clear();
 		try {
 			for (TopUrl r : topDomains) {
 				box.addItem(r.getUrl());
