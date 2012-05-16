@@ -5,3 +5,6 @@
 *.war
 *.ear
 /gwt-unitCache
+/war/rateit
+/war/WEB-INF/deploy
+.gwt
