@@ -1,0 +1,3 @@
+This program, plugin, or function is licenced under the Maximal Opensource Licence. That means that it`s source should always stay open source. And any changes must be available with the branches. And its derivatives can never in anyway be released as closed source.
+
+Authorship can be included, but it is not neccesary. A list of changes by author is though recommended.
