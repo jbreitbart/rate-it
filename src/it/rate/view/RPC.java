@@ -232,7 +232,7 @@ public class RPC {
 					// TODO change url
 					rateService
 							.getLoginURL(
-									"http://127.0.0.1:8888/RateIt.html?gwt.codesvr=127.0.0.1:9997",
+									"http://rateerate.appspot.com/",
 									callback);
 				}
 			}
