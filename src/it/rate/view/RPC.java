@@ -122,12 +122,17 @@ public class RPC {
 			public void onFailure(Throwable caught) {
 				Window.alert("An error occured while sending your rating."
 						+ "Please try it again.");
+				System.out.println("lolo");
 			}
 
 			@Override
 			public void onSuccess(Integer result) {
 				// If server sends rate exists, the user will be asked for overwriting
 				// his rating
+				if(result == ErrorMessage.URL_NOT_CORRECT)
+				{
+					Window.confirm("lololo");
+				}
 				if (result == ErrorMessage.RATE_EXISTS) {
 					if (Window
 							.confirm("Are you sure you want to replace your rating for this URL?")) {
@@ -140,7 +145,8 @@ public class RPC {
 							@Override
 							public void onFailure(Throwable caught) {
 								Window.alert("An error occured while sending your rating."
-										+ "Please try it again.");								
+										+ "Please try it again.");
+								System.out.println("lala");
 							}
 
 							@Override

@@ -75,7 +75,7 @@ public class Rating implements Serializable
 	public float getRating() {
 		return rating;
 	}
-	public void setRating(int rating) {
+	public void setRating(float rating) {
 		this.rating = rating;
 	}
 	public String getComment() {
