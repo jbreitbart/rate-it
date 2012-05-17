@@ -1,6 +1,7 @@
 package it.rate.data;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.Text;
 
 import it.rate.client.Rating;
 
@@ -18,9 +19,8 @@ import javax.jdo.annotations.IdentityType;
  * @author Vladimir 
  */
 
-@SuppressWarnings("serial")
 @PersistenceCapable(identityType = IdentityType.APPLICATION) 
-public class RatingDB extends Rating 
+public class RatingDB 
 {
 
 	@PrimaryKey
@@ -31,7 +31,7 @@ public class RatingDB extends Rating
 	@Persistent
 	private String url;
 	@Persistent
-	private String comment;
+	private Text comment;
 	@Persistent
 	private float rating;
 	@Persistent
@@ -40,7 +40,7 @@ public class RatingDB extends Rating
 	private String host; 	
 	
 
-	public RatingDB(String userEmail, String url, String host, String comment,
+	public RatingDB(String userEmail, String url, String host, Text comment,
 			float rating)
 	{
 		this.userEmail = userEmail;
@@ -106,12 +106,12 @@ public class RatingDB extends Rating
 		this.rating = rating;
 	}
 
-	public String getComment()
+	public Text getComment()
 	{
 		return comment;
 	}
 
-	public void setComments(String comment)
+	public void setComments(Text comment)
 	{
 		this.comment = comment;
 	}
