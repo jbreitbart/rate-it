@@ -21,6 +21,7 @@ import it.rate.data.TopHostDB;
 import it.rate.data.TopUrlDB;
 import it.rate.util.PMF;
 
+import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -62,7 +63,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 
 					if (result.isEmpty()) {
 						RatingDB newRating = new RatingDB(user.getEmail(), url,
-								host, comment, rating);
+								host, new Text(comment), rating);
 						TopHostDB topHost = null;
 						TopUrlDB topUrl = null;
 
@@ -280,7 +281,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 
 			for (RatingDB r : result) {
 				allUrls.add(new Rating(r.getUserEmail(), r.getUrl(), r
-						.getHost(), r.getComment(), r.getRating()));
+						.getHost(), r.getComment().getValue(), r.getRating()));
 			}
 		}
 		return allUrls;
