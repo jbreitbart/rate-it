@@ -38,7 +38,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 {
 
 	@Override
-	public Integer rateUrl(String url, String comment, float rating,
+	public int rateUrl(String url, String comment, float rating,
 			boolean canReplace)
 	{
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
