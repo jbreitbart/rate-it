@@ -11,6 +11,7 @@ import it.rate.client.RateItService;
 import it.rate.client.RateItServiceAsync;
 import it.rate.client.Rating;
 import it.rate.client.TopUrl;
+import it.rate.util.ErrorMessage;
 
 public class RPC {
 	
@@ -116,34 +117,37 @@ public class RPC {
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
 
-		AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+		AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
 
 			public void onFailure(Throwable caught) {
 				Window.alert("An error occured while sending your rating."
 						+ "Please try it again.");
+				System.out.println("lolo");
 			}
 
 			@Override
-			public void onSuccess(Boolean result) {
-				// If server sends false, the user will be asked for overwriting
+			public void onSuccess(Integer result) {
+				// If server sends rate exists, the user will be asked for overwriting
 				// his rating
-				if (!result) {
+				
+				if (result == ErrorMessage.RATE_EXISTS) {
 					if (Window
 							.confirm("Are you sure you want to replace your rating for this URL?")) {
 						replaceRating = true;
 						
 						RateItServiceAsync rateService = (RateItServiceAsync) GWT
 								.create(RateItService.class);
-						AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+						AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
 
 							@Override
 							public void onFailure(Throwable caught) {
 								Window.alert("An error occured while sending your rating."
-										+ "Please try it again.");								
+										+ "Please try it again.");
+								System.out.println("lala");
 							}
 
 							@Override
-							public void onSuccess(Boolean result) {
+							public void onSuccess(Integer result) {
 								savedUrl = null;
 								savedRating = 0;
 								savedComment = null;
