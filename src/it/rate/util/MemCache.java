@@ -26,7 +26,6 @@ public class MemCache {
 			cache = cacheFactory.createCache(props);
 			
 		} catch (CacheException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
