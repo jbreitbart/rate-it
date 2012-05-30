@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class TopUrl implements Serializable, Comparable<TopUrl>
-{
+{	
 	private String url;
 	private float averadgeRating;
 	private int countOfRatings;

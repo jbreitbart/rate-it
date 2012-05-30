@@ -143,7 +143,6 @@ public class RPC {
 							public void onFailure(Throwable caught) {
 								Window.alert("An error occured while sending your rating."
 										+ "Please try it again.");
-								System.out.println("lala");
 							}
 
 							@Override

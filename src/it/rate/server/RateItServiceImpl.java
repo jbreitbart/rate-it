@@ -4,25 +4,28 @@ import it.rate.client.RateItService;
 import it.rate.client.Rating;
 import it.rate.client.TopUrl;
 import it.rate.data.RatingDB;
-import it.rate.data.TopHostDB;
-import it.rate.data.TopUrlDB;
 import it.rate.util.ErrorMessage;
+import it.rate.util.MemCache;
 import it.rate.util.PMF;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
-import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import org.apache.commons.validator.routines.UrlValidator;
+import net.sf.jsr107cache.Cache;
 
+import org.apache.commons.validator.routines.UrlValidator;
 
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
@@ -58,7 +61,6 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			UrlValidator urlValidator = new UrlValidator();
 			if (urlValidator.isValid(url))
 			{
-
 				try
 				{
 					link = new URL(url);
@@ -79,47 +81,6 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 						{
 							RatingDB newRating = new RatingDB(user.getEmail(),
 									url, host, new Text(comment), rating);
-							TopHostDB topHost = null;
-							TopUrlDB topUrl = null;
-
-							try
-							{
-								
-								// calculate an average rating for host and save
-								// in
-								// DB if it exists
-								topHost = pm.getObjectById(TopHostDB.class,
-										host);
-								topHost.setAverageRating((topHost
-										.getAverageRating()
-										* topHost.getCountOfRatings() + rating)
-										/ (topHost.getCountOfRatings() + 1));
-								topHost.setCountOfRatings(topHost
-										.getCountOfRatings() + 1);
-							} catch (JDOObjectNotFoundException e)
-							{
-								// else create new object
-								topHost = new TopHostDB(host, rating, 1);
-								pm.makePersistent(topHost);
-							}
-
-							try
-							{
-								// calculate an average rating for url if it
-								// exists
-								topUrl = pm.getObjectById(TopUrlDB.class, url);
-								topUrl.setAverageRating((topUrl
-										.getAverageRating()
-										* topUrl.getCountOfRatings() + rating)
-										/ (topUrl.getCountOfRatings() + 1));
-								topUrl.setCountOfRatings(topUrl
-										.getCountOfRatings() + 1);
-							} catch (JDOObjectNotFoundException e)
-							{
-								// else create new object
-								topUrl = new TopUrlDB(url, rating, 1);
-								pm.makePersistent(topUrl);
-							}
 
 							try
 							{
@@ -138,12 +99,13 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 							// replace the rate
 							else
 							{
-								RatingDB ratingToReplace = pm.getObjectById(RatingDB.class, result.get(0).getKey());
+								RatingDB ratingToReplace = pm.getObjectById(
+										RatingDB.class, result.get(0).getKey());
 								ratingToReplace.setRating(rating);
 								ratingToReplace.setComments(new Text(comment));
 								try
 								{
-									
+
 									pm.makePersistent(ratingToReplace);
 									returnMessage = ErrorMessage.RATE_SUCCESS;
 								} finally
@@ -166,7 +128,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			} else
 			{
 				returnMessage = ErrorMessage.URL_NOT_CORRECT;
-				
+
 			}
 
 		}
@@ -213,39 +175,75 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	public List<TopUrl> getTopUrlsForPeriod(Date startDate, Date endDate,
 			int countOfUrls)
 	{
-		System.out.println("start : " + startDate + " end : " + endDate);
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
-		List<TopUrlDB> result = null;
+		List<RatingDB> result = null;
+		Map<String, TopUrl> tempUrls = new HashMap<String, TopUrl>();
 		List<TopUrl> topUrls = new ArrayList<TopUrl>();
+		List<TopUrl> tempTopUrls = new ArrayList<TopUrl>();
 
-		Query query = pm.newQuery(TopUrlDB.class,
+		Query query = pm.newQuery(RatingDB.class,
 				"this.date >= startDateParam && this.date <= endDateParam");
 		query.declareParameters("java.util.Date startDateParam, java.util.Date endDateParam");
 
 		try
 		{
 			// get all ratings of url
-			result = (List<TopUrlDB>) query.execute(startDate, endDate);
+			result = (List<RatingDB>) query.execute(startDate, endDate);
 		} finally
 		{
 
 			query.closeAll();
 		}
-		Collections.sort(result);
-		int i = 0;
-		for (TopUrlDB topUrl : result)
+
+		// format start and end date to a key for cache (it looks like
+		// "dd.mm.yyy-dd.mm.yyyy-top_urls")
+		DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM,
+				Locale.GERMANY);
+		String cacheKey = df.format(startDate) + "-" + df.format(endDate)
+				+ "-top_urls";
+		System.out.println(cacheKey);
+
+		Cache cache = MemCache.getInstance().getCache();
+
+		// if an entity for this time is not existing in cache, create one
+		if (cache.get(cacheKey) == null)
 		{
-			if (i < countOfUrls)
+			for (RatingDB rating : result)
 			{
-				topUrls.add(new TopUrl(topUrl.getUrl(), topUrl
-						.getAverageRating(), topUrl.getCountOfRatings()));
-				i++;
-			} else
+				if (tempUrls.containsKey(rating.getUrl()))
+				{
+					String url = rating.getUrl();
+					float ratingValue = tempUrls.get(url).getAveradgeRating();
+					int countOfRating = tempUrls.get(url).getCountOfRatings();
+					float newRating = (ratingValue * countOfRating + rating
+							.getRating()) / (countOfRating + 1);
+					tempUrls.put(url, new TopUrl(url, newRating,
+							countOfRating + 1));
+
+				} else
+				{
+					tempUrls.put(rating.getUrl(), new TopUrl(rating.getUrl(),
+							rating.getRating(), 1));
+				}
+			}
+			cache.put(cacheKey, new ArrayList<TopUrl>(tempUrls.values()));
+
+		}
+		tempTopUrls = (List<TopUrl>) cache.get(cacheKey);
+		
+		Collections.sort(tempTopUrls);
+		System.out.println("top url" + topUrls);
+		int i = 0;
+		for (TopUrl temp : tempTopUrls)
+		{
+			if (i > countOfUrls)
 			{
 				break;
 			}
+			topUrls.add(temp);
+			i++;
+			System.out.println("hallo " + temp.getUrl());
 		}
-
 		return topUrls;
 	}
 
@@ -254,35 +252,73 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			int countOfUrls)
 	{
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
-		List<TopHostDB> result = null;
+		List<RatingDB> result = null;
+		Map<String, TopUrl> tempHosts = new HashMap<String, TopUrl>();
 		List<TopUrl> topHosts = new ArrayList<TopUrl>();
+		List<TopUrl> tempTopHosts = new ArrayList<TopUrl>();
 
-		Query query = pm.newQuery(TopHostDB.class,
+		Query query = pm.newQuery(RatingDB.class,
 				"this.date >= startDateParam && this.date <= endDateParam");
 		query.declareParameters("java.util.Date startDateParam, java.util.Date endDateParam");
 
 		try
 		{
 			// get all ratings of url
-			result = (List<TopHostDB>) query.execute(startDate, endDate);
+			result = (List<RatingDB>) query.execute(startDate, endDate);
 		} finally
 		{
 
 			query.closeAll();
 		}
-		Collections.sort(result);
-		int i = 0;
-		for (TopHostDB topHost : result)
+
+		// format start and end date to a key for cache (it looks like
+		// "dd.mm.yyy-dd.mm.yyyy-top_urls")
+		DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM,
+				Locale.GERMANY);
+		String cacheKey = df.format(startDate) + "-" + df.format(endDate)
+				+ "-top_hosts";
+		System.out.println(cacheKey);
+
+		Cache cache = MemCache.getInstance().getCache();
+
+		// if an entity for this time is not existing in cache, create one
+		if (cache.get(cacheKey) == null)
 		{
-			if (i < countOfUrls)
+			for (RatingDB rating : result)
 			{
-				topHosts.add(new TopUrl(topHost.getURL(), topHost
-						.getAverageRating(), topHost.getCountOfRatings()));
-				i++;
-			} else
+				if (tempHosts.containsKey(rating.getHost()))
+				{
+					String host = rating.getHost();
+					float ratingValue = tempHosts.get(host).getAveradgeRating();
+					int countOfRating = tempHosts.get(host).getCountOfRatings();
+					float newRating = (ratingValue * countOfRating + rating
+							.getRating()) / (countOfRating + 1);
+					tempHosts.put(host, new TopUrl(host, newRating,
+							countOfRating + 1));
+
+				} else
+				{
+					tempHosts.put(rating.getHost(), new TopUrl(
+							rating.getHost(), rating.getRating(), 1));
+				}
+			}
+			cache.put(cacheKey, new ArrayList<TopUrl>(tempHosts.values()));
+
+		}
+		tempTopHosts = (List<TopUrl>) cache.get(cacheKey);
+
+		Collections.sort(tempTopHosts);
+		System.out.println("top host" + topHosts);
+		int i = 0;
+		for (TopUrl temp : tempTopHosts)
+		{
+			if (i > countOfUrls)
 			{
 				break;
 			}
+			topHosts.add(temp);
+			i++;
+			System.out.println("hallo " + temp.getUrl());
 		}
 
 		return topHosts;
@@ -410,8 +446,6 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public String getLoginURL(String destinationURL)
 	{
-		// System.out.println(UserServiceFactory.getUserService().createLoginURL(
-		// destinationURL));
 		return UserServiceFactory.getUserService().createLoginURL(
 				destinationURL);
 	}
