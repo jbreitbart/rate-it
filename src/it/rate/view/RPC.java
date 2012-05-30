@@ -14,7 +14,7 @@ import it.rate.client.TopUrl;
 import it.rate.util.ErrorMessage;
 
 public class RPC {
-	
+
 	FrontPage fP;
 	WidgetUpdate wUpd;
 	public List<TopUrl> receivedTopUrls;
@@ -26,12 +26,12 @@ public class RPC {
 	public String savedComment;
 	boolean replaceRating = false;
 	boolean loggedIn = false;
-	
-	public RPC (FrontPage frontPage, WidgetUpdate widgetUpdate){
+
+	public RPC(FrontPage frontPage, WidgetUpdate widgetUpdate) {
 		this.fP = frontPage;
 		this.wUpd = widgetUpdate;
 	}
-	
+
 	/**
 	 * Method which receives all sub domains for a URL from server and calls the
 	 * method updateSubDomainList(List<Rating> result)
@@ -60,7 +60,7 @@ public class RPC {
 
 		rateService.getSubDomains(url, callback);
 	}
-	
+
 	/**
 	 * Receives top URLs from server
 	 * 
@@ -90,7 +90,7 @@ public class RPC {
 
 		rateService.getTopUrlsForPeriod(startDate, endDate, urlCount, callback);
 	}
-	
+
 	/**
 	 * Saves the last rating on client side and sends rating to server. If user
 	 * already rated the URL, he will be asked for overwriting his rating.
@@ -108,7 +108,7 @@ public class RPC {
 		savedUrl = url;
 		savedRating = rating;
 		savedComment = comment;
-		
+
 		if (!loggedIn) {
 			Window.alert("Please log in first");
 			return;
@@ -122,19 +122,19 @@ public class RPC {
 			public void onFailure(Throwable caught) {
 				Window.alert("An error occured while sending your rating."
 						+ "Please try it again.");
-				System.out.println("lolo");
 			}
 
 			@Override
 			public void onSuccess(Integer result) {
-				// If server sends rate exists, the user will be asked for overwriting
+				// If server sends rate exists, the user will be asked for
+				// overwriting
 				// his rating
-				
+
 				if (result == ErrorMessage.RATE_EXISTS) {
 					if (Window
 							.confirm("Are you sure you want to replace your rating for this URL?")) {
 						replaceRating = true;
-						
+
 						RateItServiceAsync rateService = (RateItServiceAsync) GWT
 								.create(RateItService.class);
 						AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
@@ -143,6 +143,7 @@ public class RPC {
 							public void onFailure(Throwable caught) {
 								Window.alert("An error occured while sending your rating."
 										+ "Please try it again.");
+								System.out.println("lala");
 							}
 
 							@Override
@@ -153,13 +154,13 @@ public class RPC {
 								replaceRating = false;
 								wUpd.clearUrlBox();
 								wUpd.clearCommentBox();
-								Window.alert("Thank your for your rating!");								
+								Window.alert("Thank your for your rating!");
 							}
-							
+
 						};
 
-						rateService
-						.rateUrl(savedUrl, savedComment, (float) savedRating, replaceRating, callback);
+						rateService.rateUrl(savedUrl, savedComment,
+								(float) savedRating, replaceRating, callback);
 						return;
 					}
 					savedUrl = null;
@@ -178,8 +179,47 @@ public class RPC {
 			}
 		};
 
-		rateService
-				.rateUrl(url, comment, (float) rating, replaceRating, callback);
+		rateService.rateUrl(url, comment, (float) rating, replaceRating,
+				callback);
+	}
+
+	public void receiveUserRatings() {
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+
+		AsyncCallback<List<Rating>> callback = new AsyncCallback<List<Rating>>() {
+
+			public void onFailure(Throwable caught) {
+				Window.alert("Could not get user information from server.");
+			}
+
+			@Override
+			public void onSuccess(List<Rating> result) {
+				receivedUserRatings = result;
+			}
+		};
+		rateService.getAllUserRatedUrls(callback);
+	}
+
+	public void receiveTopDomains(int TOP_COUNT, Date oneYearBack, Date today) {
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+
+		AsyncCallback<List<TopUrl>> callback = new AsyncCallback<List<TopUrl>>() {
+
+			public void onFailure(Throwable caught) {
+				Window.alert("An error occured while retrieving the url list.");
+			}
+
+			@Override
+			public void onSuccess(List<TopUrl> topDomains) {
+				receivedTopDomains = topDomains;
+			}
+		};
+
+		rateService.getTopHostsForPeriod(oneYearBack, today, TOP_COUNT,
+				callback);
+
 	}
 	
 	/**
@@ -210,7 +250,42 @@ public class RPC {
 						@Override
 						public void onSuccess(String email) {
 							fP.htmlNewHtml.setHTML("Logged in as " + email);
-							loggedIn = true;
+							
+							RateItServiceAsync rateService = (RateItServiceAsync) GWT
+									.create(RateItService.class);
+
+							AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+
+								public void onFailure(Throwable caught) {
+									Window.alert("Could not get user information from server.");
+								}
+
+								@Override
+								public void onSuccess(Boolean result) {
+									RateItServiceAsync rateService = (RateItServiceAsync) GWT
+											.create(RateItService.class);
+
+									AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+										public void onFailure(Throwable caught) {
+											Window.alert("Could not get user information from server.");
+										}
+
+										@Override
+										public void onSuccess(String url) {
+											fP.htmlNewHtml_1.setVisible(true);
+											fP.htmlNewHtml_1.setHTML("<a href=\"" + url + "\">Logout</a>");
+											loggedIn = true;
+										}
+									};
+
+									rateService.getLogoutURL("http://rateerate.appspot.com/",
+											callback);
+
+								}
+							};
+
+							rateService.isUserLoggedIn(callback);
 						}
 					};
 
@@ -227,16 +302,14 @@ public class RPC {
 
 						@Override
 						public void onSuccess(String url) {
-							fP.htmlNewHtml.setHTML("Please log in " + "<a href=\""
-									+ url + "\">here</a>");
+							fP.htmlNewHtml.setHTML("Please log in "
+									+ "<a href=\"" + url + "\">here</a>");
 							loggedIn = false;
 						}
 					};
 					// TODO change url
-					rateService
-							.getLoginURL(
-									"http://rateerate.appspot.com/",
-									callback);
+					rateService.getLoginURL("http://rateerate.appspot.com/",
+							callback);
 				}
 			}
 		};
@@ -244,42 +317,46 @@ public class RPC {
 		rateService.isUserLoggedIn(callback);
 	}
 
-	public void receiveUserRatings() {
+	/**
+	 * User logout
+	 */
+	public void logout() {
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
 
-		AsyncCallback<List<Rating>> callback = new AsyncCallback<List<Rating>>() {
+		AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
 
 			public void onFailure(Throwable caught) {
 				Window.alert("Could not get user information from server.");
 			}
 
 			@Override
-			public void onSuccess(List<Rating> result) {
-				receivedUserRatings = result;				
+			public void onSuccess(Boolean result) {
+				RateItServiceAsync rateService = (RateItServiceAsync) GWT
+						.create(RateItService.class);
+
+				AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+					public void onFailure(Throwable caught) {
+						Window.alert("Could not get user information from server.");
+					}
+
+					@Override
+					public void onSuccess(String url) {
+						fP.htmlNewHtml.setHTML("Please log in " + "<a href=\""
+								+ url + "\">here</a>");
+						fP.htmlNewHtml_1.setVisible(false);
+						loggedIn = false;
+					}
+				};
+
+				rateService.getLogoutURL("http://rateerate.appspot.com/",
+						callback);
+
 			}
 		};
-		rateService.getAllUserRatedUrls(callback);
-	}
 
-	public void receiveTopDomains(int TOP_COUNT, Date oneYearBack, Date today) {
-		RateItServiceAsync rateService = (RateItServiceAsync) GWT
-				.create(RateItService.class);
-
-		AsyncCallback<List<TopUrl>> callback = new AsyncCallback<List<TopUrl>>() {
-
-			public void onFailure(Throwable caught) {
-				Window.alert("An error occured while retrieving the url list.");
-			}
-
-			@Override
-			public void onSuccess(List<TopUrl> topDomains) {
-				receivedTopDomains = topDomains;
-			}
-		};
-
-		rateService.getTopHostsForPeriod(oneYearBack, today, TOP_COUNT, callback);
-		
+		rateService.isUserLoggedIn(callback);
 	}
 
 }

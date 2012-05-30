@@ -346,5 +346,14 @@ public class HandlerInit {
 			}
 
 		});
+		
+		fP.htmlNewHtml_1.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				rpc.logout();				
+			}
+			
+		});
 	}
 }

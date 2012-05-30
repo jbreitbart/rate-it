@@ -61,6 +61,7 @@ public class FrontPage {
 	public Label lblNewLabel_4;
 	public VerticalPanel verticalPanel_7;
 	public Label lblNewLabel_5;
+	public HTML htmlNewHtml_1;
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -77,10 +78,16 @@ public class FrontPage {
 
 		verticalPanel_2 = new VerticalPanel();
 		rootPanel.add(verticalPanel_2, 10, 10);
-
-		htmlNewHtml = new HTML("", true);
-		htmlNewHtml.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		verticalPanel_2.add(htmlNewHtml);
+		
+				htmlNewHtml = new HTML("", true);
+				verticalPanel_2.add(htmlNewHtml);
+				htmlNewHtml.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		
+		htmlNewHtml_1 = new HTML("", true);
+		verticalPanel_2.add(htmlNewHtml_1);
+		htmlNewHtml_1.setVisible(false);
+		htmlNewHtml_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		verticalPanel_2.setCellHorizontalAlignment(htmlNewHtml_1, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		horizontalPanel = new HorizontalPanel();
 		horizontalPanel
