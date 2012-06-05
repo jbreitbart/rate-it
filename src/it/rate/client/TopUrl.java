@@ -37,7 +37,7 @@ public class TopUrl implements Serializable, Comparable<TopUrl>
 	{
 		this.url = url;
 	}
-	public float getAveradgeRating()
+	public float getAverageRating()
 	{
 		return averadgeRating;
 	}
@@ -50,11 +50,11 @@ public class TopUrl implements Serializable, Comparable<TopUrl>
 	public int compareTo(TopUrl o)
 	{
 		int result = 0;
-		if (this.getAveradgeRating() < o.getAveradgeRating())
+		if (this.getAverageRating() < o.getAverageRating())
 		{
 			result = 1;
 		}
-		else if (this.getAveradgeRating() > o.getAveradgeRating())
+		else if (this.getAverageRating() > o.getAverageRating())
 		{
 			result = -1;
 		}

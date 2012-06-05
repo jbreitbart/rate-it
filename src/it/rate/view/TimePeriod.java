@@ -4,15 +4,19 @@ import java.util.Date;
 
 public class TimePeriod {
 	
-	Date oneYearBack = new Date();
-	Date oneMonthBack = new Date();
-	Date oneDayBack = new Date();
-	Date today = new Date();
+	public Date oneYearBack;
+	public Date oneMonthBack;
+	public Date oneDayBack;
+	public Date today;
 
 	@SuppressWarnings("deprecation")
 	public TimePeriod(){
+		oneYearBack = new Date();
+		oneMonthBack = new Date();
+		oneDayBack = new Date();
+		today = new Date();
+		
 		today.setTime(new Date().getTime());
-		today.setYear(today.getYear());
 		oneYearBack.setTime(today.getTime());
 		oneMonthBack.setTime(today.getTime());
 		oneDayBack.setTime(today.getTime());
@@ -36,5 +40,9 @@ public class TimePeriod {
 		}
 		oneDayBack.setDate(today.getDate() - 1);
 		
+	}
+	
+	public void refresh(){
+		today = new Date();
 	}
 }
