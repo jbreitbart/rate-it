@@ -213,7 +213,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 				if (tempUrls.containsKey(rating.getUrl()))
 				{
 					String url = rating.getUrl();
-					float ratingValue = tempUrls.get(url).getAveradgeRating();
+					float ratingValue = tempUrls.get(url).getAverageRating();
 					int countOfRating = tempUrls.get(url).getCountOfRatings();
 					float newRating = (ratingValue * countOfRating + rating
 							.getRating()) / (countOfRating + 1);
@@ -289,7 +289,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 				if (tempHosts.containsKey(rating.getHost()))
 				{
 					String host = rating.getHost();
-					float ratingValue = tempHosts.get(host).getAveradgeRating();
+					float ratingValue = tempHosts.get(host).getAverageRating();
 					int countOfRating = tempHosts.get(host).getCountOfRatings();
 					float newRating = (ratingValue * countOfRating + rating
 							.getRating()) / (countOfRating + 1);

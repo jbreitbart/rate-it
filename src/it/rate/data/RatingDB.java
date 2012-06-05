@@ -3,8 +3,6 @@ package it.rate.data;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
 
-import it.rate.client.Rating;
-
 import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
