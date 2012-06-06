@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.HTML;
 
-public class FrontPage {
+public class FrontPage implements Constants {
 
 	public RootPanel rootPanel;
 	public VerticalPanel verticalPanel_2;
@@ -42,7 +42,6 @@ public class FrontPage {
 	public ListBox listBox_1;
 	public Label lblNewLabel_1;
 	public HTML htmlNewHtml;
-	public static final int TOP_COUNT = 10;
 	public ListBox listBox_2;
 	public ListBox listBox_3;
 	public Label lblNewLabel_2;
@@ -55,12 +54,18 @@ public class FrontPage {
 	public ListBox listBox_5;
 	public ListBox listBox_6;
 	public VerticalPanel verticalPanel_5;
-	public Button btnSeeOwnRatings;
 	public ListBox listBox_7;
 	public HorizontalPanel horizontalPanel_2;
 	public Label lblNewLabel_4;
 	public VerticalPanel verticalPanel_7;
 	public Label lblNewLabel_5;
+	public HTML htmlNewHtml_1;
+	public VerticalPanel verticalPanel_8;
+	public Button btnRefresh;
+	public Button btnRefresh_1;
+	public Button btnNewButton;
+	public TextBox textBox;
+	public Label lblNewLabel_6;
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -77,10 +82,16 @@ public class FrontPage {
 
 		verticalPanel_2 = new VerticalPanel();
 		rootPanel.add(verticalPanel_2, 10, 10);
-
-		htmlNewHtml = new HTML("", true);
-		htmlNewHtml.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		verticalPanel_2.add(htmlNewHtml);
+		
+				htmlNewHtml = new HTML("", true);
+				verticalPanel_2.add(htmlNewHtml);
+				htmlNewHtml.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		
+		htmlNewHtml_1 = new HTML("", true);
+		verticalPanel_2.add(htmlNewHtml_1);
+		htmlNewHtml_1.setVisible(false);
+		htmlNewHtml_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		verticalPanel_2.setCellHorizontalAlignment(htmlNewHtml_1, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		horizontalPanel = new HorizontalPanel();
 		horizontalPanel
@@ -173,19 +184,20 @@ public class FrontPage {
 		tabPanel.add(listBox, "Year", false);
 		listBox.setVisible(true);
 		listBox.setSize("5cm", "3cm");
-		listBox.setTitle("Double-klick for sub domains");
 
 		listBox_2 = new ListBox();
 		listBox_2.setMultipleSelect(true);
 		tabPanel.add(listBox_2, "Month", false);
 		listBox_2.setSize("5cm", "3cm");
-		listBox_2.setTitle("Double-klick for sub domains");
 
 		listBox_3 = new ListBox();
 		listBox_3.setMultipleSelect(true);
 		tabPanel.add(listBox_3, "Today", false);
 		listBox_3.setSize("5cm", "3cm");
-		listBox_3.setTitle("Double-klick for sub domains");
+		
+		btnRefresh_1 = new Button("Refresh");
+		verticalPanel_3.add(btnRefresh_1);
+		verticalPanel_3.setCellHorizontalAlignment(btnRefresh_1, HasHorizontalAlignment.ALIGN_CENTER);
 
 		verticalPanel_6 = new VerticalPanel();
 		horizontalPanel_1.add(verticalPanel_6);
@@ -203,18 +215,25 @@ public class FrontPage {
 		tabPanel_1.add(listBox_4, "Year", false);
 		listBox_4.setSize("5cm", "3cm");
 		listBox_4.setVisibleItemCount(5);
+		listBox_4.setTitle("Double-klick for sub domains");
 
 		listBox_5 = new ListBox();
 		listBox_5.setMultipleSelect(true);
 		tabPanel_1.add(listBox_5, "Month", false);
 		listBox_5.setSize("5cm", "3cm");
 		listBox_5.setVisibleItemCount(5);
+		listBox_5.setTitle("Double-klick for sub domains");
 
 		listBox_6 = new ListBox();
 		listBox_6.setMultipleSelect(true);
 		tabPanel_1.add(listBox_6, "Today", false);
 		listBox_6.setSize("5cm", "3cm");
 		listBox_6.setVisibleItemCount(5);
+		listBox_6.setTitle("Double-klick for sub domains");
+		
+		btnRefresh = new Button("Refresh");
+		verticalPanel_6.add(btnRefresh);
+		verticalPanel_6.setCellHorizontalAlignment(btnRefresh, HasHorizontalAlignment.ALIGN_CENTER);
 
 		verticalPanel_4 = new VerticalPanel();
 		horizontalPanel_1.add(verticalPanel_4);
@@ -275,23 +294,35 @@ public class FrontPage {
 		horizontalPanel_2.setSpacing(20);
 		verticalPanel_2.add(horizontalPanel_2);
 		
-		btnSeeOwnRatings = new Button("See own ratings");
-		horizontalPanel_2.add(btnSeeOwnRatings);
+		verticalPanel_8 = new VerticalPanel();
+		verticalPanel_8.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_2.add(verticalPanel_8);
+		verticalPanel_8.setVisible(false);
+		
+		lblNewLabel_6 = new Label("Your ratings");
+		verticalPanel_8.add(lblNewLabel_6);
 		
 		listBox_7 = new ListBox();
-		listBox_7.setVisible(false);
-		horizontalPanel_2.add(listBox_7);
+		verticalPanel_8.add(listBox_7);
+		verticalPanel_8.setCellHorizontalAlignment(listBox_7, HasHorizontalAlignment.ALIGN_CENTER);
 		listBox_7.setVisibleItemCount(5);
+		
+		btnNewButton = new Button("New button");
+		btnNewButton.setText("Refresh");
+		verticalPanel_8.add(btnNewButton);
 		
 		verticalPanel_7 = new VerticalPanel();
 		horizontalPanel_2.add(verticalPanel_7);
+		verticalPanel_7.setVisible(false);
 		
 		lblNewLabel_4 = new Label("Rating");
-		lblNewLabel_4.setVisible(false);
 		verticalPanel_7.add(lblNewLabel_4);
 		
 		lblNewLabel_5 = new Label("");
-		lblNewLabel_5.setVisible(false);
 		verticalPanel_7.add(lblNewLabel_5);
+		
+		textBox = new TextBox();
+		verticalPanel_7.add(textBox);
+		textBox.setReadOnly(true);
 	}
 }
