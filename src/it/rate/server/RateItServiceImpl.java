@@ -232,7 +232,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		tempTopUrls = (List<TopUrl>) cache.get(cacheKey);
 		
 		Collections.sort(tempTopUrls);
-		System.out.println("top url" + topUrls);
+		
 		int i = 0;
 		for (TopUrl temp : tempTopUrls)
 		{
@@ -244,6 +244,8 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			i++;
 			System.out.println("hallo " + temp.getUrl());
 		}
+		
+		System.out.println("top url" + topUrls);
 		return topUrls;
 	}
 
@@ -308,7 +310,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		tempTopHosts = (List<TopUrl>) cache.get(cacheKey);
 
 		Collections.sort(tempTopHosts);
-		System.out.println("top host" + topHosts);
+		
 		int i = 0;
 		for (TopUrl temp : tempTopHosts)
 		{
@@ -320,7 +322,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			i++;
 			System.out.println("hallo " + temp.getUrl());
 		}
-
+		System.out.println("top host" + topHosts);
 		return topHosts;
 	}
 
@@ -478,6 +480,27 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			return null;
 		}
 
+	}
+
+	@Override
+	public int isCurUserAdmin()
+	{
+		int result;
+		try
+		{
+			if (UserServiceFactory.getUserService().isUserAdmin() == true)
+			{
+				result = 0;
+			}
+			else
+			{
+				result = -1;
+			}
+		} catch (IllegalStateException e)
+		{
+			result = -2;
+		}
+		return result;
 	}
 
 }

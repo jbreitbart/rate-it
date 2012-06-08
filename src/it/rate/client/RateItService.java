@@ -87,6 +87,11 @@ public interface RateItService extends RemoteService {
 	
 	/**
 	 * 
+	 * @return 0 if current user is an admin, -1 if current user isn't an admin, -2 if user isn't logged in
+	 */
+	public int isCurUserAdmin();
+	/**
+	 * 
 	 * @return E-mail of current logged user as String
 	 */
 	public String getCurrentUserEmail();

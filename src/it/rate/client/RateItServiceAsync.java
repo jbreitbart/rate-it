@@ -35,4 +35,6 @@ public interface RateItServiceAsync {
 	
 	void getCurrentUserEmail( AsyncCallback<String> callback);
 	
+	void isCurUserAdmin(AsyncCallback<Integer> callback);
+	
 }
