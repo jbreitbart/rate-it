@@ -12,11 +12,19 @@ import net.sf.jsr107cache.CacheManager;
 
 public class MemCache {
 	
-	private final int CACHE_LIVE_TIME = 300; // in sec.
+	private final int CACHE_LIVE_TIME = 0; // in sec.
 	private static MemCache instance = null;
 	CacheFactory cacheFactory = null;
 	Cache cache = null;	
-
+	
+	public static final String CACHE_KEY_URL_DAY = "topUrlsOfDay";
+	public static final String CACHE_KEY_URL_MONTH = "topUrlsOfMonh";
+	public static final String CACHE_KEY_URL_YEAR = "topUrlsOfYeary";
+	
+	public static final String CACHE_KEY_HOST_DAY = "topHostsOfDay";
+	public static final String CACHE_KEY_HOST_MONTH = "topHostsOfMonth";
+	public static final String CACHE_KEY_HOST_YEAR = "topHostsOfYear";
+	
 	public MemCache()
 	{
 		try {
