@@ -37,4 +37,6 @@ public interface RateItServiceAsync {
 	
 	void isCurUserAdmin(AsyncCallback<Integer> callback);
 	
+	void clearServerCache(AsyncCallback<Void> calback);
+	
 }

@@ -24,6 +24,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import net.sf.jsr107cache.Cache;
+import net.sf.jsr107cache.CacheManager;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
@@ -364,13 +365,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			advRating = advRating / result.size();
 		}
 
-		// System.out.println("++start : " + startDate.toString() + " end : "
-		// +endDate.toString());
-		// for(Rating r : result)
-		// {
-		// System.out.println("start : " + r.getDate().toString());
-		// }
-		// System.out.println("url: " + url + " ADVRating: " + advRating);
+	
 
 		return advRating;
 	}
@@ -501,6 +496,12 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			result = -2;
 		}
 		return result;
+	}
+
+	@Override
+	public void clearServerCache()
+	{
+		MemCache.getInstance().getCache().clear();
 	}
 
 }

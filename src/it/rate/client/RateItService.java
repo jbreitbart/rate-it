@@ -97,4 +97,11 @@ public interface RateItService extends RemoteService {
 	public String getCurrentUserEmail();
 	
 	
+	/**
+	 * clear server cache for all values
+	 */
+	public void clearServerCache();
+	
+	
+	
 }
