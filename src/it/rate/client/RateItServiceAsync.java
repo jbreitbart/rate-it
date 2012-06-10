@@ -39,4 +39,12 @@ public interface RateItServiceAsync {
 	
 	void clearServerCache(AsyncCallback<Void> calback);
 	
+    void getTopUrlsForDay(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
+    void getTopUrlsForMonth(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
+    void getTopUrlsForYear(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
+	
+    void getTopHostsForDay(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
+    void getTopHostsForMonth(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
+    void getTopHostsForYear(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
+	
 }

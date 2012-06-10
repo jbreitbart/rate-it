@@ -103,5 +103,48 @@ public interface RateItService extends RemoteService {
 	public void clearServerCache();
 	
 	
+	/**
+	 * Gets the top URLs for a day
+	 * 
+	 * @return An array with the top URLs
+	 */
+	public List<TopUrl> getTopUrlsForDay(int countOfUrls);
+	
+	/**
+	 * Gets the top URLs for a month
+	 * 
+	 * @return An array with the top URLs
+	 */
+	public List<TopUrl> getTopUrlsForMonth(int countOfUrls);
+	
+	/**
+	 * Gets the top URLs for a year
+	 * 
+	 * @return An array with the top URLs
+	 */
+	public List<TopUrl> getTopUrlsForYear(int countOfUrls);
+	
+	/**
+	 * Gets the top Hosts for a day
+	 * 
+	 * @return An array with the top Hosts
+	 */
+	public List<TopUrl> getTopHostsForDay(int countOfUrls);
+	
+	/**
+	 * Gets the top Hosts for a month
+	 * 
+	 * @return An array with the top Hosts
+	 */
+	public List<TopUrl> getTopHostsForMonth(int countOfUrls);
+	
+	/**
+	 * Gets the top Hosts for a year
+	 * 
+	 * @return An array with the top Hosts
+	 */
+	public List<TopUrl> getTopHostsForYear(int countOfUrls);
+	
+	
 	
 }

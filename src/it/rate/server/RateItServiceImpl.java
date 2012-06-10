@@ -4,6 +4,7 @@ import it.rate.client.RateItService;
 import it.rate.client.Rating;
 import it.rate.client.TopUrl;
 import it.rate.data.RatingDB;
+import it.rate.data.TopUrlDB;
 import it.rate.util.ErrorMessage;
 import it.rate.util.MemCache;
 import it.rate.util.PMF;
@@ -24,7 +25,6 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import net.sf.jsr107cache.Cache;
-import net.sf.jsr107cache.CacheManager;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
@@ -80,9 +80,12 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 
 						if (result.isEmpty())
 						{
+							//add new entity in DB
 							RatingDB newRating = new RatingDB(user.getEmail(),
 									url, host, new Text(comment), rating);
-
+							
+							// calculate top for new value 
+							calculateTop(url, rating);
 							try
 							{
 								pm.makePersistent(newRating);
@@ -93,6 +96,7 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 							}
 						} else
 						{
+							
 							if (!canReplace)
 							{
 								returnMessage = ErrorMessage.RATE_EXISTS;
@@ -104,6 +108,9 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 										RatingDB.class, result.get(0).getKey());
 								ratingToReplace.setRating(rating);
 								ratingToReplace.setComments(new Text(comment));
+								
+								// recalculate top value for existing entity
+								recalculateTop(url, rating);
 								try
 								{
 
@@ -502,6 +509,63 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	public void clearServerCache()
 	{
 		MemCache.getInstance().getCache().clear();
+	}
+
+	
+	/**
+	 * calculate tops for new value and insert in DB
+	 * @param url
+	 * @param rating
+	 */
+	public void calculateTop(String url, float rating)
+	{
+		TopsCalculator.calculateTops(url, rating);
+
+	}
+	/**
+	 * recalculate top for existing value
+	 * @param url
+	 * @param rating
+	 */
+	public void recalculateTop(String url, float rating)
+	{
+		
+	}
+	
+	@Override
+	public List<TopUrl> getTopUrlsForDay(int countOfUrls)
+	{
+		return TopsCalculator.getTopUrlsForDay(countOfUrls);		
+	}
+
+	@Override
+	public List<TopUrl> getTopUrlsForMonth(int countOfUrls)
+	{
+		return TopsCalculator.getTopUrlsForMonth(countOfUrls);
+	}
+
+	@Override
+	public List<TopUrl> getTopUrlsForYear(int countOfUrls)
+	{
+		return TopsCalculator.getTopUrlsForYear(countOfUrls);
+	}
+
+	@Override
+	public List<TopUrl> getTopHostsForDay(int countOfUrls)
+	{
+		return TopsCalculator.getTopHostsForDay(countOfUrls);
+	}
+
+	@Override
+	public List<TopUrl> getTopHostsForMonth(int countOfUrls)
+	{
+		return TopsCalculator.getTopHostsForMonth(countOfUrls);
+	}
+
+	@Override
+	public List<TopUrl> getTopHostsForYear(int countOfUrls)
+	{
+		return TopsCalculator.getTopHostsForYear(countOfUrls);
 	}
 
 }
