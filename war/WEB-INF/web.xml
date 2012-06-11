@@ -16,11 +16,21 @@
     <url-pattern>/rateit/rate</url-pattern> 
   </servlet-mapping>
   
+  <!--  Cron Job Servlet -->
+  <servlet>
+  	<servlet-name>calculatetop</servlet-name>
+  	<servlet-class>it.rate.server.CronJobImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+  	<servlet-name>calculatetop</servlet-name>
+  	<url-pattern>/cron/calculatetop</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>RateIt.html</welcome-file>
   </welcome-file-list>
-  
   
   <security-constraint> 
     <web-resource-collection>

@@ -1,6 +1,7 @@
 package it.rate.server;
 
 import it.rate.client.TopUrl;
+import it.rate.data.RatingDB;
 import it.rate.data.TopUrlDB;
 import it.rate.util.MemCache;
 import it.rate.util.PMF;
@@ -54,6 +55,23 @@ public class TopsCalculator
 	{
 		return getTops(MemCache.CACHE_KEY_HOST_YEAR, TopUrl.PERIOD_YEAR,
 				TopUrl.TYPE_DOMAIN, countOfUrls);
+	}
+	
+	
+	public static void calculateAllTops()
+	{
+		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
+		Query query = pm
+				.newQuery(RatingDB.class);
+
+		List<RatingDB> result = (List<RatingDB>) query.execute();
+		if(!result.isEmpty())
+		{
+			for(RatingDB tempRating : result)
+			{
+				calculateTops(tempRating.getUrl(), tempRating.getRating());
+			}
+		}
 	}
 
 	public static void calculateTops(String url, float rating)

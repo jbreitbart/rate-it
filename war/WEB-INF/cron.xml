@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
   <cron>
-    <url>/calculateTop</url>
+    <url>/cron/calculatetop</url>
     <description>recalculate top and save in DB every 12 hours</description>
-    <schedule>every 12 hours</schedule>
+    <schedule>every 2 minutes</schedule>
   </cron>
 </cronentries>

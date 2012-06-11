@@ -14,11 +14,11 @@ public interface RateItServiceAsync {
 
 	void getSubDomains(String url, AsyncCallback<List<Rating>> callback);
 
-	void getTopUrlsForPeriod(Date startDate, Date endDate, int countOfUrls,
-			AsyncCallback<List<TopUrl>> callback);
-	
-	void getTopHostsForPeriod(Date startDate, Date endDate, int countOfUrls,
-			AsyncCallback<List<TopUrl>> callback);
+//	void getTopUrlsForPeriod(Date startDate, Date endDate, int countOfUrls,
+//			AsyncCallback<List<TopUrl>> callback);
+//	
+//	void getTopHostsForPeriod(Date startDate, Date endDate, int countOfUrls,
+//			AsyncCallback<List<TopUrl>> callback);
 
 	void getAverageRatingForPeriod(String url, Date startDate,
 			Date endDate, AsyncCallback<Float> callback);

@@ -27,29 +27,29 @@ public interface RateItService extends RemoteService {
 	 */
 	public List<Rating> getSubDomains(String url);
 	
-	/**
-	 * Gets the top URLs for a certain time period
-	 * @param startDate The start date for the average rating
-	 * @param endDate The end date for the average rating
-	 * @return An array with the top URLs
-	 */
-	public List<TopUrl> getTopUrlsForPeriod(Date startDate, Date endDate, int countOfUrls);
-	
-	/**
-	 * Gets the top Hosts for a certain time period
-	 * @param startDate The start date for the average rating
-	 * @param endDate The end date for the average rating
-	 * @return An array with the top Hosts
-	 */
-	public List<TopUrl> getTopHostsForPeriod(Date startDate, Date endDate, int countOfUrls);
-	
-	/**
-	 * Fetches average URL rating for a certain time period
-	 * @param url The URL as string object
-	 * @param startDate The start date for the average rating
-	 * @param endDate The end date for the average rating
-	 * @return Average rating
-	 */
+//	/**
+//	 * Gets the top URLs for a certain time period
+//	 * @param startDate The start date for the average rating
+//	 * @param endDate The end date for the average rating
+//	 * @return An array with the top URLs
+//	 */
+//	public List<TopUrl> getTopUrlsForPeriod(Date startDate, Date endDate, int countOfUrls);
+//	
+//	/**
+//	 * Gets the top Hosts for a certain time period
+//	 * @param startDate The start date for the average rating
+//	 * @param endDate The end date for the average rating
+//	 * @return An array with the top Hosts
+//	 */
+//	public List<TopUrl> getTopHostsForPeriod(Date startDate, Date endDate, int countOfUrls);
+//	
+//	/**
+//	 * Fetches average URL rating for a certain time period
+//	 * @param url The URL as string object
+//	 * @param startDate The start date for the average rating
+//	 * @param endDate The end date for the average rating
+//	 * @return Average rating
+//	 */
 	public float getAverageRatingForPeriod(String url, Date startDate, Date endDate);
 	
 	/**
