@@ -45,9 +45,9 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveTodaysTopUrls() {
-		timePeriod.refresh();
-		Date startDate = timePeriod.oneDayBack;
-		Date endDate = timePeriod.today;
+//		timePeriod.refresh();
+//		Date startDate = timePeriod.oneDayBack;
+//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -62,11 +62,15 @@ public class RPC implements Constants {
 			public void onSuccess(List<TopUrl> topUrls) {
 				wUpd.updateTopUrlsList(topUrls, Period.DAY);
 				dataCache.receivedTodaysTopUrls = topUrls;
+				for(TopUrl t : topUrls)
+				{
+					System.out.println("###tops: " + t.getUrl() + " ###");
+				}
 			}
 		};
 
-		rateService
-				.getTopUrlsForPeriod(startDate, endDate, TOP_COUNT, callback);
+		rateService.getTopUrlsForDay(TOP_COUNT, callback);
+//				.getTopUrlsForPeriod(startDate, endDate, TOP_COUNT, callback);
 	}
 
 	/**
@@ -80,9 +84,9 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveMonthsTopUrls() {
-		timePeriod.refresh();
-		Date startDate = timePeriod.oneMonthBack;
-		Date endDate = timePeriod.today;
+//		timePeriod.refresh();
+//		Date startDate = timePeriod.oneMonthBack;
+//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -100,8 +104,8 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService
-				.getTopUrlsForPeriod(startDate, endDate, TOP_COUNT, callback);
+		rateService.getTopUrlsForMonth(TOP_COUNT, callback);
+//				.getTopUrlsForPeriod(startDate, endDate, TOP_COUNT, callback);
 	}
 
 	/**
@@ -115,9 +119,9 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveYearsTopUrls() {
-		timePeriod.refresh();
-		Date startDate = timePeriod.oneYearBack;
-		Date endDate = timePeriod.today;
+//		timePeriod.refresh();
+//		Date startDate = timePeriod.oneYearBack;
+//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -135,8 +139,8 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService
-				.getTopUrlsForPeriod(startDate, endDate, TOP_COUNT, callback);
+		rateService.getTopUrlsForYear(TOP_COUNT, callback);
+//				.getTopUrlsForPeriod(startDate, endDate, TOP_COUNT, callback);
 	}
 
 	/**
@@ -150,9 +154,9 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveTodaysTopDomains() {
-		timePeriod.refresh();
-		Date startDate = timePeriod.oneDayBack;
-		Date endDate = timePeriod.today;
+//		timePeriod.refresh();
+//		Date startDate = timePeriod.oneDayBack;
+//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -181,8 +185,9 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService.getTopHostsForPeriod(startDate, endDate, TOP_COUNT,
-				callback);
+		rateService.getTopHostsForDay(TOP_COUNT, callback);
+//		getTopHostsForPeriod(startDate, endDate, TOP_COUNT,
+//				callback);
 	}
 
 	/**
@@ -196,9 +201,9 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveMonthsTopDomains() {
-		timePeriod.refresh();
-		Date startDate = timePeriod.oneMonthBack;
-		Date endDate = timePeriod.today;
+//		timePeriod.refresh();
+//		Date startDate = timePeriod.oneMonthBack;
+//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -227,8 +232,8 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService.getTopHostsForPeriod(startDate, endDate, TOP_COUNT,
-				callback);
+		rateService.getTopHostsForMonth(TOP_COUNT, callback);
+//		getTopHostsForPeriod(startDate, endDate, TOP_COUNT, callback);
 	}
 
 	/**
@@ -242,9 +247,9 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveYearsTopDomains() {
-		timePeriod.refresh();
-		Date startDate = timePeriod.oneYearBack;
-		Date endDate = timePeriod.today;
+//		timePeriod.refresh();
+//		Date startDate = timePeriod.oneYearBack;
+//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -273,8 +278,8 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService.getTopHostsForPeriod(startDate, endDate, TOP_COUNT,
-				callback);
+		rateService.getTopHostsForYear(TOP_COUNT, callback);
+//		getTopHostsForPeriod(startDate, endDate, TOP_COUNT, callback);
 	}
 
 	/**

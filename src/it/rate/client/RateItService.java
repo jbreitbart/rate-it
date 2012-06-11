@@ -87,9 +87,64 @@ public interface RateItService extends RemoteService {
 	
 	/**
 	 * 
+	 * @return 0 if current user is an admin, -1 if current user isn't an admin, -2 if user isn't logged in
+	 */
+	public int isCurUserAdmin();
+	/**
+	 * 
 	 * @return E-mail of current logged user as String
 	 */
 	public String getCurrentUserEmail();
+	
+	
+	/**
+	 * clear server cache for all values
+	 */
+	public void clearServerCache();
+	
+	
+	/**
+	 * Gets the top URLs for a day
+	 * 
+	 * @return An array with the top URLs
+	 */
+	public List<TopUrl> getTopUrlsForDay(int countOfUrls);
+	
+	/**
+	 * Gets the top URLs for a month
+	 * 
+	 * @return An array with the top URLs
+	 */
+	public List<TopUrl> getTopUrlsForMonth(int countOfUrls);
+	
+	/**
+	 * Gets the top URLs for a year
+	 * 
+	 * @return An array with the top URLs
+	 */
+	public List<TopUrl> getTopUrlsForYear(int countOfUrls);
+	
+	/**
+	 * Gets the top Hosts for a day
+	 * 
+	 * @return An array with the top Hosts
+	 */
+	public List<TopUrl> getTopHostsForDay(int countOfUrls);
+	
+	/**
+	 * Gets the top Hosts for a month
+	 * 
+	 * @return An array with the top Hosts
+	 */
+	public List<TopUrl> getTopHostsForMonth(int countOfUrls);
+	
+	/**
+	 * Gets the top Hosts for a year
+	 * 
+	 * @return An array with the top Hosts
+	 */
+	public List<TopUrl> getTopHostsForYear(int countOfUrls);
+	
 	
 	
 }
