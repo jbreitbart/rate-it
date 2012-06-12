@@ -320,5 +320,26 @@ public class HandlerInit implements Constants {
 			}
 
 		});
+		
+		fP.clearCacheBtn.addClickHandler(new ClickHandler()
+		{
+			
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				rpc.clearServerCache();				
+			}
+		});
+		
+		fP.recalculateTopsBtn.addClickHandler(new ClickHandler()
+		{
+			
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				rpc.recalculateTops();
+				
+			}
+		});
 	}
 }
