@@ -37,7 +37,8 @@ public interface RateItServiceAsync {
 	
 	void isCurUserAdmin(AsyncCallback<Integer> callback);
 	
-	void clearServerCache(AsyncCallback<Void> calback);
+	void clearServerCache(AsyncCallback<Void> callback);
+	void recalculateTops(AsyncCallback<Void> callback);
 	
     void getTopUrlsForDay(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
     void getTopUrlsForMonth(int countOfUrls, AsyncCallback<List<TopUrl>> callback);

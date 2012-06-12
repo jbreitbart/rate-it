@@ -15,6 +15,8 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.widget.client.TextButton;
 
 public class FrontPage implements Constants {
 
@@ -66,6 +68,10 @@ public class FrontPage implements Constants {
 	public Button btnNewButton;
 	public TextBox textBox;
 	public Label lblNewLabel_6;
+	public VerticalPanel adminPanel;
+	public Label adminLabel;
+	public Button clearCacheBtn;
+	public Button recalculateTopsBtn;
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -94,6 +100,7 @@ public class FrontPage implements Constants {
 		verticalPanel_2.setCellHorizontalAlignment(htmlNewHtml_1, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setBorderWidth(0);
 		horizontalPanel
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
@@ -287,6 +294,26 @@ public class FrontPage implements Constants {
 		verticalPanel_1.add(txtrOptionalEnterYour);
 		txtrOptionalEnterYour.setWidth("100%");
 		txtrOptionalEnterYour.setTitle("Enter comment for URL");
+		
+		adminPanel = new VerticalPanel();
+		adminPanel.setBorderWidth(0);
+		adminPanel.setVisible(false);
+		adminPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel.add(adminPanel);
+		horizontalPanel.setCellVerticalAlignment(adminPanel, HasVerticalAlignment.ALIGN_MIDDLE);
+		horizontalPanel.setCellHorizontalAlignment(adminPanel, HasHorizontalAlignment.ALIGN_CENTER);
+		adminPanel.setSize("131px", "116px");
+		
+		adminLabel = new Label("Admin Panel");
+		adminLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		adminPanel.add(adminLabel);
+		
+		clearCacheBtn = new Button("clear cache");
+		adminPanel.add(clearCacheBtn);
+		clearCacheBtn.setSize("112px", "30");
+		
+		recalculateTopsBtn = new Button("recalculate Tops");
+		adminPanel.add(recalculateTopsBtn);
 
 		rootPanel.add(verticalPanel_2);
 		
