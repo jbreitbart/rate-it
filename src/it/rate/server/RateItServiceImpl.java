@@ -544,4 +544,11 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		return TopsCalculator.getTopHostsForYear(countOfUrls);
 	}
 
+	@Override
+	public void recalculateTops()
+	{
+		TopsCalculator.calculateAllTops();
+		
+	}
+
 }

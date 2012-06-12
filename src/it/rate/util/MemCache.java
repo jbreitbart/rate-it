@@ -12,7 +12,7 @@ import net.sf.jsr107cache.CacheManager;
 
 public class MemCache {
 	
-	private final int CACHE_LIVE_TIME = 5; // in sec.
+	private final int CACHE_LIVE_TIME = 600; // in sec.
 	private static MemCache instance = null;
 	CacheFactory cacheFactory = null;
 	Cache cache = null;	

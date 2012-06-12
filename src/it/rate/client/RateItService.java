@@ -102,6 +102,11 @@ public interface RateItService extends RemoteService {
 	 */
 	public void clearServerCache();
 	
+	/**
+	 * recalculate all tops for urls and domains
+	 */
+	public void recalculateTops();
+	
 	
 	/**
 	 * Gets the top URLs for a day
