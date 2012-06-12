@@ -1,5 +1,7 @@
 package it.rate.server;
 
+import it.rate.util.MemCache;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -15,6 +17,7 @@ public class CronJobImpl extends RemoteServiceServlet
 	@Override
 	  public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	      throws ServletException, IOException {
+		MemCache.getInstance().getCache().clear();
 	    TopsCalculator.calculateAllTops();
 	  }
 }

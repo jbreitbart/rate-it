@@ -1,6 +1,5 @@
 package it.rate.view;
 
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -23,6 +22,7 @@ public class RPC implements Constants {
 	public String savedComment;
 	boolean replaceRating = false;
 	boolean loggedIn = false;
+	boolean isUserAdmin = false;
 	public String currentCalledDomain;
 	public TimePeriod timePeriod;
 
@@ -526,11 +526,96 @@ public class RPC implements Constants {
 						+ "\">here</a>");
 				fP.htmlNewHtml_1.setVisible(false);
 				loggedIn = false;
+				fP.adminPanel.setVisible(false);
 			}
 		};
 
 		rateService.getLogoutURL(REDIRECTION_URL, callback);
 	}
+	
+	public void clearServerCache(){
+		
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+		AsyncCallback<Void> callback = new AsyncCallback<Void>()
+		{
+			
+			@Override
+			public void onFailure(Throwable caught)
+			{
+				Window.alert(CACHE_CLEAR_FAILED);
+				
+			}
+
+			@Override
+			public void onSuccess(Void result)
+			{
+				Window.alert(CACHE_CLEAR_SUCCESS);
+				
+			}
+		};
+		
+		rateService.clearServerCache(callback);
+	}
+	
+	public void checkAdmin(){
+
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+		
+		AsyncCallback<Integer> callback = new AsyncCallback<Integer>()
+		{
+			
+			@Override
+			public void onSuccess(Integer result)
+			{
+				if(result == 0)
+				{
+					isUserAdmin = true;
+					fP.adminPanel.setVisible(true);
+				}
+				else if (result == -1)
+				{
+					isUserAdmin = false;
+					fP.adminPanel.setVisible(false);
+				}
+				
+			}
+			
+			@Override
+			public void onFailure(Throwable caught)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		rateService.isCurUserAdmin(callback );
+	}
+	
+	public void recalculateTops(){
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+		
+		AsyncCallback<Void> callback = new AsyncCallback<Void>()
+		{
+			
+			@Override
+			public void onSuccess(Void result)
+			{
+				Window.alert(RECALCLATE_TOPS_SUCCESS);
+				
+			}
+			
+			@Override
+			public void onFailure(Throwable caught)
+			{
+				Window.alert(RECALCLATE_TOPS_FAILED);
+				
+			}
+		};
+		rateService.recalculateTops(callback );
+	}
+	
 
 	public void init() {
 		receiveTodaysTopDomains();
@@ -540,5 +625,6 @@ public class RPC implements Constants {
 		receiveMonthsTopUrls();
 		receiveYearsTopUrls();
 		userAuthentication();
+		checkAdmin();
 	}
 }
