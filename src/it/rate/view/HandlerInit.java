@@ -167,9 +167,13 @@ public class HandlerInit implements Constants {
 
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
-				fP.verticalPanel_4.setVisible(true);
-				wUpd.updateSubDomainList(fP.listBox_4.getItemText(fP.listBox_4
-						.getItemCount()));
+				try {
+					fP.verticalPanel_4.setVisible(true);
+					wUpd.updateSubDomainList(fP.listBox_4
+							.getItemText(fP.listBox_4.getSelectedIndex()));
+				} catch (Exception e) {
+					wUpd.updateSubDomainList(null);
+				}
 			}
 		});
 
@@ -177,9 +181,13 @@ public class HandlerInit implements Constants {
 
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
-				fP.verticalPanel_4.setVisible(true);
-				wUpd.updateSubDomainList(fP.listBox_5.getItemText(fP.listBox_5
-						.getItemCount()));
+				try {
+					fP.verticalPanel_4.setVisible(true);
+					wUpd.updateSubDomainList(fP.listBox_5
+							.getItemText(fP.listBox_5.getSelectedIndex()));
+				} catch (Exception e) {
+					wUpd.updateSubDomainList(null);
+				}
 			}
 		});
 
@@ -187,9 +195,13 @@ public class HandlerInit implements Constants {
 
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
-				fP.verticalPanel_4.setVisible(true);
-				wUpd.updateSubDomainList(fP.listBox_6.getItemText(fP.listBox_6
-						.getItemCount()));
+				try {
+					fP.verticalPanel_4.setVisible(true);
+					wUpd.updateSubDomainList(fP.listBox_6
+							.getItemText(fP.listBox_6.getSelectedIndex()));
+				} catch (Exception e) {
+					wUpd.updateSubDomainList(null);
+				}
 			}
 		});
 
@@ -274,7 +286,7 @@ public class HandlerInit implements Constants {
 			}
 
 		});
-		
+
 		/*
 		 * Refresh buttons click handler
 		 */
@@ -282,11 +294,11 @@ public class HandlerInit implements Constants {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				rpc.receiveUserRatings();			
+				rpc.receiveUserRatings();
 			}
-			
+
 		});
-		
+
 		fP.btnRefresh_1.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -295,10 +307,10 @@ public class HandlerInit implements Constants {
 				rpc.receiveMonthsTopUrls();
 				rpc.receiveYearsTopUrls();
 			}
-			
+
 		});
-		
-		fP.btnRefresh.addClickHandler(new ClickHandler(){
+
+		fP.btnRefresh.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -306,7 +318,7 @@ public class HandlerInit implements Constants {
 				rpc.receiveMonthsTopDomains();
 				rpc.receiveYearsTopDomains();
 			}
-			
+
 		});
 	}
 }

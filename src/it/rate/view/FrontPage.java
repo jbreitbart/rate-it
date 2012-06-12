@@ -323,6 +323,7 @@ public class FrontPage implements Constants {
 		
 		textBox = new TextBox();
 		verticalPanel_7.add(textBox);
+		textBox.setVisible(false);
 		textBox.setReadOnly(true);
 	}
 }

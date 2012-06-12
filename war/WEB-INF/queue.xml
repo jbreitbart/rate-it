@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<queue-entries>
+  <queue>
+    <name>default</name>
+    <rate>1/s</rate>
+  </queue>
+  <queue>
+    <name>rate-queue</name>
+    <rate>5/s</rate>
+  </queue>
+  <queue>
+    <name>top-urls-queue</name>
+    <rate>5/s</rate>
+  </queue>
+  <queue>
+    <name>top-domains-queue</name>
+    <rate>5/s</rate>
+  </queue>
+</queue-entries>

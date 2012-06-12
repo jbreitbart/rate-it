@@ -33,7 +33,7 @@ public interface Constants {
 	
 	public static final String URL_BOX_DEFAULT = "Please enter a URL";
 	
-	public static final String NO_SELECTION = "Please enter a URL";
+	public static final String NO_SELECTION = "No item selected";
 	
 	public static enum Period {DAY, MONTH, YEAR};
 	

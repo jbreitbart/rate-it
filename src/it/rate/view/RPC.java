@@ -1,6 +1,5 @@
 package it.rate.view;
 
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -45,9 +44,6 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveTodaysTopUrls() {
-//		timePeriod.refresh();
-//		Date startDate = timePeriod.oneDayBack;
-//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -62,15 +58,10 @@ public class RPC implements Constants {
 			public void onSuccess(List<TopUrl> topUrls) {
 				wUpd.updateTopUrlsList(topUrls, Period.DAY);
 				dataCache.receivedTodaysTopUrls = topUrls;
-				for(TopUrl t : topUrls)
-				{
-					System.out.println("###tops: " + t.getUrl() + " ###");
-				}
 			}
 		};
 
 		rateService.getTopUrlsForDay(TOP_COUNT, callback);
-//				.getTopUrlsForPeriod(startDate, endDate, TOP_COUNT, callback);
 	}
 
 	/**
@@ -84,9 +75,6 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveMonthsTopUrls() {
-//		timePeriod.refresh();
-//		Date startDate = timePeriod.oneMonthBack;
-//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -100,12 +88,11 @@ public class RPC implements Constants {
 			@Override
 			public void onSuccess(List<TopUrl> topUrls) {
 				wUpd.updateTopUrlsList(topUrls, Period.MONTH);
-				dataCache.receivedTodaysTopUrls = topUrls;
+				dataCache.receivedMonthsTopUrls = topUrls;
 			}
 		};
 
 		rateService.getTopUrlsForMonth(TOP_COUNT, callback);
-//				.getTopUrlsForPeriod(startDate, endDate, TOP_COUNT, callback);
 	}
 
 	/**
@@ -119,9 +106,6 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveYearsTopUrls() {
-//		timePeriod.refresh();
-//		Date startDate = timePeriod.oneYearBack;
-//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -135,12 +119,11 @@ public class RPC implements Constants {
 			@Override
 			public void onSuccess(List<TopUrl> topUrls) {
 				wUpd.updateTopUrlsList(topUrls, Period.YEAR);
-				dataCache.receivedTodaysTopUrls = topUrls;
+				dataCache.receivedYearsTopUrls = topUrls;
 			}
 		};
 
 		rateService.getTopUrlsForYear(TOP_COUNT, callback);
-//				.getTopUrlsForPeriod(startDate, endDate, TOP_COUNT, callback);
 	}
 
 	/**
@@ -154,9 +137,6 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveTodaysTopDomains() {
-//		timePeriod.refresh();
-//		Date startDate = timePeriod.oneDayBack;
-//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -186,8 +166,6 @@ public class RPC implements Constants {
 		};
 
 		rateService.getTopHostsForDay(TOP_COUNT, callback);
-//		getTopHostsForPeriod(startDate, endDate, TOP_COUNT,
-//				callback);
 	}
 
 	/**
@@ -201,9 +179,6 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveMonthsTopDomains() {
-//		timePeriod.refresh();
-//		Date startDate = timePeriod.oneMonthBack;
-//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -233,7 +208,6 @@ public class RPC implements Constants {
 		};
 
 		rateService.getTopHostsForMonth(TOP_COUNT, callback);
-//		getTopHostsForPeriod(startDate, endDate, TOP_COUNT, callback);
 	}
 
 	/**
@@ -247,9 +221,6 @@ public class RPC implements Constants {
 	 *            End date for calculating top list
 	 */
 	public void receiveYearsTopDomains() {
-//		timePeriod.refresh();
-//		Date startDate = timePeriod.oneYearBack;
-//		Date endDate = timePeriod.today;
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -279,7 +250,6 @@ public class RPC implements Constants {
 		};
 
 		rateService.getTopHostsForYear(TOP_COUNT, callback);
-//		getTopHostsForPeriod(startDate, endDate, TOP_COUNT, callback);
 	}
 
 	/**

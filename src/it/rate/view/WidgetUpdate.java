@@ -33,8 +33,8 @@ public class WidgetUpdate implements Constants {
 	}
 
 	public void showUserRating(Float rating, String comment) {
-		fP.verticalPanel_7.setVisible(false);
-		fP.textBox.setVisible(true);
+		fP.verticalPanel_7.setVisible(true);
+		fP.textBox.setVisible(false);
 		if (rating == null) {
 			fP.lblNewLabel_4.setText(NO_SELECTION);
 			return;
@@ -96,6 +96,7 @@ public class WidgetUpdate implements Constants {
 				box.addItem(r.getUrl());
 			}
 			box.setVisibleItemCount(topUrls.size());
+			fP.tabPanel.selectTab(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -131,6 +132,7 @@ public class WidgetUpdate implements Constants {
 				box.addItem(r.getUrl());
 			}
 			box.setVisibleItemCount(topDomains.size());
+			fP.tabPanel_1.selectTab(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
