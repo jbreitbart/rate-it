@@ -1,6 +1,7 @@
 package it.rate.server;
 
 import it.rate.client.TopUrl;
+import it.rate.data.RatingDB;
 import it.rate.data.TopUrlDB;
 import it.rate.util.MemCache;
 import it.rate.util.PMF;
@@ -55,36 +56,82 @@ public class TopsCalculator
 		return getTops(MemCache.CACHE_KEY_HOST_YEAR, TopUrl.PERIOD_YEAR,
 				TopUrl.TYPE_DOMAIN, countOfUrls);
 	}
-
-	public static void calculateTops(String url, float rating)
+	
+	
+	public static void calculateAllTops()
 	{
-
-		URL host;
-		try
+		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
+		Query queryTops = pm.newQuery(TopUrlDB.class);
+		List<TopUrlDB> resultTops = (List<TopUrlDB>) queryTops.execute();
+		
+		//clear TopUrlDB
+		if(!resultTops.isEmpty())
 		{
-			host = new URL(url);
-			if (url.startsWith("http://"))
+			for(TopUrlDB temp : resultTops)
 			{
-				url = url.substring("http://".length());
+				pm.deletePersistent(temp);
 			}
-			if (url.equals(host.getHost()))
-			{
-				calculate(url, rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_DAY);
-				calculate(url, rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_MONTH);
-				calculate(url, rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_YEAR);
-			}
-		} catch (MalformedURLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		calculate(url, rating, TopUrl.TYPE_URL, TopUrl.PERIOD_DAY);
-		calculate(url, rating, TopUrl.TYPE_URL, TopUrl.PERIOD_MONTH);
-		calculate(url, rating, TopUrl.TYPE_URL, TopUrl.PERIOD_YEAR);
+		
+		Query query = pm
+				.newQuery(RatingDB.class);
 
+		List<RatingDB> result = (List<RatingDB>) query.execute();
+		if(!result.isEmpty())
+		{
+			for(RatingDB tempRating : result)
+			{
+				calculateTops(tempRating);
+			}
+		}
 	}
 
-	private static void calculate(String url, float rating, String linkType,
+	public static void calculateTops(RatingDB rating)
+	{
+        String url = rating.getUrl();
+		if (rating.getUrl().startsWith("http://"))
+		{
+			url = url.substring("http://".length());
+		}
+		if (url.equals(rating.getHost()))
+		{
+			if ((rating.getDate().getYear() == new Date().getYear())
+					&&(rating.getDate().getMonth() == new Date().getMonth()) 
+						&& (rating.getDate().getDate() == new Date().getDate()))
+			{
+				calculate(rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_DAY);
+			}
+			if ((rating.getDate().getYear() == new Date().getYear())
+					&&(rating.getDate().getMonth() == new Date().getMonth()))
+			{
+				calculate(rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_MONTH);
+			}
+			if (rating.getDate().getYear() == new Date().getYear())
+			{
+				calculate(rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_YEAR);
+			}
+			
+		}
+		//calculate tops only for current period
+		if ((rating.getDate().getYear() == new Date().getYear())
+				&&(rating.getDate().getMonth() == new Date().getMonth()) 
+					&& (rating.getDate().getDate() == new Date().getDate()))
+		{
+			calculate(rating, TopUrl.TYPE_URL, TopUrl.PERIOD_DAY);
+		}
+		if ((rating.getDate().getYear() == new Date().getYear())
+				&&(rating.getDate().getMonth() == new Date().getMonth()))
+		{
+			calculate(rating, TopUrl.TYPE_URL, TopUrl.PERIOD_MONTH);
+		}
+		if (rating.getDate().getYear() == new Date().getYear())
+		{
+			calculate(rating, TopUrl.TYPE_URL, TopUrl.PERIOD_YEAR);
+		}
+		
+	}
+
+	private static void calculate(RatingDB rating, String linkType,
 			String period)
 	{
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
@@ -96,57 +143,38 @@ public class TopsCalculator
 				.declareParameters("String typeParam, String periodParam, String urlParam");
 
 		List<TopUrlDB> result = (List<TopUrlDB>) topUrlDayQuery.execute(
-				linkType, period, url);
+				linkType, period, rating.getUrl());
 
 		if (result.isEmpty())
 		{
-			// create new entity if it does not exist or if it is not current
-			// date
 			try
 			{
-				pm.makePersistent(new TopUrlDB(url, rating, 1, period, linkType));
+				pm.makePersistent(new TopUrlDB(rating.getUrl(), rating.getRating(), 1, period, linkType));
 			} finally
 			{
 				pm.close();
 			}
 		} else
 		{
-			if (result.get(0).getDate().getDate() == new Date().getDate())
+			TopUrlDB topToReplace = pm.getObjectById(TopUrlDB.class, result
+					.get(0).getKey());
+
+			float ratingValue = result.get(0).getAveradgeRating();
+			float newRating = (ratingValue
+					* ((float) result.get(0).getCountOfRatings()) + rating
+						.getRating())
+					/ ((float) (result.get(0).getCountOfRatings() + 1));
+			topToReplace.setAveradgeRating(newRating);
+			topToReplace
+					.setCountOfRatings(result.get(0).getCountOfRatings() + 1);
+			try
 			{
-				TopUrlDB topToReplace = pm.getObjectById(TopUrlDB.class, result
-						.get(0).getKey());
-
-				topToReplace.setCountOfRatings(result.get(0)
-						.getCountOfRatings() + 1);
-
-				float ratingValue = result.get(0).getAveradgeRating();
-				float newRating = (ratingValue
-						* ((float) result.get(0).getCountOfRatings()) + rating)
-						/ ((float) (result.get(0).getCountOfRatings() + 1));
-				topToReplace.setAveradgeRating(newRating);
-
-				try
-				{
-					pm.makePersistent(topToReplace);
-				} finally
-				{
-					pm.close();
-				}
-			} else
+				pm.makePersistent(topToReplace);
+			} finally
 			{
-				TopUrlDB topToReplace = pm.getObjectById(TopUrlDB.class, result
-						.get(0).getKey());
-				topToReplace.setAveradgeRating(rating);
-				topToReplace.setCountOfRatings(1);
-				topToReplace.setDate(new Date());
-				try
-				{
-					pm.makePersistent(topToReplace);
-				} finally
-				{
-					pm.close();
-				}
+				pm.close();
 			}
+
 		}
 	}
 

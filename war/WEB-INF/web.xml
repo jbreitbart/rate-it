@@ -13,12 +13,33 @@
   
   <servlet-mapping>
     <servlet-name>rateItServlet</servlet-name>
-    <url-pattern>/rateit/rate</url-pattern>
+    <url-pattern>/rateit/rate</url-pattern> 
+  </servlet-mapping>
+  
+  <!--  Cron Job Servlet -->
+  <servlet>
+  	<servlet-name>calculatetop</servlet-name>
+  	<servlet-class>it.rate.server.CronJobImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+  	<servlet-name>calculatetop</servlet-name>
+  	<url-pattern>/cron/calculatetop</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>RateIt.html</welcome-file>
   </welcome-file-list>
+  
+  <security-constraint> 
+    <web-resource-collection>
+    <web-resource-name>cronjob</web-resource-name>
+       <url-pattern>/cron/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+       <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
 
 </web-app>

@@ -84,8 +84,6 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 							RatingDB newRating = new RatingDB(user.getEmail(),
 									url, host, new Text(comment), rating);
 							
-							// calculate top for new value 
-							calculateTop(url, rating);
 							try
 							{
 								pm.makePersistent(newRating);
@@ -109,8 +107,6 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 								ratingToReplace.setRating(rating);
 								ratingToReplace.setComments(new Text(comment));
 								
-								// recalculate top value for existing entity
-								recalculateTop(url, rating);
 								try
 								{
 
@@ -179,160 +175,160 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 
 	}
 
-	@Override
-	public List<TopUrl> getTopUrlsForPeriod(Date startDate, Date endDate,
-			int countOfUrls)
-	{
-		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
-		List<RatingDB> result = null;
-		Map<String, TopUrl> tempUrls = new HashMap<String, TopUrl>();
-		List<TopUrl> topUrls = new ArrayList<TopUrl>();
-		List<TopUrl> tempTopUrls = new ArrayList<TopUrl>();
-
-		Query query = pm.newQuery(RatingDB.class,
-				"this.date >= startDateParam && this.date <= endDateParam");
-		query.declareParameters("java.util.Date startDateParam, java.util.Date endDateParam");
-
-		try
-		{
-			// get all ratings of url
-			result = (List<RatingDB>) query.execute(startDate, endDate);
-		} finally
-		{
-
-			query.closeAll();
-		}
-
-		// format start and end date to a key for cache (it looks like
-		// "dd.mm.yyy-dd.mm.yyyy-top_urls")
-		DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM,
-				Locale.GERMANY);
-		String cacheKey = df.format(startDate) + "-" + df.format(endDate)
-				+ "-top_urls";
-		System.out.println(cacheKey);
-
-		Cache cache = MemCache.getInstance().getCache();
-
-		// if an entity for this time is not existing in cache, create one
-		if (cache.get(cacheKey) == null)
-		{
-			for (RatingDB rating : result)
-			{
-				if (tempUrls.containsKey(rating.getUrl()))
-				{
-					String url = rating.getUrl();
-					float ratingValue = tempUrls.get(url).getAverageRating();
-					int countOfRating = tempUrls.get(url).getCountOfRatings();
-					float newRating = (ratingValue * countOfRating + rating
-							.getRating()) / (countOfRating + 1);
-					tempUrls.put(url, new TopUrl(url, newRating,
-							countOfRating + 1));
-
-				} else
-				{
-					tempUrls.put(rating.getUrl(), new TopUrl(rating.getUrl(),
-							rating.getRating(), 1));
-				}
-			}
-			cache.put(cacheKey, new ArrayList<TopUrl>(tempUrls.values()));
-
-		}
-		tempTopUrls = (List<TopUrl>) cache.get(cacheKey);
-		
-		Collections.sort(tempTopUrls);
-		
-		int i = 0;
-		for (TopUrl temp : tempTopUrls)
-		{
-			if (i > countOfUrls)
-			{
-				break;
-			}
-			topUrls.add(temp);
-			i++;
-			System.out.println("hallo " + temp.getUrl());
-		}
-		
-		System.out.println("top url" + topUrls);
-		return topUrls;
-	}
-
-	@Override
-	public List<TopUrl> getTopHostsForPeriod(Date startDate, Date endDate,
-			int countOfUrls)
-	{
-		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
-		List<RatingDB> result = null;
-		Map<String, TopUrl> tempHosts = new HashMap<String, TopUrl>();
-		List<TopUrl> topHosts = new ArrayList<TopUrl>();
-		List<TopUrl> tempTopHosts = new ArrayList<TopUrl>();
-
-		Query query = pm.newQuery(RatingDB.class,
-				"this.date >= startDateParam && this.date <= endDateParam");
-		query.declareParameters("java.util.Date startDateParam, java.util.Date endDateParam");
-
-		try
-		{
-			// get all ratings of url
-			result = (List<RatingDB>) query.execute(startDate, endDate);
-		} finally
-		{
-
-			query.closeAll();
-		}
-
-		// format start and end date to a key for cache (it looks like
-		// "dd.mm.yyy-dd.mm.yyyy-top_urls")
-		DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM,
-				Locale.GERMANY);
-		String cacheKey = df.format(startDate) + "-" + df.format(endDate)
-				+ "-top_hosts";
-		System.out.println(cacheKey);
-
-		Cache cache = MemCache.getInstance().getCache();
-
-		// if an entity for this time is not existing in cache, create one
-		if (cache.get(cacheKey) == null)
-		{
-			for (RatingDB rating : result)
-			{
-				if (tempHosts.containsKey(rating.getHost()))
-				{
-					String host = rating.getHost();
-					float ratingValue = tempHosts.get(host).getAverageRating();
-					int countOfRating = tempHosts.get(host).getCountOfRatings();
-					float newRating = (ratingValue * countOfRating + rating
-							.getRating()) / (countOfRating + 1);
-					tempHosts.put(host, new TopUrl(host, newRating,
-							countOfRating + 1));
-
-				} else
-				{
-					tempHosts.put(rating.getHost(), new TopUrl(
-							rating.getHost(), rating.getRating(), 1));
-				}
-			}
-			cache.put(cacheKey, new ArrayList<TopUrl>(tempHosts.values()));
-
-		}
-		tempTopHosts = (List<TopUrl>) cache.get(cacheKey);
-
-		Collections.sort(tempTopHosts);
-		
-		int i = 0;
-		for (TopUrl temp : tempTopHosts)
-		{
-			if (i > countOfUrls)
-			{
-				break;
-			}
-			topHosts.add(temp);
-			i++;
-			System.out.println("hallo " + temp.getUrl());
-		}
-		System.out.println("top host" + topHosts);
-		return topHosts;
-	}
+//	@Override
+//	public List<TopUrl> getTopUrlsForPeriod(Date startDate, Date endDate,
+//			int countOfUrls)
+//	{
+//		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
+//		List<RatingDB> result = null;
+//		Map<String, TopUrl> tempUrls = new HashMap<String, TopUrl>();
+//		List<TopUrl> topUrls = new ArrayList<TopUrl>();
+//		List<TopUrl> tempTopUrls = new ArrayList<TopUrl>();
+//
+//		Query query = pm.newQuery(RatingDB.class,
+//				"this.date >= startDateParam && this.date <= endDateParam");
+//		query.declareParameters("java.util.Date startDateParam, java.util.Date endDateParam");
+//
+//		try
+//		{
+//			// get all ratings of url
+//			result = (List<RatingDB>) query.execute(startDate, endDate);
+//		} finally
+//		{
+//
+//			query.closeAll();
+//		}
+//
+//		// format start and end date to a key for cache (it looks like
+//		// "dd.mm.yyy-dd.mm.yyyy-top_urls")
+//		DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM,
+//				Locale.GERMANY);
+//		String cacheKey = df.format(startDate) + "-" + df.format(endDate)
+//				+ "-top_urls";
+//		System.out.println(cacheKey);
+//
+//		Cache cache = MemCache.getInstance().getCache();
+//
+//		// if an entity for this time is not existing in cache, create one
+//		if (cache.get(cacheKey) == null)
+//		{
+//			for (RatingDB rating : result)
+//			{
+//				if (tempUrls.containsKey(rating.getUrl()))
+//				{
+//					String url = rating.getUrl();
+//					float ratingValue = tempUrls.get(url).getAverageRating();
+//					int countOfRating = tempUrls.get(url).getCountOfRatings();
+//					float newRating = (ratingValue * countOfRating + rating
+//							.getRating()) / (countOfRating + 1);
+//					tempUrls.put(url, new TopUrl(url, newRating,
+//							countOfRating + 1));
+//
+//				} else
+//				{
+//					tempUrls.put(rating.getUrl(), new TopUrl(rating.getUrl(),
+//							rating.getRating(), 1));
+//				}
+//			}
+//			cache.put(cacheKey, new ArrayList<TopUrl>(tempUrls.values()));
+//
+//		}
+//		tempTopUrls = (List<TopUrl>) cache.get(cacheKey);
+//		
+//		Collections.sort(tempTopUrls);
+//		
+//		int i = 0;
+//		for (TopUrl temp : tempTopUrls)
+//		{
+//			if (i > countOfUrls)
+//			{
+//				break;
+//			}
+//			topUrls.add(temp);
+//			i++;
+//			System.out.println("hallo " + temp.getUrl());
+//		}
+//		
+//		System.out.println("top url" + topUrls);
+//		return topUrls;
+//	}
+//
+//	@Override
+//	public List<TopUrl> getTopHostsForPeriod(Date startDate, Date endDate,
+//			int countOfUrls)
+//	{
+//		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
+//		List<RatingDB> result = null;
+//		Map<String, TopUrl> tempHosts = new HashMap<String, TopUrl>();
+//		List<TopUrl> topHosts = new ArrayList<TopUrl>();
+//		List<TopUrl> tempTopHosts = new ArrayList<TopUrl>();
+//
+//		Query query = pm.newQuery(RatingDB.class,
+//				"this.date >= startDateParam && this.date <= endDateParam");
+//		query.declareParameters("java.util.Date startDateParam, java.util.Date endDateParam");
+//
+//		try
+//		{
+//			// get all ratings of url
+//			result = (List<RatingDB>) query.execute(startDate, endDate);
+//		} finally
+//		{
+//
+//			query.closeAll();
+//		}
+//
+//		// format start and end date to a key for cache (it looks like
+//		// "dd.mm.yyy-dd.mm.yyyy-top_urls")
+//		DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM,
+//				Locale.GERMANY);
+//		String cacheKey = df.format(startDate) + "-" + df.format(endDate)
+//				+ "-top_hosts";
+//		System.out.println(cacheKey);
+//
+//		Cache cache = MemCache.getInstance().getCache();
+//
+//		// if an entity for this time is not existing in cache, create one
+//		if (cache.get(cacheKey) == null)
+//		{
+//			for (RatingDB rating : result)
+//			{
+//				if (tempHosts.containsKey(rating.getHost()))
+//				{
+//					String host = rating.getHost();
+//					float ratingValue = tempHosts.get(host).getAverageRating();
+//					int countOfRating = tempHosts.get(host).getCountOfRatings();
+//					float newRating = (ratingValue * countOfRating + rating
+//							.getRating()) / (countOfRating + 1);
+//					tempHosts.put(host, new TopUrl(host, newRating,
+//							countOfRating + 1));
+//
+//				} else
+//				{
+//					tempHosts.put(rating.getHost(), new TopUrl(
+//							rating.getHost(), rating.getRating(), 1));
+//				}
+//			}
+//			cache.put(cacheKey, new ArrayList<TopUrl>(tempHosts.values()));
+//
+//		}
+//		tempTopHosts = (List<TopUrl>) cache.get(cacheKey);
+//
+//		Collections.sort(tempTopHosts);
+//		
+//		int i = 0;
+//		for (TopUrl temp : tempTopHosts)
+//		{
+//			if (i > countOfUrls)
+//			{
+//				break;
+//			}
+//			topHosts.add(temp);
+//			i++;
+//			System.out.println("hallo " + temp.getUrl());
+//		}
+//		System.out.println("top host" + topHosts);
+//		return topHosts;
+//	}
 
 	@Override
 	public float getAverageRatingForPeriod(String url, Date startDate,
@@ -511,26 +507,6 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		MemCache.getInstance().getCache().clear();
 	}
 
-	
-	/**
-	 * calculate tops for new value and insert in DB
-	 * @param url
-	 * @param rating
-	 */
-	public void calculateTop(String url, float rating)
-	{
-		TopsCalculator.calculateTops(url, rating);
-
-	}
-	/**
-	 * recalculate top for existing value
-	 * @param url
-	 * @param rating
-	 */
-	public void recalculateTop(String url, float rating)
-	{
-		
-	}
 	
 	@Override
 	public List<TopUrl> getTopUrlsForDay(int countOfUrls)
