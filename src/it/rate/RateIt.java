@@ -3,7 +3,6 @@ package it.rate;
 import it.rate.view.FrontPage;
 import it.rate.view.HandlerInit;
 import it.rate.view.RPC;
-import it.rate.view.Constants;
 import it.rate.view.ServerDataCache;
 import it.rate.view.WidgetUpdate;
 import com.google.gwt.core.client.EntryPoint;
