@@ -1,5 +1,6 @@
 package it.rate.view;
 
+import it.rate.Constants;
 import it.rate.client.Rating;
 import it.rate.client.TopUrl;
 import java.util.List;

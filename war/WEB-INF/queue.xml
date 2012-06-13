@@ -14,7 +14,7 @@
     <rate>5/s</rate>
   </queue>
   <queue>
-    <name>top-domains-queue</name>
+    <name>top-hosts-queue</name>
     <rate>5/s</rate>
   </queue>
 </queue-entries>

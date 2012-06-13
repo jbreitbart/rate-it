@@ -6,6 +6,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import it.rate.Constants;
 import it.rate.client.RateItService;
 import it.rate.client.RateItServiceAsync;
 import it.rate.client.Rating;
@@ -556,8 +557,6 @@ public class RPC implements Constants {
 			@Override
 			public void onFailure(Throwable caught)
 			{
-				// TODO Auto-generated method stub
-				
 			}
 		};
 		rateService.isCurUserAdmin(callback );
@@ -573,14 +572,14 @@ public class RPC implements Constants {
 			@Override
 			public void onSuccess(Void result)
 			{
-				Window.alert(RECALCLATE_TOPS_SUCCESS);
+				Window.alert(RECALCULATE_TOPS_SUCCESS);
 				
 			}
 			
 			@Override
 			public void onFailure(Throwable caught)
 			{
-				Window.alert(RECALCLATE_TOPS_FAILED);
+				Window.alert(RECALCULATE_TOPS_FAILED);
 				
 			}
 		};

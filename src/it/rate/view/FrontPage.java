@@ -1,5 +1,7 @@
 package it.rate.view;
 
+import it.rate.Constants;
+
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -72,6 +74,8 @@ public class FrontPage implements Constants {
 	public Label adminLabel;
 	public Button clearCacheBtn;
 	public Button recalculateTopsBtn;
+	public Button btnRunWorkloadTest;
+	public Label label;
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -314,6 +318,13 @@ public class FrontPage implements Constants {
 		
 		recalculateTopsBtn = new Button("recalculate Tops");
 		adminPanel.add(recalculateTopsBtn);
+		
+		btnRunWorkloadTest = new Button("Run workload test");
+		adminPanel.add(btnRunWorkloadTest);
+		
+		label = new Label("");
+		adminPanel.add(label);
+		label.setVisible(false);
 
 		rootPanel.add(verticalPanel_2);
 		

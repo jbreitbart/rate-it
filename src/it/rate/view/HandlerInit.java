@@ -1,5 +1,8 @@
 package it.rate.view;
 
+import it.rate.Constants;
+import it.rate.workload.ClientSideWorkload;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -340,6 +343,18 @@ public class HandlerInit implements Constants {
 				rpc.recalculateTops();
 				
 			}
+		});
+		
+		fP.btnRunWorkloadTest.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				ClientSideWorkload workload = new ClientSideWorkload(fP);
+				for(int i = 0; i<NUMBER_TOP_URLS_CALLS; i++){
+					workload.receiveTodaysTopUrls();
+				}
+			}
+			
 		});
 	}
 }

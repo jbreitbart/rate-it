@@ -11,7 +11,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
 @SuppressWarnings("serial")
-public class CreateRatingTaskServlet extends HttpServlet implements Constants{
+public class CreateTopUrlsTaskServlet extends HttpServlet implements Constants{
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
@@ -19,19 +19,11 @@ public class CreateRatingTaskServlet extends HttpServlet implements Constants{
 		String strCallResult = "";
 		resp.setContentType("text/plain");
 		try {
-
-//			String url = req.getParameter("url");
-//			String comment = req.getParameter("comment");
-//			String rating = req.getParameter("rating");
-
-			String url = WORKLOAD_URL;
-			String comment = WORKLOAD_COMMENT;
-			String rating = WORKLOAD_RATING;
-			Queue queue = QueueFactory.getQueue(WORKLOAD_RATING_QUEUE);
-			for (int i = 0; i < WORKLOAD_RATING_TASKS ; i++) {
-				queue.add(TaskOptions.Builder.withUrl(WORKLOAD_RATING_URL_PATTERN)
-						.param("id", Integer.toString(i)).param("url", url).param("comment", comment).param("rating", rating));
-				strCallResult = (i+1) + " rating-job(s) put into queue";
+			Queue queue = QueueFactory.getQueue(WORKLOAD_URL_QUEUE);
+			for (int i = 0; i < WORKLOAD_URL_TASKS ; i++) {
+				queue.add(TaskOptions.Builder.withUrl(WORKLOAD_URL_URL_PATTERN)
+						.param("id", "i"));
+				strCallResult = (i+1) + " top-urls-job(s) put into queue";
 				resp.getWriter().println(strCallResult);
 			}
 		} catch (Exception ex) {
