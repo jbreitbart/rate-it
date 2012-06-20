@@ -330,7 +330,7 @@ public class HandlerInit implements Constants {
 			@Override
 			public void onClick(ClickEvent event)
 			{
-				rpc.clearServerCache();				
+				rpc.clearServerCache();	
 			}
 		});
 		

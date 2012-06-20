@@ -25,7 +25,7 @@ public class RateTask {
 		User user = UserServiceFactory.getUserService().getCurrentUser();
 		URL link;
 		int returnMessage = 0;
-
+		
 		if (user == null)
 		{
 			returnMessage = ErrorMessage.USER_NOT_LOGGED_IN;
