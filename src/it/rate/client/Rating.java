@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 
+
 /**
  * Class which can be used for one certain URL rating from a user (comments can't have more than one object)
  * or as a URL summary (comments can have more than one object).

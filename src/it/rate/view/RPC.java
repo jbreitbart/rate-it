@@ -274,6 +274,15 @@ public class RPC implements Constants {
 
 			@Override
 			public void onSuccess(List<Rating> subDomains) {
+				
+				for(Rating r : subDomains)
+				{
+					System.out.println("domain " + r.getHost());
+					System.out.println("sub " + r.getUrl());
+					System.out.println("comment" + r.getComment());
+				}
+				
+				
 				// Calls method for widget update
 				String hostDomain = subDomains.get(0).getHost();
 				if (!subDomains.isEmpty() && subDomains != null) {
