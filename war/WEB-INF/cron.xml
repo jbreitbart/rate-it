@@ -3,6 +3,6 @@
   <cron>
     <url>/cron/calculatetop</url>
     <description>recalculate top and save in DB every 12 hours</description>
-    <schedule>every 3 hours</schedule>
+    <schedule>every 24 hours</schedule>
   </cron>
 </cronentries>
