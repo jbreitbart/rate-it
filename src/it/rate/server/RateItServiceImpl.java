@@ -48,7 +48,9 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	{
 		int result = ErrorMessage.RATE_SUCCESS;
 		try {
+
 			result = RateTask.rateUrl(url, comment, rating, canReplace);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
