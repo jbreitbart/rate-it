@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -21,6 +22,7 @@ import net.sf.jsr107cache.Cache;
 public class TopsCalculator
 {
 
+	private static HashSet<TopUrlDB> topUrls;
 	public static List<TopUrl> getTopUrlsForDay(int countOfUrls)
 	{
 		return getTops(MemCache.CACHE_KEY_URL_DAY, TopUrl.PERIOD_DAY,
@@ -67,12 +69,10 @@ public class TopsCalculator
 		//clear TopUrlDB
 		if(!resultTops.isEmpty())
 		{
-			for(TopUrlDB temp : resultTops)
-			{
-				pm.deletePersistent(temp);
-			}
+			pm.deletePersistentAll(resultTops);
 		}
 		
+		topUrls = new HashSet<TopUrlDB>();
 		Query query = pm
 				.newQuery(RatingDB.class);
 
@@ -83,7 +83,10 @@ public class TopsCalculator
 			{
 				calculateTops(tempRating);
 			}
+			
+			pm.makePersistentAll(topUrls);
 		}
+		
 	}
 
 	public static void calculateTops(RatingDB rating)
@@ -134,47 +137,36 @@ public class TopsCalculator
 	private static void calculate(RatingDB rating, String linkType,
 			String period)
 	{
-		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
-		Query topUrlDayQuery = pm
-				.newQuery(
-						TopUrlDB.class,
-						("this.type == typeParam && this.period == periodParam && this.url == urlParam"));
-		topUrlDayQuery
-				.declareParameters("String typeParam, String periodParam, String urlParam");
-
-		List<TopUrlDB> result = (List<TopUrlDB>) topUrlDayQuery.execute(
-				linkType, period, rating.getUrl());
-
-		if (result.isEmpty())
+		
+		boolean exist = false;
+		
+		for(TopUrlDB tempTop : topUrls)
 		{
-			try
+			if(tempTop.getUrl().equals(rating.getUrl())
+					&& tempTop.getPeriod().equals(period) 
+						&& tempTop.getType().equals(linkType))
 			{
-				pm.makePersistent(new TopUrlDB(rating.getUrl(), rating.getRating(), 1, period, linkType));
-			} finally
-			{
-				pm.close();
+				exist = true;
+				topUrls.remove(tempTop);
+				
+				float ratingValue = tempTop.getAveradgeRating();
+				float newRating = (ratingValue
+						* ((float) tempTop.getCountOfRatings()) + rating
+							.getRating())
+						/ ((float) (tempTop.getCountOfRatings() + 1));
+				
+				tempTop.setAveradgeRating(newRating);
+				tempTop.setCountOfRatings(tempTop.getCountOfRatings() + 1);
+				
+				topUrls.add(tempTop);
+				break;
+				
 			}
-		} else
+		}		
+		
+		if (!exist)
 		{
-			TopUrlDB topToReplace = pm.getObjectById(TopUrlDB.class, result
-					.get(0).getKey());
-
-			float ratingValue = result.get(0).getAveradgeRating();
-			float newRating = (ratingValue
-					* ((float) result.get(0).getCountOfRatings()) + rating
-						.getRating())
-					/ ((float) (result.get(0).getCountOfRatings() + 1));
-			topToReplace.setAveradgeRating(newRating);
-			topToReplace
-					.setCountOfRatings(result.get(0).getCountOfRatings() + 1);
-			try
-			{
-				pm.makePersistent(topToReplace);
-			} finally
-			{
-				pm.close();
-			}
-
+			topUrls.add(new TopUrlDB(rating.getUrl(), rating.getRating(), 1, period, linkType));
 		}
 	}
 
