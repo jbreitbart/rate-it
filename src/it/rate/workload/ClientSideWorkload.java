@@ -1,27 +1,29 @@
 package it.rate.workload;
 
 import it.rate.Constants;
-import it.rate.Constants.Period;
 import it.rate.client.RateItService;
 import it.rate.client.RateItServiceAsync;
 import it.rate.client.TopUrl;
 import it.rate.view.FrontPage;
-import it.rate.view.ServerDataCache;
 import it.rate.view.WidgetUpdate;
 
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ClientSideWorkload implements Constants {
 	
 	FrontPage fP;
-	public static int todayUrlsCount = 1;
+	WidgetUpdate wUpd;
+	public int counter = 0;
+	public long startTime;
+	public int max = -1;
 	
-	public ClientSideWorkload(FrontPage frontPage) {
+	public ClientSideWorkload(FrontPage frontPage, WidgetUpdate widgetUpdate, int max) {
 		this.fP = frontPage;
+		this.wUpd = widgetUpdate;
+		this.max = max;
 	}
 	/**
 	 * Receives top URLs from server for today
@@ -43,84 +45,90 @@ public class ClientSideWorkload implements Constants {
 			public void onFailure(Throwable caught) {
 				fP.label.setVisible(true);
 				fP.label.setText("Error occured through test execution");
+				wUpd.enableTestButtons();
 			}
 
 			@Override
 			public void onSuccess(List<TopUrl> topUrls) {
-				todayUrlsCount++;
-				if(todayUrlsCount == 1){
+				counter++;
+				if(counter == 1){
+					startTime = System.currentTimeMillis();
 					fP.label.setVisible(true);
-					fP.label.setText("Test begins");
-				}
-				if(todayUrlsCount == NUMBER_TOP_URLS_CALLS){
+					fP.label.setText("Top Urls test begins");
+				} else if(counter == max - 1){
+					long elepsedTime = System.currentTimeMillis() - startTime;
 					fP.label.setVisible(true);
-					fP.label.setText("Test finished successfully");
+					fP.label.setText("Test finished successfully. ElepsedTime: " + elepsedTime + "ms");
+					wUpd.enableTestButtons();
 				}
 			}
 		};
 
 		rateService.getTopUrlsForDay(TOP_COUNT, callback);
 	}
-//
-//	/**
-//	 * Receives top URLs from server for last month
-//	 * 
-//	 * @param urlCount
-//	 *            Counter for top list
-//	 * @param startDate
-//	 *            Start date for calculating top list
-//	 * @param endDate
-//	 *            End date for calculating top list
-//	 */
-//	public void receiveMonthsTopUrls() {
-//
-//		RateItServiceAsync rateService = (RateItServiceAsync) GWT
-//				.create(RateItService.class);
-//
-//		AsyncCallback<List<TopUrl>> callback = new AsyncCallback<List<TopUrl>>() {
-//
-//			public void onFailure(Throwable caught) {
-//				Window.alert(SERVER_ERROR);
-//			}
-//
-//			@Override
-//			public void onSuccess(List<TopUrl> topUrls) {
-//				wUpd.updateTopUrlsList(topUrls, Period.MONTH);
-//				dataCache.receivedMonthsTopUrls = topUrls;
-//			}
-//		};
-//
-//		rateService.getTopUrlsForMonth(TOP_COUNT, callback);
-//	}
-//
-//	/**
-//	 * Receives top URLs from server for last year
-//	 * 
-//	 * @param urlCount
-//	 *            Counter for top list
-//	 * @param startDate
-//	 *            Start date for calculating top list
-//	 * @param endDate
-//	 *            End date for calculating top list
-//	 */
-//	public void receiveYearsTopUrls() {
-//
-//		RateItServiceAsync rateService = (RateItServiceAsync) GWT
-//				.create(RateItService.class);
-//
-//		AsyncCallback<List<TopUrl>> callback = new AsyncCallback<List<TopUrl>>() {
-//
-//			public void onFailure(Throwable caught) {
-//				Window.alert(SERVER_ERROR);
-//			}
-//
-//			@Override
-//			public void onSuccess(List<TopUrl> topUrls) {
-//				wUpd.updateTopUrlsList(topUrls, Period.YEAR);
-//				dataCache.receivedYearsTopUrls = topUrls;
-//			}
-//		};
-//
-//		rateService.getTopUrlsForYear(TOP_COUNT, callback);
-//	}
+	
+	
+	public void receiveTodaysTopHosts() {
+
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+
+		AsyncCallback<List<TopUrl>> callback = new AsyncCallback<List<TopUrl>>() {
+
+			public void onFailure(Throwable caught) {
+				fP.label.setVisible(true);
+				fP.label.setText("Error occured through test execution");
+				wUpd.enableTestButtons();			
+			}
+
+			@Override
+			public void onSuccess(List<TopUrl> topUrls) {
+				counter++;
+				if(counter == 1){
+					startTime = System.currentTimeMillis();
+					fP.label.setVisible(true);
+					fP.label.setText("Top Hosts test begins");
+				} else if(counter == max - 1){
+					long elepsedTime = System.currentTimeMillis() - startTime;
+					fP.label.setVisible(true);
+					fP.label.setText("Test finished successfully. ElepsedTime: " + elepsedTime + "ms");
+					wUpd.enableTestButtons();
+				}
+			}
+		};
+
+		rateService.getTopHostsForDay(TOP_COUNT, callback);
+	}
+
+	public void rate(String mail, String url, String comment, float rating) {
+
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+
+		AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
+
+			public void onFailure(Throwable caught) {
+				fP.label.setVisible(true);
+				fP.label.setText("Error occured through test execution");
+				wUpd.enableTestButtons();				
+			}
+
+			@Override
+			public void onSuccess(Integer result) {
+				counter++;
+				if(counter == 1){
+					startTime = System.currentTimeMillis();
+					fP.label.setVisible(true);
+					fP.label.setText("Rating test begins");
+				} else if(counter == max - 1){
+					long elepsedTime = System.currentTimeMillis() - startTime;
+					fP.label.setVisible(true);
+					fP.label.setText("Test finished successfully. ElepsedTime: " + elepsedTime + "ms");
+					wUpd.enableTestButtons();
+				}
+			}
+		};
+
+		rateService.ratingTest(mail, url, comment, rating, callback);
+	}
 }

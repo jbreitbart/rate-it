@@ -5,7 +5,6 @@ import it.rate.server.RateTask;
 import it.rate.util.ErrorMessage;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -13,11 +12,7 @@ import javax.servlet.http.*;
 @SuppressWarnings("serial")
 public class RatingExecutionServlet extends HttpServlet implements Constants {
 
-	private static final Logger _logger = Logger
-			.getLogger(RatingExecutionServlet.class.getName());
-	HttpServletResponse response;
-	private static int counter = 1;
-	private static double startTime = 0.0;
+	public static volatile int counter = 0;
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
@@ -27,6 +22,16 @@ public class RatingExecutionServlet extends HttpServlet implements Constants {
 		try {
 
 			String strId = req.getParameter("id");
+			String strCount = req.getParameter("count");
+			int id = -1;
+			int count = -1;
+			try {
+				id = Integer.valueOf(strId);
+				count = Integer.valueOf(strCount);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+			String mail = req.getParameter("mail");
 			String url = req.getParameter("url");
 			String comment = req.getParameter("comment");
 			String strRating = req.getParameter("rating");
@@ -34,45 +39,34 @@ public class RatingExecutionServlet extends HttpServlet implements Constants {
 
 			try {
 				rating = Integer.valueOf(strRating);
-			} catch (Exception e) {
+			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			}
-
-			rateUrl(url, comment, rating);
+			rateUrl(id, url, comment, rating, mail, count);
 
 		} catch (Exception ex) {
-			strCallResult = "FAIL: Rating placed";
+			strCallResult = "FAIL: Rating not placed";
 			System.out.println(strCallResult);
 		}
 	}
 
-	public void rateUrl(String url, String comment, float rating)
-			throws Exception {
-		switch (RateTask.rateUrl(url, comment, rating, true)) {
-		case ErrorMessage.URL_NOT_CORRECT:
-			System.out.println("url not correct");
-			break;
-		case ErrorMessage.USER_NOT_LOGGED_IN:
-			System.out.println("user not logged in");
-			break;
-		case ErrorMessage.RATE_EXISTS:
-			System.out.println("rate exists");
+	public void rateUrl(int id, String url, String comment, float rating,
+			String mail, int count) throws Exception {
+		switch (RateTask.rateUrl(url, comment, rating, mail)) {
+		case ErrorMessage.DB_ERROR:
+			System.out.println("DB_ERROR");
 			break;
 		case ErrorMessage.RATE_SUCCESS:
-			System.out.println("SUCCESS");
+			// System.out.println("SUCCESS");
 			break;
 		}
-
-		if (counter == 1) {
-			startTime = System.currentTimeMillis();
+		if (id == 0) {
+			DbHelper.setStartTime(System.currentTimeMillis());
+		} else if (id == count - 1) {
+			DbHelper.setRunTime(System.currentTimeMillis()
+					- DbHelper.getStartTime());
 		}
-		if (counter % WORKLOAD_RATING_INFO_RATIO == 0) {
-			System.out.println(
-					counter + " ratings finished in "
-							+ (System.currentTimeMillis() - startTime) + "ms");
-		}
-		counter++;
-
+		System.out.println(id);
 	}
 
 	@Override

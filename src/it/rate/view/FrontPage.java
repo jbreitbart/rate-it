@@ -17,8 +17,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.widget.client.TextButton;
+import com.google.gwt.user.client.ui.IntegerBox;
 
 public class FrontPage implements Constants {
 
@@ -76,6 +75,13 @@ public class FrontPage implements Constants {
 	public Button recalculateTopsBtn;
 	public Button btnRunWorkloadTest;
 	public Label label;
+	public VerticalPanel verticalPanel_9;
+	public Label lblNewLabel_7;
+	public Button btnTopUrlsTest;
+	public Button btnNewButton_1;
+	public Button btnRatingTest;
+	public IntegerBox integerBox;
+	public Button btnClearDb;
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -312,6 +318,10 @@ public class FrontPage implements Constants {
 		adminLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		adminPanel.add(adminLabel);
 		
+		btnClearDb = new Button("Clear DB");
+		adminPanel.add(btnClearDb);
+		btnClearDb.setWidth("112px");
+		
 		clearCacheBtn = new Button("clear cache");
 		adminPanel.add(clearCacheBtn);
 		clearCacheBtn.setSize("112px", "30");
@@ -320,10 +330,38 @@ public class FrontPage implements Constants {
 		adminPanel.add(recalculateTopsBtn);
 		
 		btnRunWorkloadTest = new Button("Run workload test");
+		btnRunWorkloadTest.setText("Workload tests");
 		adminPanel.add(btnRunWorkloadTest);
+		btnRunWorkloadTest.setSize("112px", "30px");
+		
+		verticalPanel_9 = new VerticalPanel();
+		horizontalPanel.add(verticalPanel_9);
+		horizontalPanel.setCellHorizontalAlignment(verticalPanel_9, HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_9.setVisible(false);
+		
+		lblNewLabel_7 = new Label("Workload Tests");
+		lblNewLabel_7.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_9.add(lblNewLabel_7);
+		
+		btnTopUrlsTest = new Button("Top URLs Test");
+		verticalPanel_9.add(btnTopUrlsTest);
+		btnTopUrlsTest.setWidth("112px");
+		
+		btnNewButton_1 = new Button("New button");
+		btnNewButton_1.setText("Top Hosts Test");
+		verticalPanel_9.add(btnNewButton_1);
+		btnNewButton_1.setWidth("112px");
+		
+		btnRatingTest = new Button("Rating Test");
+		verticalPanel_9.add(btnRatingTest);
+		btnRatingTest.setWidth("112px");
+		
+		integerBox = new IntegerBox();
+		verticalPanel_9.add(integerBox);
+		integerBox.setWidth("112px");
 		
 		label = new Label("");
-		adminPanel.add(label);
+		verticalPanel_9.add(label);
 		label.setVisible(false);
 
 		rootPanel.add(verticalPanel_2);

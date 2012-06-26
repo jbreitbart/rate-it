@@ -2,6 +2,7 @@ package it.rate.view;
 
 import it.rate.Constants;
 import it.rate.workload.ClientSideWorkload;
+import it.rate.workload.RandomString;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -323,38 +324,119 @@ public class HandlerInit implements Constants {
 			}
 
 		});
-		
-		fP.clearCacheBtn.addClickHandler(new ClickHandler()
-		{
-			
-			@Override
-			public void onClick(ClickEvent event)
-			{
-				rpc.clearServerCache();	
-			}
-		});
-		
-		fP.recalculateTopsBtn.addClickHandler(new ClickHandler()
-		{
-			
-			@Override
-			public void onClick(ClickEvent event)
-			{
-				rpc.recalculateTops();
-				
-			}
-		});
-		
-		fP.btnRunWorkloadTest.addClickHandler(new ClickHandler(){
+
+		/*
+		 * Admin Panel buttons click handler
+		 */
+		fP.clearCacheBtn.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				ClientSideWorkload workload = new ClientSideWorkload(fP);
-				for(int i = 0; i<NUMBER_TOP_URLS_CALLS; i++){
-					workload.receiveTodaysTopUrls();
+				rpc.clearServerCache();
+			}
+		});
+
+		fP.recalculateTopsBtn.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				rpc.recalculateTops();
+
+			}
+		});
+
+		fP.btnRunWorkloadTest.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (fP.verticalPanel_9.isVisible()) {
+					fP.verticalPanel_9.setVisible(false);
+				}
+				if (!fP.verticalPanel_9.isVisible()) {
+					fP.verticalPanel_9.setVisible(true);
 				}
 			}
+
+		});
+		
+		fP.btnClearDb.addClickHandler(new ClickHandler() {
 			
+			@Override
+			public void onClick(ClickEvent event) {
+				rpc.clearDB();
+				
+			}
+		});
+
+		/*
+		 * Workload tests buttons click handler
+		 */
+
+		fP.btnTopUrlsTest.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				wUpd.disableTestButtons();
+				int count = 0;
+				try {
+					count = Integer.valueOf(fP.integerBox.getText());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				ClientSideWorkload work = new ClientSideWorkload(fP, wUpd,
+						count);
+				for (int i = 0; i < count; i++) {
+					work.receiveTodaysTopUrls();
+				}
+			}
+		});
+
+		fP.btnNewButton_1.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				wUpd.disableTestButtons();
+				int count = 0;
+				try {
+					count = Integer.valueOf(fP.integerBox.getText());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				ClientSideWorkload work = new ClientSideWorkload(fP, wUpd,
+						count);
+				for (int i = 0; i < count; i++) {
+					work.receiveTodaysTopHosts();
+				}
+			}
+		});
+
+		fP.btnRatingTest.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				wUpd.disableTestButtons();
+				int count = 0;
+				try {
+					count = Integer.valueOf(fP.integerBox.getText());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				ClientSideWorkload work = new ClientSideWorkload(fP, wUpd,
+						count);
+				for (int i = 0; i < count; i++) {
+					work.rate(RandomString.nextEmail(), RandomString.nextUrl(),
+							RandomString.nextComment(), 2);
+				}
+			}
+		});
+
+		fP.btnClearDb.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				rpc.clearDB();
+			}
+
 		});
 	}
 }

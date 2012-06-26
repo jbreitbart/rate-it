@@ -42,38 +42,30 @@ public interface Constants {
 	public static final String CACHE_CLEAR_FAILED = "Clearing cache failed";
 	
 	public static final String CACHE_CLEAR_SUCCESS = "Cache successfully cleard";
-	
-	public static final String WORKLOAD_COMMENT = "test comment";
-	
-	public static final String WORKLOAD_URL = "www.workload-test.com";
 
 	public static final String WORKLOAD_RATING = "1";
 	
-	public static final int WORKLOAD_RATING_TASKS = 10;
-
-	public static final int WORKLOAD_RATING_INFO_RATIO = WORKLOAD_RATING_TASKS/1;
+	public static final int WORKLOAD_RATING_TASKS = 10000;
 	
-	public static final int WORKLOAD_URL_TASKS = 10;
-
-	public static final int WORKLOAD_URL_INFO_RATIO = WORKLOAD_URL_TASKS/1;
+	public static final int WORKLOAD_CALC_TOPS_TASKS = 1000;
 	
-	public static final int WORKLOAD_HOST_TASKS = 10;
-
-	public static final int WORKLOAD_HOST_INFO_RATIO = WORKLOAD_HOST_TASKS/1;
+	public static final int WORKLOAD_FETCH_TOPS_TASKS = 1000;
 	
-	public static final String WORKLOAD_URL_URL_PATTERN = "/queue/fetchtopurls";
-	
-	public static final String WORKLOAD_URL_QUEUE = "top-urls-queue";
-	
-	public static final String WORKLOAD_RATING_URL_PATTERN = "/queue/ratingexecution";
+	public static final String WORKLOAD_RATING_URL_PATTERN = "/queue/ratingtasks";
 	
 	public static final String WORKLOAD_RATING_QUEUE = "rate-queue";
 	
-	public static final String WORKLOAD_HOST_URL_PATTERN = "/queue/fetchtophosts";
+	public static final String WORKLOAD_CALC_TOPS_URL_PATTERN = "/queue/calctasks";
 	
-	public static final String WORKLOAD_HOST_QUEUE = "rate-queue";
+	public static final String WORKLOAD_CALC_TOPS_QUEUE = "calc-tops-queue";
 	
-	public static final int NUMBER_TOP_URLS_CALLS = 100; 
+	public static final String WORKLOAD_FETCH_TOPS_URL_PATTERN = "/queue/fetchtasks";
+	
+	public static final String WORKLOAD_FETCH_TOPS_QUEUE = "fetch-tops-queue";
+	
+	public static final int NUMBER_TOP_URLS_CALLS = 1000;
+	
+	public static final int NUMBER_TOP_HOSTS_CALLS = 1000;
 	
 	public static enum Period {DAY, MONTH, YEAR};
 	
