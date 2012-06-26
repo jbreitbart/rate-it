@@ -56,6 +56,18 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 		}
 		return result;
 	}
+	
+	@Override
+	public int ratingTest(String mail, String url, String comment, float rating)
+	{
+		int result = ErrorMessage.RATE_SUCCESS;
+		try {
+			result = RateTask.rateUrl(url, comment, rating, mail);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	@Override
 	public List<Rating> getSubDomains(String host)
@@ -270,6 +282,11 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	{
 		TopsCalculator.calculateAllTops();
 		
+	}
+	
+	@Override
+	public void clearDB(){
+		ClearDB.clearDB();
 	}
 
 }

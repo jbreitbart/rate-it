@@ -12,5 +12,6 @@ public interface ErrorMessage {
 	public final int RATE_EXISTS 		= 1;
 	public final int URL_NOT_CORRECT 	= 2;
 	public final int USER_NOT_LOGGED_IN = 4;
+	public final int DB_ERROR 			= 5;
 
 }

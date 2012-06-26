@@ -39,4 +39,7 @@ public interface RateItServiceAsync {
     void getTopHostsForMonth(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
     void getTopHostsForYear(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
 	
+	void ratingTest(String mail, String url, String comment, float rating, AsyncCallback<Integer> callback);
+
+	void clearDB(AsyncCallback<Void> callback);
 }

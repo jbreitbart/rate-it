@@ -177,5 +177,17 @@ public class WidgetUpdate implements Constants {
 		}
 		return true;
 	}
+	
+	public void disableTestButtons(){
+		fP.btnTopUrlsTest.setEnabled(false);
+		fP.btnRatingTest.setEnabled(false);
+		fP.btnNewButton_1.setEnabled(false);
+	}
+
+	public void enableTestButtons(){
+		fP.btnTopUrlsTest.setEnabled(true);
+		fP.btnRatingTest.setEnabled(true);
+		fP.btnNewButton_1.setEnabled(true);
+	}
 
 }
