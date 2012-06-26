@@ -8,34 +8,42 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 @SuppressWarnings("serial")
-public class FetchTopHostsServlet extends HttpServlet implements Constants {
-
-	private static int counter = 1;
-	private static double startTime = 0.0;
+public class FetchTopsServlet extends HttpServlet implements Constants {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		String strCallResult = "";
 		resp.setContentType("text/plain");
+		
+		String strId = req.getParameter("id");
+		String strCount = req.getParameter("count");
+		int id = -1;
+		int count = -1;
+		try {
+			id = Integer.valueOf(strId);
+			count = Integer.valueOf(strCount);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
 
 		try {
 
+			TopsCalculator.getTopUrlsForDay(TOP_COUNT);
+			TopsCalculator.getTopUrlsForMonth(TOP_COUNT);
+			TopsCalculator.getTopUrlsForYear(TOP_COUNT);
 			TopsCalculator.getTopHostsForDay(TOP_COUNT);
 			TopsCalculator.getTopHostsForMonth(TOP_COUNT);
 			TopsCalculator.getTopHostsForYear(TOP_COUNT);
 			
-			if (counter == 1) {
-				startTime = System.currentTimeMillis();
+			if (id == 0) {
+				DbHelper.setStartTime(System.currentTimeMillis());
+			} else if (id == count - 1) {
+				DbHelper.setRunTime(System.currentTimeMillis()
+						- DbHelper.getStartTime());
 			}
-			if (counter % WORKLOAD_HOST_INFO_RATIO == 0) {
-				System.out.println(
-						counter + " fetches of hosts top lists finished in "
-								+ (System.currentTimeMillis() - startTime) + "ms");
-			}
-			counter++;
 
 		} catch (Exception ex) {
-			strCallResult = "FAIL: Fetching hosts top lists";
+			strCallResult = "FAIL: Fetching top lists";
 			System.out.println(strCallResult);
 		}
 	}

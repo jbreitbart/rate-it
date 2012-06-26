@@ -11,19 +11,27 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
 @SuppressWarnings("serial")
-public class CreateTopUrlsTaskServlet extends HttpServlet implements Constants{
+public class CreateFetchingTopsTaskServlet extends HttpServlet implements Constants{
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
 		String strCallResult = "";
 		resp.setContentType("text/plain");
+		
+		String strWorkloadCount = req.getParameter("count");
+		int workloadCount = -1;
+		try{
+			workloadCount = Integer.valueOf(strWorkloadCount);
+		}catch(NumberFormatException e){
+			e.printStackTrace();
+		}
 		try {
-			Queue queue = QueueFactory.getQueue(WORKLOAD_URL_QUEUE);
-			for (int i = 0; i < WORKLOAD_URL_TASKS ; i++) {
-				queue.add(TaskOptions.Builder.withUrl(WORKLOAD_URL_URL_PATTERN)
-						.param("id", "i"));
-				strCallResult = (i+1) + " top-urls-job(s) put into queue";
+			Queue queue = QueueFactory.getQueue(WORKLOAD_FETCH_TOPS_QUEUE);
+			for (int i = 0; i < workloadCount; i++) {
+				queue.add(TaskOptions.Builder.withUrl(WORKLOAD_FETCH_TOPS_URL_PATTERN)
+						.param("id", "i").param("count", Integer.toString(workloadCount)));
+				strCallResult = (i+1) + " fetch-tops-job(s) put into queue";
 				resp.getWriter().println(strCallResult);
 			}
 		} catch (Exception ex) {

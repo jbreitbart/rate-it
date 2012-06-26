@@ -154,16 +154,14 @@ public class RPC implements Constants {
 				wUpd.updateTopDomainsList(topDomains, Period.DAY);
 				dataCache.receivedTodaysTopDomains = topDomains;
 
-				// TODO: Remove comment, when receiving sub domains
-				// issue is resolved
-//				try {
-//					for (TopUrl domain : topDomains) {
-//						
-//						receiveSubDomains(domain.getUrl());
-//					}
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
+				try {
+					for (TopUrl domain : topDomains) {
+						
+						receiveSubDomains(domain.getUrl());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		};
 
@@ -196,16 +194,14 @@ public class RPC implements Constants {
 				wUpd.updateTopDomainsList(topDomains, Period.MONTH);
 				dataCache.receivedMonthsTopDomains = topDomains;
 
-				// TODO: Remove comment, when receiving sub domains
-				// issue is resolved
-//				try {
-//					for (TopUrl domain : topDomains) {
-//						
-//						receiveSubDomains(domain.getUrl());
-//					}
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
+				try {
+					for (TopUrl domain : topDomains) {
+						
+						receiveSubDomains(domain.getUrl());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		};
 
@@ -238,16 +234,14 @@ public class RPC implements Constants {
 				wUpd.updateTopDomainsList(topDomains, Period.YEAR);
 				dataCache.receivedYearsTopDomains = topDomains;
 
-				// TODO: Remove comment, when receiving sub domains
-				// issue is resolved
-//				try {
-//					for (TopUrl domain : topDomains) {
-//						
-//						receiveSubDomains(domain.getUrl());
-//					}
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
+				try {
+					for (TopUrl domain : topDomains) {
+						
+						receiveSubDomains(domain.getUrl());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		};
 
@@ -274,13 +268,6 @@ public class RPC implements Constants {
 
 			@Override
 			public void onSuccess(List<Rating> subDomains) {
-				
-				for(Rating r : subDomains)
-				{
-					System.out.println("domain " + r.getHost());
-					System.out.println("sub " + r.getUrl());
-					System.out.println("comment" + r.getComment());
-				}
 				
 				
 				// Calls method for widget update
@@ -605,5 +592,25 @@ public class RPC implements Constants {
 		receiveYearsTopUrls();
 		userAuthentication();
 		checkAdmin();
+	}
+
+	public void clearDB() {
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+		AsyncCallback<Void> callback = new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("DB could not be cleared");
+				
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert("DB cleared");				
+			}
+			
+		};
+		rateService.clearDB(callback);
 	}
 }

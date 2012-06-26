@@ -30,41 +30,41 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>RatingExecutionServlet</servlet-name>
-		<url-pattern>/queue/ratingexecution</url-pattern>
+		<url-pattern>/queue/ratingtasks</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>CreateTopUrlsTaskServlet</servlet-name>
-		<servlet-class>it.rate.workload.CreateTopUrlsTaskServlet</servlet-class>
+		<servlet-name>CreateCalculateTopsTaskServlet</servlet-name>
+		<servlet-class>it.rate.workload.CreateCalculateTopsTaskServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>FetchTopUrlsServlet</servlet-name>
-		<servlet-class>it.rate.workload.FetchTopUrlsServlet</servlet-class>
+		<servlet-name>CalculateTopsServlet</servlet-name>
+		<servlet-class>it.rate.workload.CalculateTopsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>CreateTopUrlsTaskServlet</servlet-name>
-		<url-pattern>/queue/createurltasks</url-pattern>
+		<servlet-name>CreateCalculateTopsTaskServlet</servlet-name>
+		<url-pattern>/queue/createcalctasks</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>FetchTopUrlsServlet</servlet-name>
-		<url-pattern>/queue/fetchtopurls</url-pattern>
+		<servlet-name>CalculateTopsServlet</servlet-name>
+		<url-pattern>/queue/calctasks</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>CreateTopHostsTaskServlet</servlet-name>
-		<servlet-class>it.rate.workload.CreateTopHostsTaskServlet</servlet-class>
+		<servlet-name>CreateFetchingTopsTaskServlet</servlet-name>
+		<servlet-class>it.rate.workload.CreateFetchingTopsTaskServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>FetchTopHostsServlet</servlet-name>
-		<servlet-class>it.rate.workload.FetchTopHostsServlet</servlet-class>
+		<servlet-name>FetchTopsServlet</servlet-name>
+		<servlet-class>it.rate.workload.FetchTopsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>CreateTopHostsTaskServlet</servlet-name>
-		<url-pattern>/queue/createhoststasks</url-pattern>
+		<servlet-name>CreateFetchingTopsTaskServlet</servlet-name>
+		<url-pattern>/queue/createfetchtasks</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>FetchTopHostsServlet</servlet-name>
-		<url-pattern>/queue/fetchtophosts</url-pattern>
+		<servlet-name>FetchTopsServlet</servlet-name>
+		<url-pattern>/queue/fetchtasks</url-pattern>
 	</servlet-mapping>
 
 	<security-constraint>
@@ -76,6 +76,7 @@
 			<role-name>admin</role-name>
 		</auth-constraint>
 	</security-constraint>
+
 
 	<!-- Cron Job Servlet -->
 	<servlet>

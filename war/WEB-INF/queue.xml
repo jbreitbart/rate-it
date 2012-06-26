@@ -7,14 +7,17 @@
   </queue>
   <queue>
     <name>rate-queue</name>
-    <rate>5/s</rate>
+    <rate>500/s</rate>
+    <bucket-size>1</bucket-size>
   </queue>
   <queue>
-    <name>top-urls-queue</name>
-    <rate>5/s</rate>
+    <name>calc-tops-queue</name>
+    <rate>500/s</rate>
+    <bucket-size>100</bucket-size>
   </queue>
   <queue>
-    <name>top-hosts-queue</name>
-    <rate>5/s</rate>
+    <name>fetch-tops-queue</name>
+    <rate>500/s</rate>
+    <bucket-size>100</bucket-size>
   </queue>
 </queue-entries>
