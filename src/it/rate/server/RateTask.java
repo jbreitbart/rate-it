@@ -7,13 +7,13 @@ import it.rate.util.PMF;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -44,61 +44,54 @@ public class RateTask {
 
 					String host = link.getHost();
 
-					Query query = pm
-							.newQuery(
-									RatingDB.class,
-									("this.userEmail == userEmailParam && this.url == urlParam"));
-					query.declareParameters("String userEmailParam, String urlParam");
 					try
 					{
-						List<RatingDB> result = (List<RatingDB>) query.execute(
-								user.getEmail(), url);
 
-						if (result.isEmpty())
+						RatingDB tempRating = pm.getObjectById(
+								RatingDB.class,
+								KeyFactory.createKey(
+										RatingDB.class.getSimpleName(),
+										user.getEmail() + "_" + url));
+
+						if (!canReplace)
 						{
-							//add new entity in DB
-							RatingDB newRating = new RatingDB(user.getEmail(),
-									url, host, new Text(comment), rating);
-							
+							returnMessage = ErrorMessage.RATE_EXISTS;
+						}
+						// replace the rate
+						else
+						{
+							tempRating.setRating(rating);
+							tempRating.setComments(new Text(comment));
+
 							try
 							{
-								pm.makePersistent(newRating);
+
+								pm.makePersistent(tempRating);
 								returnMessage = ErrorMessage.RATE_SUCCESS;
 							} finally
 							{
 								pm.close();
 							}
-						} else
-						{
-							
-							if (!canReplace)
-							{
-								returnMessage = ErrorMessage.RATE_EXISTS;
-							}
-							// replace the rate
-							else
-							{
-								RatingDB ratingToReplace = pm.getObjectById(
-										RatingDB.class, result.get(0).getKey());
-								ratingToReplace.setRating(rating);
-								ratingToReplace.setComments(new Text(comment));
-								
-								try
-								{
 
-									pm.makePersistent(ratingToReplace);
-									returnMessage = ErrorMessage.RATE_SUCCESS;
-								} finally
-								{
-									pm.close();
-								}
-
-							}
 						}
-
-					} finally
+					} catch (JDOObjectNotFoundException e)
 					{
-						query.closeAll();
+
+						// add new entity in DB
+						RatingDB newRating = new RatingDB(user.getEmail(), url,
+								host, new Text(comment), rating);
+
+						try
+						{
+							newRating.setKey(KeyFactory.createKey(
+									RatingDB.class.getSimpleName(),
+									user.getEmail() + "_" + url));
+							pm.makePersistent(newRating);
+							returnMessage = ErrorMessage.RATE_SUCCESS;
+						} finally
+						{
+							pm.close();
+						}
 					}
 				} catch (MalformedURLException e1)
 				{
@@ -131,49 +124,43 @@ public class RateTask {
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
 		int returnMessage = 0;
 
-		try {
-			Query query = pm
-					.newQuery(
-							RatingDB.class,
-							("this.userEmail == userEmailParam && this.url == urlParam"));
-			query.declareParameters("String userEmailParam, String urlParam");
-			try {
-				List<RatingDB> result = (List<RatingDB>) query.execute(
-						userEmail, url);
+		try
+		{
 
-				if (result.isEmpty()) {
-					// add new entity in DB
-					RatingDB newRating = new RatingDB(userEmail, url, url,
-							new Text(comment), rating);
+			RatingDB tempRating = pm.getObjectById(
+					RatingDB.class,
+					KeyFactory.createKey(
+							RatingDB.class.getSimpleName(),
+							userEmail + "_" + url));
+
+					tempRating.setRating(rating);
+					tempRating.setComments(new Text(comment));
 					try {
-						pm.makePersistent(newRating);
+
+						pm.makePersistent(tempRating);
 						returnMessage = ErrorMessage.RATE_SUCCESS;
 					} finally {
 						pm.close();
 					}
-				} else {
-					RatingDB ratingToReplace = pm.getObjectById(RatingDB.class,
-							result.get(0).getKey());
-					ratingToReplace.setRating(rating);
-					ratingToReplace.setComments(new Text(comment));
-					try {
+		}
+		catch(JDOObjectNotFoundException e)
+		{
 
-						pm.makePersistent(ratingToReplace);
-						returnMessage = ErrorMessage.RATE_SUCCESS;
-					} finally {
-						pm.close();
-					}
+				// add new entity in DB
+				RatingDB newRating = new RatingDB(userEmail, url, url,
+						new Text(comment), rating);
+				newRating.setKey(KeyFactory.createKey(
+						RatingDB.class.getSimpleName(),
+						userEmail + "_" + url));
+				try {
+					pm.makePersistent(newRating);
+					returnMessage = ErrorMessage.RATE_SUCCESS;
+				} finally {
+					pm.close();
 				}
 
-			} catch (Exception e) {
-				returnMessage = ErrorMessage.DB_ERROR;
-			} finally {
-				query.closeAll();
-			}
-		} catch (Exception e1) {
-			returnMessage = ErrorMessage.DB_ERROR;
 		}
-
+		
 		return new Integer(returnMessage);
 	}
 }
