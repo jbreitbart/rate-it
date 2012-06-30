@@ -1,6 +1,7 @@
 package it.rate.data;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 
 import java.util.Date;
@@ -47,6 +48,9 @@ public class RatingDB
 		this.comment = comment;
 		this.rating = rating;
 		this.date = new Date();
+		this.key = KeyFactory.createKey(
+				RatingDB.class.getSimpleName(),
+				userEmail + "_" + url);
 	}
 	
 	public String getHost()
@@ -83,7 +87,7 @@ public class RatingDB
 	{
 		return key;
 	}
-
+	
 	public String getUrl()
 	{
 		return url;
