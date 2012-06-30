@@ -5,6 +5,9 @@ import it.rate.util.PMF;
 
 import javax.jdo.PersistenceManager;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+
 public class ClearDB {
 
 	public static void clearDB() {

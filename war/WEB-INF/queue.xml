@@ -8,7 +8,12 @@
   <queue>
     <name>rate-queue</name>
     <rate>500/s</rate>
-    <bucket-size>1</bucket-size>
+    <bucket-size>100</bucket-size>
+  </queue> 
+  <queue>
+    <name>split-queue</name>
+    <rate>500/s</rate>
+    <bucket-size>100</bucket-size>
   </queue>
   <queue>
     <name>calc-tops-queue</name>
