@@ -55,6 +55,10 @@ public interface Constants {
 	
 	public static final String WORKLOAD_RATING_QUEUE = "rate-queue";
 	
+	public static final String WORKLOAD_SPLIT_JOBS_URL_PATTERN = "/queue/splitjobs";
+	
+	public static final String WORKLOAD_SPLIT_JOBS_QUEUE = "split-queue";
+	
 	public static final String WORKLOAD_CALC_TOPS_URL_PATTERN = "/queue/calctasks";
 	
 	public static final String WORKLOAD_CALC_TOPS_QUEUE = "calc-tops-queue";

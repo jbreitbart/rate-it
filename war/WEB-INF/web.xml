@@ -32,6 +32,15 @@
 		<servlet-name>RatingExecutionServlet</servlet-name>
 		<url-pattern>/queue/ratingtasks</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SplitJobsServlet</servlet-name>
+		<servlet-class>it.rate.workload.SplitJobsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SplitJobsServlet</servlet-name>
+		<url-pattern>/queue/splitjobs</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>CreateCalculateTopsTaskServlet</servlet-name>
