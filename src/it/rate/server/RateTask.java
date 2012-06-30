@@ -14,6 +14,10 @@ import javax.jdo.PersistenceManager;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -162,5 +166,24 @@ public class RateTask {
 		}
 		
 		return new Integer(returnMessage);
+	}
+	
+	//private static final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	public static int lowLevelRate(String url, String comment, float rating,
+			String userEmail){
+		try{
+			DatastoreService datastore = DatastoreServiceFactory
+					.getDatastoreService();
+			Entity user = new Entity("Rating");
+			user.setProperty("url", url);
+			user.setProperty("userEmail", userEmail);
+			user.setProperty("rating", rating);
+			user.setProperty("comment", new Text(comment));
+			datastore.put(user);
+		} catch (Exception e){
+			e.printStackTrace();
+			return ErrorMessage.DB_ERROR;
+		}
+		return ErrorMessage.RATE_SUCCESS;
 	}
 }
