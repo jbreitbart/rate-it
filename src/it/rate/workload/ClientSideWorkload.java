@@ -16,7 +16,7 @@ public class ClientSideWorkload implements Constants {
 	
 	FrontPage fP;
 	WidgetUpdate wUpd;
-	public int counter = 0;
+	private static volatile int counter = 0;
 	public long startTime;
 	public int max = -1;
 	
