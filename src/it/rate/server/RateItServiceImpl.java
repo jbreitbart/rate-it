@@ -4,32 +4,19 @@ import it.rate.client.RateItService;
 import it.rate.client.Rating;
 import it.rate.client.TopUrl;
 import it.rate.data.RatingDB;
-import it.rate.data.TopUrlDB;
 import it.rate.util.ErrorMessage;
 import it.rate.util.MemCache;
 import it.rate.util.PMF;
-
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import net.sf.jsr107cache.Cache;
-
-import org.apache.commons.validator.routines.UrlValidator;
-
-import com.google.appengine.api.datastore.Text;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -152,26 +139,19 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	public float getUsersUrlRating(String user, String url)
 	{
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
-		List<RatingDB> userRatedUrl = null;
 		float userRating = 0;
-
-		Query query = pm.newQuery(RatingDB.class,
-				"(this.userEmail == userParam && this.url == urlParam)");
-		query.declareParameters("String userParam, String urlParam");
-
 		try
 		{
-			// get user rating of url
-			userRatedUrl = (List<RatingDB>) query.execute(user, url);
-
-			if ((!userRatedUrl.isEmpty()) && (userRatedUrl.size() == 1))
-			{
-				userRating = userRatedUrl.get(0).getRating();
-			}
-
-		} finally
+			RatingDB tempRating = pm.getObjectById(
+					RatingDB.class,
+					KeyFactory.createKey(
+							RatingDB.class.getSimpleName(),
+							user + "_" + url));
+			userRating = tempRating.getRating();
+		}
+		catch(JDOObjectNotFoundException e)
 		{
-			query.closeAll();
+			userRating = -1;
 		}
 		return userRating;
 	}

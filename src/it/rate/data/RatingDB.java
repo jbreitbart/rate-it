@@ -83,6 +83,10 @@ public class RatingDB
 	{
 		return key;
 	}
+	
+	public void setKey(Key key) {
+		this.key = key;
+	}
 
 	public String getUrl()
 	{
