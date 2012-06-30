@@ -82,9 +82,6 @@ public class RateTask {
 
 						try
 						{
-							newRating.setKey(KeyFactory.createKey(
-									RatingDB.class.getSimpleName(),
-									user.getEmail() + "_" + url));
 							pm.makePersistent(newRating);
 							returnMessage = ErrorMessage.RATE_SUCCESS;
 						} finally
@@ -148,9 +145,6 @@ public class RateTask {
 				// add new entity in DB
 				RatingDB newRating = new RatingDB(userEmail, url, url,
 						new Text(comment), rating);
-				newRating.setKey(KeyFactory.createKey(
-						RatingDB.class.getSimpleName(),
-						userEmail + "_" + url));
 				try {
 					pm.makePersistent(newRating);
 					returnMessage = ErrorMessage.RATE_SUCCESS;
