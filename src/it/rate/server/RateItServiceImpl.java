@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
@@ -29,6 +30,7 @@ import net.sf.jsr107cache.Cache;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -99,7 +101,12 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 			returnResult.add(new Rating(r.getUserEmail(), r.getUrl(), r
 					.getHost(), r.getComment().getValue(), r.getRating()));
 		}
-
+//
+//for (Rating temp : returnResult)
+//{
+//	System.out.println(temp.getUrl());
+//}
+		
 		return returnResult;
 
 	}
@@ -152,26 +159,21 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 	public float getUsersUrlRating(String user, String url)
 	{
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
-		List<RatingDB> userRatedUrl = null;
 		float userRating = 0;
-
-		Query query = pm.newQuery(RatingDB.class,
-				"(this.userEmail == userParam && this.url == urlParam)");
-		query.declareParameters("String userParam, String urlParam");
 
 		try
 		{
 			// get user rating of url
-			userRatedUrl = (List<RatingDB>) query.execute(user, url);
+			RatingDB rating = pm.getObjectById(
+					RatingDB.class,
+					KeyFactory.createKey(
+							RatingDB.class.getSimpleName(),
+							user + "_" + url));
+			userRating = rating.getRating();
 
-			if ((!userRatedUrl.isEmpty()) && (userRatedUrl.size() == 1))
-			{
-				userRating = userRatedUrl.get(0).getRating();
-			}
-
-		} finally
+		} catch(JDOObjectNotFoundException e)
 		{
-			query.closeAll();
+			userRating = -1;
 		}
 		return userRating;
 	}
