@@ -64,7 +64,7 @@ public class ClientSideWorkload implements Constants {
 			}
 		};
 
-		rateService.getTopUrlsForDay(TOP_COUNT, callback);
+		rateService.getTopUrlsForDay(callback);
 	}
 	
 	
@@ -97,7 +97,7 @@ public class ClientSideWorkload implements Constants {
 			}
 		};
 
-		rateService.getTopHostsForDay(TOP_COUNT, callback);
+		rateService.getTopHostsForDay(callback);
 	}
 
 	public void rate(String mail, String url, String comment, float rating) {

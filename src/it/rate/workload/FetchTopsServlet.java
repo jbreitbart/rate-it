@@ -28,12 +28,12 @@ public class FetchTopsServlet extends HttpServlet implements Constants {
 
 		try {
 
-			TopsCalculator.getTopUrlsForDay(TOP_COUNT);
-			TopsCalculator.getTopUrlsForMonth(TOP_COUNT);
-			TopsCalculator.getTopUrlsForYear(TOP_COUNT);
-			TopsCalculator.getTopHostsForDay(TOP_COUNT);
-			TopsCalculator.getTopHostsForMonth(TOP_COUNT);
-			TopsCalculator.getTopHostsForYear(TOP_COUNT);
+			TopsCalculator.getTopUrlsForDay();
+			TopsCalculator.getTopUrlsForMonth();
+			TopsCalculator.getTopUrlsForYear();
+			TopsCalculator.getTopHostsForDay();
+			TopsCalculator.getTopHostsForMonth();
+			TopsCalculator.getTopHostsForYear();
 			
 			if (id == 0) {
 				DbHelper.setStartTime(System.currentTimeMillis());

@@ -107,42 +107,42 @@ public interface RateItService extends RemoteService {
 	 * 
 	 * @return An array with the top URLs
 	 */
-	public List<TopUrl> getTopUrlsForDay(int countOfUrls);
+	public List<TopUrl> getTopUrlsForDay();
 
 	/**
 	 * Gets the top URLs for a month
 	 * 
 	 * @return An array with the top URLs
 	 */
-	public List<TopUrl> getTopUrlsForMonth(int countOfUrls);
+	public List<TopUrl> getTopUrlsForMonth();
 
 	/**
 	 * Gets the top URLs for a year
 	 * 
 	 * @return An array with the top URLs
 	 */
-	public List<TopUrl> getTopUrlsForYear(int countOfUrls);
+	public List<TopUrl> getTopUrlsForYear();
 
 	/**
 	 * Gets the top Hosts for a day
 	 * 
 	 * @return An array with the top Hosts
 	 */
-	public List<TopUrl> getTopHostsForDay(int countOfUrls);
+	public List<TopUrl> getTopHostsForDay();
 
 	/**
 	 * Gets the top Hosts for a month
 	 * 
 	 * @return An array with the top Hosts
 	 */
-	public List<TopUrl> getTopHostsForMonth(int countOfUrls);
+	public List<TopUrl> getTopHostsForMonth();
 
 	/**
 	 * Gets the top Hosts for a year
 	 * 
 	 * @return An array with the top Hosts
 	 */
-	public List<TopUrl> getTopHostsForYear(int countOfUrls);
+	public List<TopUrl> getTopHostsForYear();
 
 	/**
 	 * Like rateUrl just without any conditions for url format and user e-mail
