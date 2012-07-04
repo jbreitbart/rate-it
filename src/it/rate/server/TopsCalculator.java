@@ -1,14 +1,13 @@
 package it.rate.server;
 
+import it.rate.Constants;
 import it.rate.client.TopUrl;
 import it.rate.data.RatingDB;
 import it.rate.data.TopUrlDB;
 import it.rate.util.MemCache;
 import it.rate.util.PMF;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+//import java.util.Collections;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,57 +21,72 @@ import net.sf.jsr107cache.Cache;
 public class TopsCalculator
 {
 
-	private static HashSet<TopUrlDB> topUrls;
-	public static List<TopUrl> getTopUrlsForDay(int countOfUrls)
+	private static ArrayList<TopUrlDB> topUrlsDay;
+	private static ArrayList<TopUrlDB> topUrlsMonth;
+	private static ArrayList<TopUrlDB> topUrlsYear;
+	private static ArrayList<TopUrlDB> topDomainsDay;
+	private static ArrayList<TopUrlDB> topDomainsMonth;
+	private static ArrayList<TopUrlDB> topDomainsYear;
+	
+	public static List<TopUrl> getTopUrlsForDay()
 	{
 		return getTops(MemCache.CACHE_KEY_URL_DAY, TopUrl.PERIOD_DAY,
-				TopUrl.TYPE_URL, countOfUrls);
+				TopUrl.TYPE_URL);
 	}
 
-	public static List<TopUrl> getTopUrlsForMonth(int countOfUrls)
+	public static List<TopUrl> getTopUrlsForMonth()
 	{
 		return getTops(MemCache.CACHE_KEY_URL_MONTH, TopUrl.PERIOD_MONTH,
-				TopUrl.TYPE_URL, countOfUrls);
+				TopUrl.TYPE_URL);
 	}
 
-	public static List<TopUrl> getTopUrlsForYear(int countOfUrls)
+	public static List<TopUrl> getTopUrlsForYear()
 	{
 		return getTops(MemCache.CACHE_KEY_URL_YEAR, TopUrl.PERIOD_YEAR,
-				TopUrl.TYPE_URL, countOfUrls);
+				TopUrl.TYPE_URL);
 	}
 
-	public static List<TopUrl> getTopHostsForDay(int countOfUrls)
+	public static List<TopUrl> getTopHostsForDay()
 	{
 		return getTops(MemCache.CACHE_KEY_HOST_DAY, TopUrl.PERIOD_DAY,
-				TopUrl.TYPE_DOMAIN, countOfUrls);
+				TopUrl.TYPE_DOMAIN);
 	}
 
-	public static List<TopUrl> getTopHostsForMonth(int countOfUrls)
+	public static List<TopUrl> getTopHostsForMonth()
 	{
 		return getTops(MemCache.CACHE_KEY_HOST_MONTH, TopUrl.PERIOD_MONTH,
-				TopUrl.TYPE_DOMAIN, countOfUrls);
+				TopUrl.TYPE_DOMAIN);
 	}
 
-	public static List<TopUrl> getTopHostsForYear(int countOfUrls)
+	public static List<TopUrl> getTopHostsForYear()
 	{
 		return getTops(MemCache.CACHE_KEY_HOST_YEAR, TopUrl.PERIOD_YEAR,
-				TopUrl.TYPE_DOMAIN, countOfUrls);
+				TopUrl.TYPE_DOMAIN);
 	}
 	
 	
 	public static void calculateAllTops()
 	{
+		List<TopUrlDB> tempResult = new ArrayList<TopUrlDB>();
+		
 		PersistenceManager pm = PMF.getInstance().getPersistenceManager();
 		Query queryTops = pm.newQuery(TopUrlDB.class);
-		List<TopUrlDB> resultTops = (List<TopUrlDB>) queryTops.execute();
 		
+		List<TopUrlDB> resultTops = (List<TopUrlDB>) queryTops.execute();
+
 		//clear TopUrlDB
 		if(!resultTops.isEmpty())
 		{
 			pm.deletePersistentAll(resultTops);
 		}
 		
-		topUrls = new HashSet<TopUrlDB>();
+		topUrlsDay = new ArrayList<TopUrlDB>();
+		topUrlsMonth = new ArrayList<TopUrlDB>();
+		topUrlsYear = new ArrayList<TopUrlDB>();
+		topDomainsDay = new ArrayList<TopUrlDB>();
+		topDomainsMonth = new ArrayList<TopUrlDB>();
+		topDomainsYear = new ArrayList<TopUrlDB>();
+		
 		Query query = pm
 				.newQuery(RatingDB.class);
 
@@ -84,7 +98,41 @@ public class TopsCalculator
 				calculateTops(tempRating);
 			}
 			
-			pm.makePersistentAll(topUrls);
+			Collections.sort(topUrlsDay);
+			Collections.sort(topUrlsMonth);
+			Collections.sort(topUrlsYear);
+			Collections.sort(topDomainsDay);
+			Collections.sort(topDomainsMonth);
+			Collections.sort(topDomainsYear);
+			
+			for (int i = 0; i < Constants.TOP_COUNT; i++)
+			{
+				if (i < topUrlsDay.size())
+				{
+					tempResult.add(topUrlsDay.get(i));
+				}
+				if (i < topUrlsMonth.size())
+				{
+					tempResult.add(topUrlsMonth.get(i));
+				}
+				if (i < topUrlsYear.size())
+				{
+					tempResult.add(topUrlsYear.get(i));
+				}
+				if (i < topDomainsDay.size())
+				{
+					tempResult.add(topDomainsDay.get(i));
+				}
+				if (i < topDomainsMonth.size())
+				{
+					tempResult.add(topDomainsMonth.get(i));
+				}
+				if (i < topDomainsYear.size())
+				{
+					tempResult.add(topDomainsYear.get(i));
+				}
+			}
+			pm.makePersistentAll(tempResult);
 		}
 		
 	}
@@ -102,16 +150,16 @@ public class TopsCalculator
 					&&(rating.getDate().getMonth() == new Date().getMonth()) 
 						&& (rating.getDate().getDate() == new Date().getDate()))
 			{
-				calculate(rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_DAY);
+				calculate(rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_DAY, topDomainsDay);
 			}
 			if ((rating.getDate().getYear() == new Date().getYear())
 					&&(rating.getDate().getMonth() == new Date().getMonth()))
 			{
-				calculate(rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_MONTH);
+				calculate(rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_MONTH, topDomainsMonth);
 			}
 			if (rating.getDate().getYear() == new Date().getYear())
 			{
-				calculate(rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_YEAR);
+				calculate(rating, TopUrl.TYPE_DOMAIN, TopUrl.PERIOD_YEAR, topDomainsYear);
 			}
 			
 		}
@@ -120,34 +168,34 @@ public class TopsCalculator
 				&&(rating.getDate().getMonth() == new Date().getMonth()) 
 					&& (rating.getDate().getDate() == new Date().getDate()))
 		{
-			calculate(rating, TopUrl.TYPE_URL, TopUrl.PERIOD_DAY);
+			calculate(rating, TopUrl.TYPE_URL, TopUrl.PERIOD_DAY, topUrlsDay);
 		}
 		if ((rating.getDate().getYear() == new Date().getYear())
 				&&(rating.getDate().getMonth() == new Date().getMonth()))
 		{
-			calculate(rating, TopUrl.TYPE_URL, TopUrl.PERIOD_MONTH);
+			calculate(rating, TopUrl.TYPE_URL, TopUrl.PERIOD_MONTH, topUrlsMonth);
 		}
 		if (rating.getDate().getYear() == new Date().getYear())
 		{
-			calculate(rating, TopUrl.TYPE_URL, TopUrl.PERIOD_YEAR);
+			calculate(rating, TopUrl.TYPE_URL, TopUrl.PERIOD_YEAR, topUrlsYear);
 		}
 		
 	}
 
 	private static void calculate(RatingDB rating, String linkType,
-			String period)
+			String period, List<TopUrlDB> topList)
 	{
 		
 		boolean exist = false;
 		
-		for(TopUrlDB tempTop : topUrls)
+		for(TopUrlDB tempTop : topList)
 		{
 			if(tempTop.getUrl().equals(rating.getUrl())
 					&& tempTop.getPeriod().equals(period) 
 						&& tempTop.getType().equals(linkType))
 			{
 				exist = true;
-				topUrls.remove(tempTop);
+				topList.remove(tempTop);
 				
 				float ratingValue = tempTop.getAveradgeRating();
 				float newRating = (ratingValue
@@ -158,7 +206,7 @@ public class TopsCalculator
 				tempTop.setAveradgeRating(newRating);
 				tempTop.setCountOfRatings(tempTop.getCountOfRatings() + 1);
 				
-				topUrls.add(tempTop);
+				topList.add(tempTop);
 				break;
 				
 			}
@@ -166,12 +214,12 @@ public class TopsCalculator
 		
 		if (!exist)
 		{
-			topUrls.add(new TopUrlDB(rating.getUrl(), rating.getRating(), 1, period, linkType));
+			topList.add(new TopUrlDB(rating.getUrl(), rating.getRating(), 1, period, linkType));
 		}
 	}
 
 	private static List<TopUrl> getTops(String cacheKey, String period,
-			String type, int countOfUrls)
+			String type)
 	{
 
 		List<TopUrl> result = new ArrayList<TopUrl>();
@@ -191,21 +239,21 @@ public class TopsCalculator
 			{
 				// get top urls of day
 				temp = (List<TopUrlDB>) query.execute(period, type);
-				Collections.sort(temp);
+//				Collections.sort(temp);
 				int i = 0;
 				for (TopUrlDB tempTopUrl : temp)
 				{
-					if (i < countOfUrls)
-					{
+//					if (i < countOfUrls)
+//					{
 						result.add(new TopUrl(tempTopUrl.getUrl(), tempTopUrl
 								.getAveradgeRating(), tempTopUrl
 								.getCountOfRatings()));
 
-					} else
-					{
-						break;
-					}
-					i++;
+//					} else
+//					{
+//						break;
+//					}
+//					i++;
 				}
 				cache.put(cacheKey, result);
 			} finally

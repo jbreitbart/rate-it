@@ -63,7 +63,7 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService.getTopUrlsForDay(TOP_COUNT, callback);
+		rateService.getTopUrlsForDay(callback);
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService.getTopUrlsForMonth(TOP_COUNT, callback);
+		rateService.getTopUrlsForMonth(callback);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService.getTopUrlsForYear(TOP_COUNT, callback);
+		rateService.getTopUrlsForYear(callback);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService.getTopHostsForDay(TOP_COUNT, callback);
+		rateService.getTopHostsForDay(callback);
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService.getTopHostsForMonth(TOP_COUNT, callback);
+		rateService.getTopHostsForMonth(callback);
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class RPC implements Constants {
 			}
 		};
 
-		rateService.getTopHostsForYear(TOP_COUNT, callback);
+		rateService.getTopHostsForYear(callback);
 	}
 
 	/**

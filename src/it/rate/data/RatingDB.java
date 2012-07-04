@@ -35,6 +35,8 @@ public class RatingDB
 	private float rating;
 	@Persistent
 	private Date date;
+//	@Persistent
+//	private int year;
 	@Persistent
 	private String host; 	
 	
@@ -48,6 +50,8 @@ public class RatingDB
 		this.comment = comment;
 		this.rating = rating;
 		this.date = new Date();
+//		this.year = this.date.getYear();
+		
 		this.key = KeyFactory.createKey(
 				RatingDB.class.getSimpleName(),
 				userEmail + "_" + url);
