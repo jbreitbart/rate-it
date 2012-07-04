@@ -31,13 +31,13 @@ public interface RateItServiceAsync {
 	void clearServerCache(AsyncCallback<Void> callback);
 	void recalculateTops(AsyncCallback<Void> callback);
 	
-    void getTopUrlsForDay(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
-    void getTopUrlsForMonth(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
-    void getTopUrlsForYear(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
+    void getTopUrlsForDay(AsyncCallback<List<TopUrl>> callback);
+    void getTopUrlsForMonth(AsyncCallback<List<TopUrl>> callback);
+    void getTopUrlsForYear(AsyncCallback<List<TopUrl>> callback);
 	
-    void getTopHostsForDay(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
-    void getTopHostsForMonth(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
-    void getTopHostsForYear(int countOfUrls, AsyncCallback<List<TopUrl>> callback);
+    void getTopHostsForDay(AsyncCallback<List<TopUrl>> callback);
+    void getTopHostsForMonth(AsyncCallback<List<TopUrl>> callback);
+    void getTopHostsForYear(AsyncCallback<List<TopUrl>> callback);
 	
 	void ratingTest(String mail, String url, String comment, float rating, AsyncCallback<Integer> callback);
 

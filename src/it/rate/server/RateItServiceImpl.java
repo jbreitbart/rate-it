@@ -222,39 +222,39 @@ public class RateItServiceImpl extends RemoteServiceServlet implements
 
 	
 	@Override
-	public List<TopUrl> getTopUrlsForDay(int countOfUrls)
+	public List<TopUrl> getTopUrlsForDay()
 	{
-		return TopsCalculator.getTopUrlsForDay(countOfUrls);		
+		return TopsCalculator.getTopUrlsForDay();		
 	}
 
 	@Override
-	public List<TopUrl> getTopUrlsForMonth(int countOfUrls)
+	public List<TopUrl> getTopUrlsForMonth()
 	{
-		return TopsCalculator.getTopUrlsForMonth(countOfUrls);
+		return TopsCalculator.getTopUrlsForMonth();
 	}
 
 	@Override
-	public List<TopUrl> getTopUrlsForYear(int countOfUrls)
+	public List<TopUrl> getTopUrlsForYear()
 	{
-		return TopsCalculator.getTopUrlsForYear(countOfUrls);
+		return TopsCalculator.getTopUrlsForYear();
 	}
 
 	@Override
-	public List<TopUrl> getTopHostsForDay(int countOfUrls)
+	public List<TopUrl> getTopHostsForDay()
 	{
-		return TopsCalculator.getTopHostsForDay(countOfUrls);
+		return TopsCalculator.getTopHostsForDay();
 	}
 
 	@Override
-	public List<TopUrl> getTopHostsForMonth(int countOfUrls)
+	public List<TopUrl> getTopHostsForMonth()
 	{
-		return TopsCalculator.getTopHostsForMonth(countOfUrls);
+		return TopsCalculator.getTopHostsForMonth();
 	}
 
 	@Override
-	public List<TopUrl> getTopHostsForYear(int countOfUrls)
+	public List<TopUrl> getTopHostsForYear()
 	{
-		return TopsCalculator.getTopHostsForYear(countOfUrls);
+		return TopsCalculator.getTopHostsForYear();
 	}
 
 	@Override
