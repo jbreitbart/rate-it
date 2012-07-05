@@ -11,6 +11,7 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.user.client.Window;
 
 public class HandlerInit implements Constants {
 
@@ -172,9 +173,9 @@ public class HandlerInit implements Constants {
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				try {
-					fP.verticalPanel_4.setVisible(true);
-					wUpd.updateSubDomainList(fP.listBox_4
+					rpc.receiveSubDomains(fP.listBox_4
 							.getItemText(fP.listBox_4.getSelectedIndex()));
+					fP.verticalPanel_4.setVisible(true);
 				} catch (Exception e) {
 					wUpd.updateSubDomainList(null);
 				}
@@ -186,9 +187,9 @@ public class HandlerInit implements Constants {
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				try {
-					fP.verticalPanel_4.setVisible(true);
-					wUpd.updateSubDomainList(fP.listBox_5
+					rpc.receiveSubDomains(fP.listBox_5
 							.getItemText(fP.listBox_5.getSelectedIndex()));
+					fP.verticalPanel_4.setVisible(true);
 				} catch (Exception e) {
 					wUpd.updateSubDomainList(null);
 				}
@@ -200,9 +201,9 @@ public class HandlerInit implements Constants {
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				try {
+					rpc.receiveSubDomains(fP.listBox_5
+							.getItemText(fP.listBox_5.getSelectedIndex()));
 					fP.verticalPanel_4.setVisible(true);
-					wUpd.updateSubDomainList(fP.listBox_6
-							.getItemText(fP.listBox_6.getSelectedIndex()));
 				} catch (Exception e) {
 					wUpd.updateSubDomainList(null);
 				}
@@ -283,9 +284,9 @@ public class HandlerInit implements Constants {
 							fP.listBox_7.getSelectedIndex()).getRating();
 					comment = dataCache.receivedUserRatings.get(
 							fP.listBox_7.getSelectedIndex()).getComment();
-					wUpd.showUserRating(rating, comment);
+					wUpd.showRating(rating, comment);
 				} catch (Exception e) {
-					wUpd.showUserRating(null, null);
+					wUpd.showRating(null, null);
 				}
 			}
 
@@ -307,6 +308,7 @@ public class HandlerInit implements Constants {
 
 			@Override
 			public void onClick(ClickEvent event) {
+				fP.verticalPanel_4.setVisible(false);
 				rpc.receiveTodaysTopUrls();
 				rpc.receiveMonthsTopUrls();
 				rpc.receiveYearsTopUrls();
@@ -318,6 +320,7 @@ public class HandlerInit implements Constants {
 
 			@Override
 			public void onClick(ClickEvent event) {
+				fP.verticalPanel_4.setVisible(false);
 				rpc.receiveTodaysTopDomains();
 				rpc.receiveMonthsTopDomains();
 				rpc.receiveYearsTopDomains();
@@ -437,6 +440,27 @@ public class HandlerInit implements Constants {
 				rpc.clearDB();
 			}
 
+		});
+		
+		fP.btnShowOwnRatings.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				rpc.receiveUserRatings();				
+			}
+		});
+		
+		fP.btnNewButton_2.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				if(rpc.loggedIn){
+					Window.Location.assign(dataCache.logoutUrl);
+				}
+				if(!rpc.loggedIn){
+					Window.Location.assign(dataCache.loginUrl);
+				}
+			}
 		});
 	}
 }
