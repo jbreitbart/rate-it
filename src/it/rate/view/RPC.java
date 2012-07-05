@@ -153,15 +153,6 @@ public class RPC implements Constants {
 			public void onSuccess(List<TopUrl> topDomains) {
 				wUpd.updateTopDomainsList(topDomains, Period.DAY);
 				dataCache.receivedTodaysTopDomains = topDomains;
-
-				try {
-					for (TopUrl domain : topDomains) {
-						
-						receiveSubDomains(domain.getUrl());
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
 		};
 
@@ -193,15 +184,6 @@ public class RPC implements Constants {
 			public void onSuccess(List<TopUrl> topDomains) {
 				wUpd.updateTopDomainsList(topDomains, Period.MONTH);
 				dataCache.receivedMonthsTopDomains = topDomains;
-
-				try {
-					for (TopUrl domain : topDomains) {
-						
-						receiveSubDomains(domain.getUrl());
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
 		};
 
@@ -233,15 +215,6 @@ public class RPC implements Constants {
 			public void onSuccess(List<TopUrl> topDomains) {
 				wUpd.updateTopDomainsList(topDomains, Period.YEAR);
 				dataCache.receivedYearsTopDomains = topDomains;
-
-				try {
-					for (TopUrl domain : topDomains) {
-						
-						receiveSubDomains(domain.getUrl());
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
 		};
 
@@ -277,6 +250,7 @@ public class RPC implements Constants {
 							.containsKey(hostDomain)) {
 						dataCache.subDomainsToDomainMap.put(hostDomain,
 								subDomains);
+						wUpd.updateSubDomainList(subDomains);
 					}
 				}
 			}
@@ -388,7 +362,7 @@ public class RPC implements Constants {
 
 			@Override
 			public void onSuccess(List<Rating> result) {
-				wUpd.updateUserRatedUrls(result);
+				wUpd.showUserRatings(result);
 				dataCache.receivedUserRatings = result;
 			}
 		};
@@ -412,7 +386,6 @@ public class RPC implements Constants {
 			public void onSuccess(Boolean result) {
 				if (result) {
 					loggedIn = true;
-					receiveUserRatings();
 
 					RateItServiceAsync rateService = (RateItServiceAsync) GWT
 							.create(RateItService.class);
@@ -424,47 +397,15 @@ public class RPC implements Constants {
 						}
 
 						public void onSuccess(String email) {
-							fP.htmlNewHtml.setHTML("Logged in as " + email);
-
-							RateItServiceAsync rateService = (RateItServiceAsync) GWT
-									.create(RateItService.class);
-
-							AsyncCallback<String> callback = new AsyncCallback<String>() {
-
-								public void onFailure(Throwable caught) {
-									Window.alert(SERVER_ERROR);
-								}
-
-								@Override
-								public void onSuccess(String url) {
-									fP.htmlNewHtml_1.setVisible(true);
-									fP.htmlNewHtml_1.setHTML("<a href=\"" + url
-											+ "\">Logout</a>");
-								}
-							};
-							rateService.getLogoutURL(REDIRECTION_URL, callback);
+							wUpd.showUserLoggedIn(email);
 						}
 					};
 
 					rateService.getCurrentUserEmail(callback);
 				} else {
 					loggedIn = false;
-					RateItServiceAsync rateService = (RateItServiceAsync) GWT
-							.create(RateItService.class);
 
-					AsyncCallback<String> callback = new AsyncCallback<String>() {
-
-						public void onFailure(Throwable caught) {
-							Window.alert(SERVER_ERROR);
-						}
-
-						@Override
-						public void onSuccess(String url) {
-							fP.htmlNewHtml.setHTML("Please log in "
-									+ "<a href=\"" + url + "\">here</a>");
-						}
-					};
-					rateService.getLoginURL(REDIRECTION_URL, callback);
+					wUpd.showUserNotLoggedIn();
 				}
 			}
 		};
@@ -472,9 +413,9 @@ public class RPC implements Constants {
 	}
 
 	/**
-	 * User logout
+	 * Receive login url from user service
 	 */
-	public void logout() {
+	public void getLoginUrl() {
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
@@ -487,14 +428,30 @@ public class RPC implements Constants {
 
 			@Override
 			public void onSuccess(String url) {
-				fP.verticalPanel_7.setVisible(false);
-				dataCache.receivedUserRatings = null;
+				dataCache.loginUrl = url;
+			}
+		};
 
-				fP.htmlNewHtml.setHTML("Please log in " + "<a href=\"" + url
-						+ "\">here</a>");
-				fP.htmlNewHtml_1.setVisible(false);
-				loggedIn = false;
-				fP.adminPanel.setVisible(false);
+		rateService.getLoginURL(REDIRECTION_URL, callback);
+	}
+	
+	/**
+	 * Receive logout url from user service
+	 */
+	public void getLogoutUrl() {
+
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+
+		AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+			public void onFailure(Throwable caught) {
+				Window.alert(SERVER_ERROR);
+			}
+
+			@Override
+			public void onSuccess(String url) {
+				dataCache.logoutUrl = url;
 			}
 		};
 

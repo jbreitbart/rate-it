@@ -33,7 +33,7 @@ public class WidgetUpdate implements Constants {
 		fP.lblNewLabel_3.setText(rating.toString());
 	}
 
-	public void showUserRating(Float rating, String comment) {
+	public void showRating(Float rating, String comment) {
 		fP.verticalPanel_7.setVisible(true);
 		fP.textBox.setVisible(false);
 		if (rating == null) {
@@ -53,10 +53,8 @@ public class WidgetUpdate implements Constants {
 	 * @param subDomains
 	 *            List of all sub domains
 	 */
-	public void updateSubDomainList(String topDomain) {
+	public void updateSubDomainList(List<Rating> receivedSubDomains) {
 		fP.listBox_1.clear();
-		List<Rating> receivedSubDomains = dataCache.subDomainsToDomainMap
-				.get(topDomain);
 		try {
 			for (Rating r : receivedSubDomains) {
 				fP.listBox_1.addItem(r.getUrl());
@@ -139,7 +137,8 @@ public class WidgetUpdate implements Constants {
 		}
 	}
 
-	public void updateUserRatedUrls(List<Rating> list) {
+	public void showUserRatings(List<Rating> list) {
+		fP.btnShowOwnRatings.setVisible(false);
 		fP.verticalPanel_8.setVisible(true);
 		fP.listBox_7.clear();
 		try {
@@ -188,6 +187,18 @@ public class WidgetUpdate implements Constants {
 		fP.btnTopUrlsTest.setEnabled(true);
 		fP.btnRatingTest.setEnabled(true);
 		fP.btnNewButton_1.setEnabled(true);
+	}
+	
+	public void showUserLoggedIn(String userId){
+		fP.horizontalPanel_3.setVisible(true);
+		fP.lblUserMail.setText("You are logged in as " + userId);
+		fP.btnNewButton_2.setText("Logout");
+	}
+	
+	public void showUserNotLoggedIn(){
+		fP.horizontalPanel_3.setVisible(true);
+		fP.lblUserMail.setText("You are not logged in");
+		fP.btnNewButton_2.setText("Login");
 	}
 
 }
