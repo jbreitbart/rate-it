@@ -28,7 +28,7 @@ public interface Constants {
 	/**
 	 * URL the user will be redirected after login/logout
 	 */
-	public static final String REDIRECTION_URL = "http://rateerate.appspot.com/";	
+	public static final String REDIRECTION_URL = "http://rateerate.appspot.com/"; //"http://127.0.0.1:8888/RateIt.html?gwt.codesvr=127.0.0.1:9997";
 
 	public static final String COMMENTS_BOX_DEFAULT = "Optional: Enter your experience with that site!";
 	
