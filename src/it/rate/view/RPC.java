@@ -22,17 +22,12 @@ public class RPC implements Constants {
 	public int savedRating;
 	public String savedComment;
 	boolean replaceRating = false;
-	boolean loggedIn = false;
-	boolean isUserAdmin = false;
-	public String currentCalledDomain;
-	public TimePeriod timePeriod;
 
 	public RPC(FrontPage frontPage, WidgetUpdate widgetUpdate,
 			ServerDataCache dataCache) {
 		this.fP = frontPage;
 		this.wUpd = widgetUpdate;
 		this.dataCache = dataCache;
-		this.timePeriod = new TimePeriod();
 	}
 
 	/**
@@ -241,17 +236,10 @@ public class RPC implements Constants {
 
 			@Override
 			public void onSuccess(List<Rating> subDomains) {
-				
-				
+
 				// Calls method for widget update
-				String hostDomain = subDomains.get(0).getHost();
 				if (!subDomains.isEmpty() && subDomains != null) {
-					if (!dataCache.subDomainsToDomainMap
-							.containsKey(hostDomain)) {
-						dataCache.subDomainsToDomainMap.put(hostDomain,
-								subDomains);
 						wUpd.updateSubDomainList(subDomains);
-					}
 				}
 			}
 		};
@@ -277,102 +265,6 @@ public class RPC implements Constants {
 		savedRating = rating;
 		savedComment = comment;
 
-		if (!loggedIn) {
-			Window.alert(LOGIN_WARNING);
-			return;
-		}
-
-		RateItServiceAsync rateService = (RateItServiceAsync) GWT
-				.create(RateItService.class);
-
-		AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
-
-			public void onFailure(Throwable caught) {
-				Window.alert(SERVER_ERROR);
-			}
-
-			@Override
-			public void onSuccess(Integer result) {
-				// If server sends rating already exists, the user will be asked
-				// for overwriting his rating
-
-				if (result == ErrorMessage.RATE_EXISTS) {
-					if (Window.confirm(REPLACE_WARINING)) {
-						replaceRating = true;
-
-						RateItServiceAsync rateService = (RateItServiceAsync) GWT
-								.create(RateItService.class);
-						AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
-
-							@Override
-							public void onFailure(Throwable caught) {
-								Window.alert(SERVER_ERROR);
-							}
-
-							@Override
-							public void onSuccess(Integer result) {
-								savedUrl = null;
-								savedRating = 0;
-								savedComment = null;
-								replaceRating = false;
-								wUpd.clearUrlBox();
-								wUpd.clearCommentBox();
-								Window.alert(RATING_ACKNOWLEDGMENT);
-							}
-
-						};
-
-						rateService.rateUrl(savedUrl, savedComment,
-								(float) savedRating, replaceRating, callback);
-						return;
-					}
-					savedUrl = null;
-					savedRating = 0;
-					savedComment = null;
-					replaceRating = false;
-					return;
-				}
-				savedUrl = null;
-				savedRating = 0;
-				savedComment = null;
-				replaceRating = false;
-				wUpd.clearUrlBox();
-				wUpd.clearCommentBox();
-				Window.alert(RATING_ACKNOWLEDGMENT);
-			}
-		};
-
-		rateService.rateUrl(url, comment, (float) rating, replaceRating,
-				callback);
-	}
-
-	public void receiveUserRatings() {
-		if (!loggedIn) {
-			Window.alert(LOGIN_WARNING);
-			return;
-		}
-		RateItServiceAsync rateService = (RateItServiceAsync) GWT
-				.create(RateItService.class);
-
-		AsyncCallback<List<Rating>> callback = new AsyncCallback<List<Rating>>() {
-
-			public void onFailure(Throwable caught) {
-				Window.alert(SERVER_ERROR);
-			}
-
-			@Override
-			public void onSuccess(List<Rating> result) {
-				wUpd.showUserRatings(result);
-				dataCache.receivedUserRatings = result;
-			}
-		};
-		rateService.getAllUserRatedUrls(callback);
-	}
-
-	/**
-	 * Shows users login status
-	 */
-	public void userAuthentication() {
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
 
@@ -385,8 +277,135 @@ public class RPC implements Constants {
 			@Override
 			public void onSuccess(Boolean result) {
 				if (result) {
-					loggedIn = true;
 
+					RateItServiceAsync rateService = (RateItServiceAsync) GWT
+							.create(RateItService.class);
+
+					AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
+
+						public void onFailure(Throwable caught) {
+							Window.alert(SERVER_ERROR);
+						}
+
+						@Override
+						public void onSuccess(Integer result) {
+							// If server sends rating already exists, the user
+							// will be asked
+							// for overwriting his rating
+
+							if (result == ErrorMessage.RATE_EXISTS) {
+								if (Window.confirm(REPLACE_WARINING)) {
+									replaceRating = true;
+
+									RateItServiceAsync rateService = (RateItServiceAsync) GWT
+											.create(RateItService.class);
+									AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
+
+										@Override
+										public void onFailure(Throwable caught) {
+											Window.alert(SERVER_ERROR);
+										}
+
+										@Override
+										public void onSuccess(Integer result) {
+											savedUrl = null;
+											savedRating = 0;
+											savedComment = null;
+											replaceRating = false;
+											wUpd.clearUrlBox();
+											wUpd.clearCommentBox();
+											Window.alert(RATING_ACKNOWLEDGMENT);
+										}
+
+									};
+
+									rateService.rateUrl(savedUrl, savedComment,
+											(float) savedRating, replaceRating,
+											callback);
+									return;
+								}
+								savedUrl = null;
+								savedRating = 0;
+								savedComment = null;
+								replaceRating = false;
+								return;
+							}
+							savedUrl = null;
+							savedRating = 0;
+							savedComment = null;
+							replaceRating = false;
+							wUpd.clearUrlBox();
+							wUpd.clearCommentBox();
+							Window.alert(RATING_ACKNOWLEDGMENT);
+						}
+					};
+
+					rateService.rateUrl(savedUrl, savedComment,
+							(float) savedRating, replaceRating, callback);
+
+				} else {
+					Window.alert(LOGIN_WARNING);
+				}
+			}
+		};
+		rateService.isUserLoggedIn(callback);
+	}
+
+	public void receiveUserRatings() {
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+
+		AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+
+			public void onFailure(Throwable caught) {
+				Window.alert(SERVER_ERROR);
+			}
+
+			@Override
+			public void onSuccess(Boolean result) {
+				if (result) {
+					RateItServiceAsync rateService = (RateItServiceAsync) GWT
+							.create(RateItService.class);
+
+					AsyncCallback<List<Rating>> callback = new AsyncCallback<List<Rating>>() {
+
+						public void onFailure(Throwable caught) {
+							Window.alert(SERVER_ERROR);
+						}
+
+						@Override
+						public void onSuccess(List<Rating> result) {
+							wUpd.showUserRatings(result);
+							dataCache.receivedUserRatings = result;
+						}
+					};
+					rateService.getAllUserRatedUrls(callback);
+				} else {
+					Window.alert(LOGIN_WARNING);
+				}
+			}
+		};
+		rateService.isUserLoggedIn(callback);
+	}
+
+	/**
+	 * Shows users login status at page start up
+	 */
+	public void userAuthenticationAtStart() {
+		RateItServiceAsync rateService = (RateItServiceAsync) GWT
+				.create(RateItService.class);
+
+		AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+
+			public void onFailure(Throwable caught) {
+				Window.alert(SERVER_ERROR);
+			}
+
+			@Override
+			public void onSuccess(Boolean result) {
+				if (result) {
+
+					checkAdmin();
 					RateItServiceAsync rateService = (RateItServiceAsync) GWT
 							.create(RateItService.class);
 
@@ -403,8 +422,6 @@ public class RPC implements Constants {
 
 					rateService.getCurrentUserEmail(callback);
 				} else {
-					loggedIn = false;
-
 					wUpd.showUserNotLoggedIn();
 				}
 			}
@@ -415,130 +432,125 @@ public class RPC implements Constants {
 	/**
 	 * Receive login url from user service
 	 */
-	public void getLoginUrl() {
-
+	public void userAuthentication() {
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
 
-		AsyncCallback<String> callback = new AsyncCallback<String>() {
+		AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
 
 			public void onFailure(Throwable caught) {
 				Window.alert(SERVER_ERROR);
 			}
 
 			@Override
-			public void onSuccess(String url) {
-				dataCache.loginUrl = url;
+			public void onSuccess(Boolean result) {
+				if (result) {
+					RateItServiceAsync rateService = (RateItServiceAsync) GWT
+							.create(RateItService.class);
+
+					AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+						public void onFailure(Throwable caught) {
+							Window.alert(SERVER_ERROR);
+						}
+
+						@Override
+						public void onSuccess(String url) {
+							Window.Location.assign(url);
+						}
+					};
+
+					rateService.getLogoutURL(REDIRECTION_URL, callback);
+
+				} else {
+					RateItServiceAsync rateService = (RateItServiceAsync) GWT
+							.create(RateItService.class);
+
+					AsyncCallback<String> callback = new AsyncCallback<String>() {
+
+						public void onFailure(Throwable caught) {
+							Window.alert(SERVER_ERROR);
+						}
+
+						@Override
+						public void onSuccess(String url) {
+							Window.Location.assign(url);
+						}
+					};
+
+					rateService.getLoginURL(REDIRECTION_URL, callback);
+				}
 			}
 		};
-
-		rateService.getLoginURL(REDIRECTION_URL, callback);
+		rateService.isUserLoggedIn(callback);
 	}
-	
-	/**
-	 * Receive logout url from user service
-	 */
-	public void getLogoutUrl() {
+
+	public void clearServerCache() {
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
+		AsyncCallback<Void> callback = new AsyncCallback<Void>() {
 
-		AsyncCallback<String> callback = new AsyncCallback<String>() {
-
+			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert(SERVER_ERROR);
-			}
-
-			@Override
-			public void onSuccess(String url) {
-				dataCache.logoutUrl = url;
-			}
-		};
-
-		rateService.getLogoutURL(REDIRECTION_URL, callback);
-	}
-	
-	public void clearServerCache(){
-		
-		RateItServiceAsync rateService = (RateItServiceAsync) GWT
-				.create(RateItService.class);
-		AsyncCallback<Void> callback = new AsyncCallback<Void>()
-		{
-			
-			@Override
-			public void onFailure(Throwable caught)
-			{
 				Window.alert(CACHE_CLEAR_FAILED);
-				
+
 			}
 
 			@Override
-			public void onSuccess(Void result)
-			{
+			public void onSuccess(Void result) {
 				Window.alert(CACHE_CLEAR_SUCCESS);
-				
+
 			}
 		};
-		
+
 		rateService.clearServerCache(callback);
 	}
-	
-	public void checkAdmin(){
+
+	public void checkAdmin() {
 
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
-		
-		AsyncCallback<Integer> callback = new AsyncCallback<Integer>()
-		{
-			
+
+		AsyncCallback<Integer> callback = new AsyncCallback<Integer>() {
+
 			@Override
-			public void onSuccess(Integer result)
-			{
-				if(result == 0)
-				{
-					isUserAdmin = true;
+			public void onSuccess(Integer result) {
+				if (result == 0) {
 					fP.adminPanel.setVisible(true);
-				}
-				else if (result == -1)
-				{
-					isUserAdmin = false;
+				} else if (result == -1) {
 					fP.adminPanel.setVisible(false);
 				}
-				
+
 			}
-			
+
 			@Override
-			public void onFailure(Throwable caught)
-			{
+			public void onFailure(Throwable caught) {
 			}
 		};
-		rateService.isCurUserAdmin(callback );
+		rateService.isCurUserAdmin(callback);
 	}
-	
-	public void recalculateTops(){
+
+	public void recalculateTops() {
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
-		
-		AsyncCallback<Void> callback = new AsyncCallback<Void>()
-		{
-			
+
+		AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+
 			@Override
-			public void onSuccess(Void result)
-			{
+			public void onSuccess(Void result) {
 				Window.alert(RECALCULATE_TOPS_SUCCESS);
-				
+
 			}
-			
+
 			@Override
-			public void onFailure(Throwable caught)
-			{
+			public void onFailure(Throwable caught) {
 				Window.alert(RECALCULATE_TOPS_FAILED);
-				
+
 			}
 		};
-		rateService.recalculateTops(callback );
+		rateService.recalculateTops(callback);
 	}
-	
 
 	public void init() {
 		receiveTodaysTopDomains();
@@ -547,26 +559,24 @@ public class RPC implements Constants {
 		receiveTodaysTopUrls();
 		receiveMonthsTopUrls();
 		receiveYearsTopUrls();
-		userAuthentication();
-		checkAdmin();
 	}
 
 	public void clearDB() {
 		RateItServiceAsync rateService = (RateItServiceAsync) GWT
 				.create(RateItService.class);
-		AsyncCallback<Void> callback = new AsyncCallback<Void>(){
+		AsyncCallback<Void> callback = new AsyncCallback<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("DB could not be cleared");
-				
+
 			}
 
 			@Override
 			public void onSuccess(Void result) {
-				Window.alert("DB cleared");				
+				Window.alert("DB cleared");
 			}
-			
+
 		};
 		rateService.clearDB(callback);
 	}
