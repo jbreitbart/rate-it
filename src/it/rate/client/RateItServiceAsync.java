@@ -1,6 +1,5 @@
 package it.rate.client;
 
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;

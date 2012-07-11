@@ -4,7 +4,8 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -34,9 +35,7 @@ public class RatingDB
 	@Persistent
 	private float rating;
 	@Persistent
-	private Date date;
-//	@Persistent
-//	private int year;
+	private String date;
 	@Persistent
 	private String host; 	
 	
@@ -49,8 +48,10 @@ public class RatingDB
 		this.host = host;
 		this.comment = comment;
 		this.rating = rating;
-		this.date = new Date();
-//		this.year = this.date.getYear();
+		
+		GregorianCalendar cal = new GregorianCalendar();
+		SimpleDateFormat sdf = new SimpleDateFormat( "dd.MM.yyyy" );
+		this.date =sdf.format(cal.getTime());
 		
 		this.key = KeyFactory.createKey(
 				RatingDB.class.getSimpleName(),
@@ -77,14 +78,9 @@ public class RatingDB
 		this.userEmail = userEmail;
 	}
 
-	public Date getDate()
+	public String getDate()
 	{
 		return date;
-	}
-
-	public void setDate(Date date)
-	{
-		this.date = date;
 	}
 
 	public Key getKey()
