@@ -16,4 +16,6 @@ public class ServerDataCache {
 	public List<TopUrl> receivedTodaysTopDomains = null;
 	public List<Rating> receivedUserRatings = null;
 	public HashMap<String, List<Rating>> subDomainsToDomainMap = new HashMap<String, List<Rating>>();
+	public String loginUrl = null;
+	public String logoutUrl = null;
 }

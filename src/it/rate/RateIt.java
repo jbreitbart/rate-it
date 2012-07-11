@@ -23,6 +23,8 @@ public class RateIt implements EntryPoint, Constants{
 		page.show();
 		init.addHandlers();
 		rpc.init();
+		rpc.getLoginUrl();
+		rpc.getLogoutUrl();
 		rpc.userAuthentication();
 	}
 

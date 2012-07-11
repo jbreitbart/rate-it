@@ -18,6 +18,9 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IntegerBox;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.DockPanel;
 
 public class FrontPage implements Constants {
 
@@ -44,7 +47,6 @@ public class FrontPage implements Constants {
 	public VerticalPanel verticalPanel_4;
 	public ListBox listBox_1;
 	public Label lblNewLabel_1;
-	public HTML htmlNewHtml;
 	public ListBox listBox_2;
 	public ListBox listBox_3;
 	public Label lblNewLabel_2;
@@ -62,7 +64,6 @@ public class FrontPage implements Constants {
 	public Label lblNewLabel_4;
 	public VerticalPanel verticalPanel_7;
 	public Label lblNewLabel_5;
-	public HTML htmlNewHtml_1;
 	public VerticalPanel verticalPanel_8;
 	public Button btnRefresh;
 	public Button btnRefresh_1;
@@ -82,6 +83,10 @@ public class FrontPage implements Constants {
 	public Button btnRatingTest;
 	public IntegerBox integerBox;
 	public Button btnClearDb;
+	public Button btnShowOwnRatings;
+	public Button btnNewButton_2;
+	public HorizontalPanel horizontalPanel_3;
+	public Label lblUserMail;
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -98,16 +103,22 @@ public class FrontPage implements Constants {
 
 		verticalPanel_2 = new VerticalPanel();
 		rootPanel.add(verticalPanel_2, 10, 10);
+		verticalPanel_2.setSize("800px", "");
 		
-				htmlNewHtml = new HTML("", true);
-				verticalPanel_2.add(htmlNewHtml);
-				htmlNewHtml.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		horizontalPanel_3 = new HorizontalPanel();
+		verticalPanel_2.add(horizontalPanel_3);
+		horizontalPanel_3.setWidth("100%");
+		horizontalPanel_3.setVisible(false);
 		
-		htmlNewHtml_1 = new HTML("", true);
-		verticalPanel_2.add(htmlNewHtml_1);
-		htmlNewHtml_1.setVisible(false);
-		htmlNewHtml_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		verticalPanel_2.setCellHorizontalAlignment(htmlNewHtml_1, HasHorizontalAlignment.ALIGN_RIGHT);
+		lblUserMail = new Label("");
+		horizontalPanel_3.add(lblUserMail);
+		
+		btnNewButton_2 = new Button("New button");
+		horizontalPanel_3.add(btnNewButton_2);
+		horizontalPanel_3.setCellHorizontalAlignment(btnNewButton_2, HasHorizontalAlignment.ALIGN_RIGHT);
+		btnNewButton_2.setText("Login");
+		verticalPanel_2.setCellVerticalAlignment(btnNewButton_2, HasVerticalAlignment.ALIGN_MIDDLE);
+		btnNewButton_2.setSize("147px", "28px");
 
 		horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setBorderWidth(0);
@@ -115,7 +126,7 @@ public class FrontPage implements Constants {
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
 		verticalPanel_2.add(horizontalPanel);
-		horizontalPanel.setWidth("771px");
+		horizontalPanel.setWidth("100%");
 		verticalPanel_2.setCellHorizontalAlignment(horizontalPanel,
 				HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel.setSpacing(20);
@@ -370,6 +381,9 @@ public class FrontPage implements Constants {
 		horizontalPanel_2.setSpacing(20);
 		verticalPanel_2.add(horizontalPanel_2);
 		
+		btnShowOwnRatings = new Button("Show own ratings");
+		horizontalPanel_2.add(btnShowOwnRatings);
+		
 		verticalPanel_8 = new VerticalPanel();
 		verticalPanel_8.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel_2.add(verticalPanel_8);
@@ -379,6 +393,7 @@ public class FrontPage implements Constants {
 		verticalPanel_8.add(lblNewLabel_6);
 		
 		listBox_7 = new ListBox();
+		listBox_7.setMultipleSelect(true);
 		verticalPanel_8.add(listBox_7);
 		verticalPanel_8.setCellHorizontalAlignment(listBox_7, HasHorizontalAlignment.ALIGN_CENTER);
 		listBox_7.setVisibleItemCount(5);
