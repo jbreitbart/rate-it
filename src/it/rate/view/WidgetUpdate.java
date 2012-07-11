@@ -95,7 +95,8 @@ public class WidgetUpdate implements Constants {
 				box.addItem(r.getUrl());
 			}
 			box.setVisibleItemCount(topUrls.size());
-			fP.tabPanel.selectTab(0);
+			if(period == Period.YEAR)
+				fP.tabPanel.selectTab(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
