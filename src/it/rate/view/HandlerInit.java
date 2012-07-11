@@ -11,7 +11,6 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.user.client.Window;
 
 public class HandlerInit implements Constants {
 
@@ -166,7 +165,7 @@ public class HandlerInit implements Constants {
 		});
 
 		/*
-		 * Top domains double-click handler
+		 * Top domains double-click handler. Shows subdomains.
 		 */
 		fP.listBox_4.addDoubleClickHandler(new DoubleClickHandler() {
 
@@ -201,8 +200,8 @@ public class HandlerInit implements Constants {
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
 				try {
-					rpc.receiveSubDomains(fP.listBox_5
-							.getItemText(fP.listBox_5.getSelectedIndex()));
+					rpc.receiveSubDomains(fP.listBox_6
+							.getItemText(fP.listBox_6.getSelectedIndex()));
 					fP.verticalPanel_4.setVisible(true);
 				} catch (Exception e) {
 					wUpd.updateSubDomainList(null);
@@ -454,12 +453,7 @@ public class HandlerInit implements Constants {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				if(rpc.loggedIn){
-					Window.Location.assign(dataCache.logoutUrl);
-				}
-				if(!rpc.loggedIn){
-					Window.Location.assign(dataCache.loginUrl);
-				}
+				rpc.userAuthentication();
 			}
 		});
 	}
