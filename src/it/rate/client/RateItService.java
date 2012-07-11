@@ -1,6 +1,5 @@
 package it.rate.client;
 
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -26,6 +25,9 @@ public interface RateItService extends RemoteService {
 	 * @param rating
 	 *            A rating object which holds user, the URL, its rating and an
 	 *            optional comment
+	 * @param canReplace
+	 * 			 rating will be replaced if this flag is true 
+	 * 
 	 * @return ErrorMessage
 	 */
 	public int rateUrl(String url, String comment, float rating,
@@ -49,6 +51,8 @@ public interface RateItService extends RemoteService {
 	/**
 	 * Gets the rating from a user for a certain URL
 	 * 
+	 * @param user
+	 * 			  user id as email
 	 * @param url
 	 *            The URL
 	 * @return URL's rating as float or 0 if not found
