@@ -6,13 +6,6 @@ import java.io.Serializable;
 public class TopUrl implements Serializable, Comparable<TopUrl>
 {
 	
-	public static String TYPE_DOMAIN = "Domain";
-	public static String TYPE_URL = "URL";
-	
-	public static String PERIOD_DAY = "Day";
-	public static String PERIOD_MONTH = "Month";
-	public static String PERIOD_YEAR = "Year";
-	
 	private String url;
 	private float averadgeRating;
 	private int countOfRatings;
