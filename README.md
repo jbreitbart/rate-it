@@ -23,16 +23,16 @@ Demo: http://rateerate.appspot.com/
     - replace it with 
             public static final String REDIRECTION_URL = "http://your-domain.com/";  
             
-4) Deploy it to Google App Engine
+4) Change some lines in the code.  
+
+    /war/WEB-INF/appengine-web.xml: application tag  
+
+5) Deploy the application to Google App Engine.
 
 
 Informations
 ============
-adjustments
------------
-If you want to deploy the code to a different site you have to change some lines in the code.  
-/war/WEB-INF/appengine-web.xml: application tag  
-/src/it/rate/Constants.java: REDIRECTION_URL value  
+
 
 benchmark
 ---------
