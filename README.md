@@ -1,16 +1,11 @@
-rate-it
-=======
+##Rate it!
 
-Rate it!
-
-http://rateerate.appspot.com/
+Demo: http://rateerate.appspot.com/
 
 
 ##Getting Started using Eclipse
 
-1) Get you own copy of project
-    
-    using: 
+1) Get you own copy of project using: 
     
      git clone git://github.com/jbreitbart/rate-it.git
      or 
@@ -28,7 +23,7 @@ http://rateerate.appspot.com/
     - replace it with 
             public static final String REDIRECTION_URL = "http://your-domain.com/";  
             
-4) Deploy it
+4) Deploy it to Google App Engine
 
 
 ##License
