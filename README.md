@@ -26,6 +26,24 @@ Demo: http://rateerate.appspot.com/
 4) Deploy it to Google App Engine
 
 
+Informations
+============
+adjustments
+-----------
+If you want to deploy the code to a different site you have to change some lines in the code.  
+/war/WEB-INF/appengine-web.xml: application tag  
+/src/it/rate/Constants.java: REDIRECTION_URL value  
+
+benchmark
+---------
+In order to test the performance of simultaneous ratings you can perform workload tests. To do so, you have to open the following site:
+www.rateerate.appspot.com/queue/createratingtasks?jobs=1000&parts=10  
+whereas jobs means the number of tasks which are put in the queues.  
+Parts means how many queues are started to proceed all these tasks. This number is important, because putting to many tasks in one queue can cause a timeout.  
+In example 1000 tasks put in 10 queues means every queue gets 100 tasks to execute.  
+If you want to change queue settings you can do that in queue.xml.  
+
+
 ##License
 
 This program, plugin, or function is licenced under the Maximal Opensource Licence. That means that it`s source should always stay open source. And any changes must be available with the branches. And its derivatives can never in anyway be released as closed source.
