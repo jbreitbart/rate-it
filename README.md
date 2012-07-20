@@ -34,7 +34,7 @@ Informations
 ============
 
 
-benchmark
+Benchmark
 ---------
 In order to test the performance of simultaneous ratings you can perform workload tests. To do so, you have to open the following site:
 www.rateerate.appspot.com/queue/createratingtasks?jobs=1000&parts=10  
