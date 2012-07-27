@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.Text;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -31,10 +32,13 @@ public class RatingDB
 	@Persistent
 	private String url;
 	@Persistent
+	@Extension(vendorName="datanucleus", key="gae.unindexed", value="true")
 	private Text comment;
 	@Persistent
+	@Extension(vendorName="datanucleus", key="gae.unindexed", value="true")
 	private float rating;
 	@Persistent
+	@Extension(vendorName="datanucleus", key="gae.unindexed", value="true")
 	private String date;
 	@Persistent
 	private String host; 	
